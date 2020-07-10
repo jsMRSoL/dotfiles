@@ -42,3 +42,17 @@ git fetch [<remote>] # check status of remote in relation to HEAD
 ## e.g. 0f303dc..7c62a4a  master    -> origin/master
 ## this means (I think) master is at 0f303dc, while origin/master is at 7c62a4a
 git pull    # git fetch; git merge. git merge updates local branch to look at same commit as origin/master
+####################################
+Adding your SSH key to the ssh-agent
+####################################
+Before adding a new SSH key to the ssh-agent to manage your keys, you should have checked for existing SSH keys and generated a new SSH key.
+
+    Start the ssh-agent in the background.
+
+    $ eval "$(ssh-agent -s)"
+    > Agent pid 59566
+
+    Add your SSH private key to the ssh-agent. If you created your key with a different name, or if you are adding an existing key that has a different name, replace id_rsa in the command with the name of your private key file.
+
+    $ ssh-add ~/.ssh/id_rsa
+
