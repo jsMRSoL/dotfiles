@@ -1,0 +1,31 @@
+##RANGER
+# ! Execute a command from the shell
+# : Execute a ranger command
+#
+# :bulkrename 
+#
+#FILE OPERATIONS
+ yy	    Copy file
+ dd	    Cut file
+ pp	    Past file
+ ya	    Add file to copy buffer
+ da	    Add file to cut buffer
+ uy	    Clear copy buffer
+ ud	    Clear cut buffer
+ uv	    Clear visual selection
+ om	    Order by modification date
+ Shift + ~	Switch to multi-pane view
+ :shell -w printf %c | xargs rm  Delete files listed in buffer (multiple directories)
+ r	    Open list of programs
+ :open_with Specify program for opening file
+ t	    Tag file
+ SPACE	    Select file
+ :flat 1	Flatten directory tree to one level deep
+ :flat 0	Disable :flat
+ :flat -1	Flatten entire tree
+# TABS
+ Alt + 1	Create/Switch to tab
+ Tab		Tab between tabs
+ Ctrl + w	Close tab
+ q		Close tab
+

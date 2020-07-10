@@ -1,0 +1,31 @@
+sw_volume: 1
+audio_device_state:1:My ALSA Device
+audio_device_state:0:My Pulse Output
+audio_device_state:1:my_fifo
+state: pause
+current: 13
+time: 460.080000
+random: 0
+repeat: 0
+single: 0
+consume: 0
+crossfade: 0
+mixrampdb: 0.000000
+mixrampdelay: -1.000000
+playlist_begin
+0:M/Michael_Bublé/Crazy_Love/01-Cry_Me_a_River.ogg
+1:M/Michael_Bublé/Crazy_Love/02-All_of_Me.ogg
+2:M/Michael_Bublé/Crazy_Love/03-Georgia_on_My_Mind.ogg
+3:M/Michael_Bublé/Crazy_Love/04-Crazy_Love.ogg
+4:M/Michael_Bublé/Crazy_Love/05-Haven't_Met_You_Yet.ogg
+5:M/Michael_Bublé/Crazy_Love/06-All_I_Do_Is_Dream_of_You.ogg
+6:M/Michael_Bublé/Crazy_Love/07-Hold_On.ogg
+7:M/Michael_Bublé/Crazy_Love/08-Heartache_Tonight.ogg
+8:M/Michael_Bublé/Crazy_Love/09-You're_Nobody_Till_Somebody_Loves_You.ogg
+9:M/Michael_Bublé/Crazy_Love/10-Michael_Bublé_feat._Sharon_Jones_and_The_Dap-Kings_-_Baby_(You've_Got_What_It_Takes).ogg
+10:M/Michael_Bublé/Crazy_Love/11-At_This_Moment.ogg
+11:M/Michael_Bublé/Crazy_Love/12-Michael_Bublé_feat._Naturally_7_-_Stardust.ogg
+12:M/Michael_Bublé/Crazy_Love/13-Michael_Bublé_feat._Ron_Sexsmith_-_Whatever_It_Takes.ogg
+13:D/David Gray/White Ladder/10-Say_Hello,_Wave_Goodbye.mp3
+14:A/Al Green/Very Best Of Al Green, The/18-Unchained_Melody.mp3
+playlist_end

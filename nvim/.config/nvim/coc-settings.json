@@ -1,0 +1,11 @@
+{
+    "rust-client.rustupPath": "/home/simon/.cargo/bin/rustup",
+    "rust-client.rlsPath": "/home/simon/.cargo/bin/rls",
+    "rust-client.channel": "stable",
+    "rust.clippy_preference": "on",
+    "rust.rustfmt_path": "/home/simon/.cargo/bin/rustfmt",
+    "rust.show_hover_context": true,
+    "coc.preferences.formatOnSaveFiletypes": ["rust", "python"],
+    "python.autoComplete.addBrackets": true,
+    "python.linting.flake8Enabled": true,
+}

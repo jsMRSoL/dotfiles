@@ -1,0 +1,42 @@
+snippet getusr "Get input from user"
+while [ ! -n "$${1:varname}" ]
+do
+    read -p 'Enter ${2:request}: ' $1
+done
+endsnippet
+
+snippet fileexists "Function to test for file"
+function fileexists() {
+	if [ -e "\$1" ]; then
+		echo "File \"\$1\" exists."
+	else
+		echo "Error: File \"\$1\" does not exist."
+	fi
+}
+endsnippet
+
+snippet filenonzero "Function to test file is not empty"
+function filenonzero() {
+	if [ -s \$1 ]; then
+		echo "File \"\$1\" is not empty."
+	else
+		echo "Error? File \"\$1\" is empty."
+	fi
+}
+endsnippet
+
+snippet direxists "Function to test for directory"
+function direxists() {
+	if [ -d "\$1" ]; then
+		${1:command}
+		${2:echo ${3:"Directory \"\$1\" exists."}}
+	else
+		${4:command}
+		${5:echo ${6:"Directory \"\$1\" does not exist."}}
+	fi
+}
+endsnippet
+
+snippet exitifempty "Exit if variable is empty"
+[ -z "${1:variable}" ] && exit
+endsnippet

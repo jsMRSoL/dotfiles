@@ -1,0 +1,8 @@
+# Combine pdfs
+pdfunite 1.pdf 2.pdf n.pdf out.pdf
+
+# Separate all pages
+pdfseparate in.pdf out-%d.pdf # produces e.g. out-1.pdf out-2.pdf etc.
+
+# Extract the first page # -f = first page -l = last page
+pdfseparate -f 1 -l 1 in.pdf out.pdf

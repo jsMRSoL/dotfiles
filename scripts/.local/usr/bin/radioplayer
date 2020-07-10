@@ -1,0 +1,29 @@
+#!/bin/bash
+## URLs taken from www.listenlive.eu/uk.html
+
+radio1="http://www.listenlive.eu/bbcradio1.m3u"
+radio2="http://www.listenlive.eu/bbcradio2.m3u"
+radio3="http://www.listenlive.eu/bbcradio3.m3u"
+radio4="http://www.listenlive.eu/bbcradio4.m3u"
+radioglos="http://open.live.bbc.co.uk/mediaselector/5/select/version/2.0/mediaset/http-icy-mp3-a/vpid/bbc_radio_gloucestershire/format/pls.pls"
+planetr="http://tx.sharp-stream.com/icecast.php?i=planetrock.mp3"
+
+play() {	
+	echo "$1" >/tmp/currentradiostation ; 
+	mpv --quiet "$1" 2&>/dev/null & disown ; 
+}
+
+choices="Radio 1\nRadio 2\nRadio 3\nRadio 4\nRadio Glos\nPlanet Rock"
+
+chosen=$(echo -e "$choices" | dmenu -i -p "Select station:")
+
+case "$chosen" in 
+	"Radio 1") play $radio1 ;;
+	"Radio 2") play $radio2 ;;
+	"Radio 3") play $radio3 ;;
+	"Radio 4") play $radio4 ;;
+	"Radio Glos") play $radioglos ;;
+	"Planet Rock") play $planetr ;;
+esac
+
+

@@ -1,0 +1,51 @@
+	C-h ?       Help about help
+	C-h k {chord}	Learn what {chord} does
+	C-x C-c     Quit
+	C-x C-z     Suspend emacs
+	C-x C-+,-     Change font size
+	C-x k       Kill buffer
+	C-x C-e     Execute current line
+	C-/         Undo
+	C-g         Cancel
+	C-u n       Pass numeric argument to next command
+
+NAVIGATION
+	C-v         Move forward one screenful
+	M-v     Move backward one screenful
+	C-l     Clear screen and redisplay all the text,
+                 moving the text around the cursor
+                 to the center of the screen.
+                 (That's CONTROL-L, not CONTROL-1.)
+	C-b	Back one character
+	C-f	Forward one character
+	C-p	Previous line
+	C-n	Next line
+	M-f	Forward one word
+	M-b	Back one word
+	C-a	Start of word
+	C-e	End of word
+	M-a	Start of sentence
+	M-e	End of sentence
+	M-<	Start of text
+	M->	End of text
+
+EDITING
+	C-k	Kill to end of line / Kill empty line
+	M-y	Insert (incrementally) earlier killed text
+	M-x replace-string	Replace string
+
+FILES
+	C-x 1	Kill all windows but the cursor one
+	C-x C-f	Find (i.e. open/create) a file
+	C-x C-s	Save the file
+	C-x C-b	List buffers
+	C-x b NAME	Switch to buffer NAME
+    M-x revert-buffer   Reload file
+MODES
+	M-x text-mode	Switch to human-language text mode
+	C-h m		Get info on current mode
+
+ORG MODE
+	C-c C-l     Insert hyperlink
+	M-arrow     Move list item, table row/col in direction of arrow
+	C-c C-e     Export file

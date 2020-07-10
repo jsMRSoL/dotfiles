@@ -1,0 +1,44 @@
+git status
+git add
+git add -p <file>   # Interactively select hunks for staging
+git commit
+
+git blame   # List commit author change
+git show <commit>   # show commit (message, changes)
+
+git stash   # store current state and restore working dir to state at last commit
+git stash pop   # retrieved stashed state
+
+git log --all --graph --decorate
+git log --all --graph --decorate --oneline
+
+git checkout [branch]   # move the HEAD pointer to the given branch
+git checkout [commit no.]  # moves the HEAD pointer and changes the working directory to the state it had at the pointed commit
+git checkout [filename] # restore file to state at the last commit
+git checkout -b [branch] # create branch and move HEAD pointer to it
+
+git diff [filename] # compares file to file at the time of the last commit
+git diff [commit no.] [filename] # compares file to file at the time of given commit
+git diff --cached   # view only staged changes (i.e. not file changes which have not been staged)
+
+git branch  # list branches
+git branch [name] # create new branch pointing to current HEAD
+
+git merge [branch] # merge branch into branch pointed to by HEAD
+git mergetool # inspect/resolve merge conflict with preset difftool
+git merge --continue # make merge continue after manually fixing a merge conflict - it will be necessary to add the fixed file again
+
+REMOTES for collaboration
+git remote  # list remotes
+git remote add <name> <url> # add remote. By convention name is origin.
+e.g. git remote add origin ../remote
+    If using a folder as in this example, this folder should be initialize with git init --bare
+git push <remote> <local branch>:<remote branch>
+e.g. git push origin master:master
+git branch --set-upstream-to=origin/master  # make origin/master track current branch
+git push # push current branch to defined upstream remote
+git fetch [<remote>] # check status of remote in relation to HEAD
+# N.B. final line indicates latest commits in remote and HEAD for comparison
+## e.g. 0f303dc..7c62a4a  master    -> origin/master
+## this means (I think) master is at 0f303dc, while origin/master is at 7c62a4a
+git pull    # git fetch; git merge. git merge updates local branch to look at same commit as origin/master

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#station=$( cat /tmp/currentradiostation )
+#process=$( ps aux | grep -m 1 "$station" )
+#pid=$( echo $process | cut -d ' ' -f 2 )
+#kill $pid
+
+kill $(pgrep -f $(cat /tmp/currentradiostation) )

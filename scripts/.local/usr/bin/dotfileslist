@@ -1,0 +1,38 @@
+#!/bin/bash
+
+declare -a Myfiles=(
+"$HOME/.inputrc                         $DOTFILES_DIR/home/inputrc"
+"$HOME/.bash_aliases                    $DOTFILES_DIR/home/bash_aliases"
+"$HOME/.bashrc                          $DOTFILES_DIR/home/bashrc"
+"$HOME/.selected_editor                 $DOTFILES_DIR/home/selected_editor"
+"$HOME/.profile                         $DOTFILES_DIR/home/profile"
+"/usr/share/xsessions/dwm.desktop       $DOTFILES_DIR/various/dwm.desktop"
+"/usr/local/bin/dwmstart                $DOTFILES_DIR/various/dwmstart"
+"$HOME/.dwmsrc/config.mk                $DOTFILES_DIR/dwm/config.mk"
+"$HOME/.stsrc/config.h                  $DOTFILES_DIR/st/config.h"
+"$XDG_CONFIG_HOME/mpd/mpd.conf          $DOTFILES_DIR/mpd/mpd.conf"
+"$XDG_CONFIG_HOME/mps-youtube/transcode $DOTFILES_DIR/mps-youtube/transcode"
+"$XDG_CONFIG_HOME/ncmpcpp/config        $DOTFILES_DIR/ncmpcpp/config"
+"$XDG_CONFIG_HOME/ncmpcpp/bindings      $DOTFILES_DIR/ncmpcpp/bindings"
+"$XDG_CONFIG_HOME/newsbeuter/config     $DOTFILES_DIR/newsbeuter/config"
+"$XDG_CONFIG_HOME/newsbeuter/urls       $DOTFILES_DIR/newsbeuter/urls"
+"$XDG_CONFIG_HOME/ranger/commands.py    $DOTFILES_DIR/ranger/commands.py"
+"$XDG_CONFIG_HOME/ranger/rc.conf        $DOTFILES_DIR/ranger/rc.conf"
+"$XDG_CONFIG_HOME/ranger/rifle.conf     $DOTFILES_DIR/ranger/rifle.conf"
+"$XDG_CONFIG_HOME/ranger/scope.sh       $DOTFILES_DIR/ranger/scope.sh"
+"$XDG_CONFIG_HOME/redshift.conf         $DOTFILES_DIR/redshift/redshift.conf"
+"$XDG_CONFIG_HOME/rtv/rtv.cfg           $DOTFILES_DIR/rtv/rtv.cfg"
+"$XDG_CONFIG_HOME/surfraw/conf          $DOTFILES_DIR/surfraw/conf"
+"$XDG_CONFIG_HOME/tmux/tmux.conf        $DOTFILES_DIR/tmux/tmux.conf"
+"$XDG_CONFIG_HOME/urlview               $DOTFILES_DIR/urlview/urlview"
+"$XDG_CONFIG_HOME/vim/vimrc             $DOTFILES_DIR/vim/vimrc"
+"$XDG_CONFIG_HOME/w3m/config            $DOTFILES_DIR/w3m/config"
+"$XDG_CONFIG_HOME/w3m/keymap            $DOTFILES_DIR/w3m/keymap"
+)
+
+for line in "${Myfiles[@]}"; do
+    sh -c "diff $line >/dev/null"
+    if [[ $? > 0 ]]; then
+        sh -c "vim -d $line"
+    fi
+done

@@ -1,0 +1,4 @@
+#!/bin/bash
+choice=$(flatpak list | cut -f2 | dmenu -p "Choose a program: ")
+[ -z "$choice" ] && exit
+flatpak run $choice

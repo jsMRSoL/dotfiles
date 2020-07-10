@@ -1,0 +1,18 @@
+##DWM
+#To move a window between master and stack
+MOD + ENTER
+#To move a terminal  between master and stack
+MOD + d (decrement no. of windows in master, i.e. demote to stack)
+MOD + i (increment no. of windows in master, increase masterhood!)
+#To move a window to another tag
+SHIFT + MOD + 1-9
+#To display another tag
+MOD + 1-9
+#To make the focused window fullscreen
+MOD + m
+#To kill a window
+SHIFT + MOD + c
+#To quit DWM
+SHIFT + MOD + q
+#Toggle top bar
+MOD + b

@@ -1,0 +1,20 @@
+### RANGER tweaks
+RANGER_LOAD_DEFAULT_RC=FALSE
+
+#fzf integration
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+#fasd integration
+fasd_cache="$HOME/.fasd-init-bash"
+if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
+  fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install >| "$fasd_cache"
+fi
+source "$fasd_cache"
+unset fasd_cache
+
+# broot
+source /home/simon/.config/broot/launcher/bash/br
+
+# python virtualenvwrapper
+source /home/simon/.local/bin/virtualenvwrapper.sh
+

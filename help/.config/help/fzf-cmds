@@ -1,0 +1,12 @@
+# SHELL SHORTCUTS
+C-t = Paste selected files and directories on to the command line
+C-r = Paste selected command from history on to the command line
+Alt-c = cd to the selected directory
+
+# FUZZY BASH COMPLETION
+COMMAND [DIRECTORY/] [FUZZY PATTERN]**<TAB>
+
+cd ~/** <tab> = select directory under $HOME directory
+vim ../**<tab> = select file under parent direct and open in vim
+
+

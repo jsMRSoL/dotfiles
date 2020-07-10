@@ -1,0 +1,47 @@
+#bash aliases
+alias la='ls -lah'
+alias ll='ls -lh'
+alias gla='ls -lah | grep'
+alias gps='ps aux | grep'
+alias brc='source ~/.bashrc'
+alias gb='cd ~/.local/usr/bin'
+alias gc='cd ~/.config'
+alias gd='cd ~/Documents'
+alias go='cd ~/Downloads'
+alias gh='cd ~'
+alias gj='cd ~/Projects'
+alias gm='cd ~/Music'
+alias gM='cd /mnt'
+alias gp='cd ~/Pictures'
+alias gr='cd ~/.config/ranger'
+alias gt='cd ~/tmp'
+alias gv='cd ~/Videos'
+alias gw='cd ~/.wine/drive_c'
+
+#programs
+alias r='ranger'
+#alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
+alias rec="avconv -f alsa -ac 2 -ar 48000 -f pulse -i alsa_output.pci-0000_00_1b.0.analog-stereo.monitor -acodec libvorbis -aq 6 $1"
+#alias wwwd='w3m www.duckduckgo.com'
+alias wwwd="xterm -fa 'Hack Regular' -fs '12' -e 'w3m www.duckduckgo.com'"
+alias start-mpd='mpd ~/.config/mpd/mpd.conf'
+alias servefiles='python -m SimpleHTTPServer'
+alias pb='playlist-browser'
+alias ty='tsp youtube-dl'
+alias sx='sxiv-handler'
+alias yt='youtube-dl --external-downloader=aria2c'
+alias ytv='youtube-dl --config-location ~/.config/youtube-dl/ytv'
+alias ytvv='youtube-dl --config-location ~/.config/youtube-dl/ytvv'
+alias yta='youtube-dl --config-location ~/.config/youtube-dl/yta'
+alias ytva='youtube-dl --config-location ~/.config/youtube-dl/ytva'
+
+#shortcut files
+alias min='vim ~/.dotfiles/help/minimal-debian-install'
+
+#config files
+alias cfg-ncmpcpp='vim ~/.config/ncmpcpp/config'
+alias cfg-mpd='vim ~/.config/mpd/mpd.conf'
+alias cfg-ranger='vim ~/.config/ranger/rc.conf'
+alias cfg-ba='vim ~/.bash_aliases'
+alias cfg-brc='vim ~/.bashrc'
+

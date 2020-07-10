@@ -1,0 +1,12 @@
+# ~/profile: user-specific .profile file for the Bourne shell (sh(1))
+# and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
+
+PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+DOTFILES="/home/simon/.dotfiles"
+[ -f "$DOTFILES/home/aliases" ] && source "$DOTFILES/home/aliases"
+[ -f "$DOTFILES/home/path_bin_dirs" ] && source "$DOTFILES/home/path_bin_dirs"
+[ -f "$DOTFILES/home/shell_vars" ] && source "$DOTFILES/home/shell_vars"

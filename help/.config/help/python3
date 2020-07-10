@@ -1,0 +1,16 @@
+pip3 install virtualenvwrapper
+## ensure that bash sources the shell functions
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+source $HOME/.local/usr/bin/virtualenvwrapper.sh
+## create a virtual environment if you haven't already
+mkvirtualenv [-a project_path] [-i package] [-r requirements_file] [virtualenv options] ENVNAME
+e.g.
+mkvirtualenv py3.7
+or
+mkvirtualenv -p python3.7 py3.7
+## There are more shell commands. See:
+https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html#mkvirtualenv
+## Now the following commands are available:
+workon # will list all virtualenv environments
+workon ENVNAME # activates the named virtualenv
+deactivate # quits environment and returns to normal shell

@@ -1,0 +1,138 @@
+#my functions
+tagger() {
+	lltag --clear --yes "$1" && \
+	lltag -a "$2" --yes "$1" && \
+	lltag -t "$3" --yes "$1"
+}
+
+vff() {
+    [ -z "$1" ] && echo "\$1 must be a directory" ; return
+	vim "$(find "$1" | fzf -e --select-1)"
+
+}
+
+vf() { find . | fzf | xargs bash -c '</dev/tty $EDITOR "$@"' ignoreme ;}
+
+cheat() {
+	vim "$(find /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1)"
+}
+
+cfg() {
+	vim "$(find /home/simon/.config | fzf -e --query="$1" --select-1)"
+}
+
+snipper() {
+	options="-i ${1} -ss ${2} -t ${3} -c:a copy -c:v copy ${4}";
+	ffmpeg "$options"
+}
+
+bak() {
+    for file in "$@"; do
+        cp "$file" "$file.bak"
+    done
+}
+
+m() {
+    if tmux has-session -t music; then
+        tmux attach -t music
+        exit
+    fi
+
+    tmux new-session -d -s music -n playlist
+    tmux set status off
+    tmux set-window-option -t music:playlist window-style 'bg=#1d1f21'
+    tmux send-keys -t music:playlist "ncmpcpp -c ~/.config/ncmpcpp/config" Enter
+    tmux split-window -t music:playlist -h
+    tmux send-keys -t music:playlist.right "ncmpcpp" Enter
+    tmux send-keys -t music:playlist.right "8" Enter
+    tmux split-window -t music:playlist.right -v
+    tmux send-keys -t music:playlist.bottom-right "ncmpcpp" Enter
+    tmux send-keys -t music:playlist.bottom-right "2" Enter
+    tmux resize-pane -t music:playlist.left -R 10
+    tmux attach -t music:playlist.left
+}
+
+v() {
+    if tmux has-session -t Editor; then
+        tmux attach -t Editor
+        exit
+    fi
+
+    tmux new-session -d -s Editor -n vim
+    tmux send-keys -t Editor:vim "vim -c Files" Enter
+    tmux split-window -t Editor:vim -h
+    tmux resize-pane -t Editor:vim.left -R 10
+    tmux attach -t Editor:vim.left
+}
+
+n() {
+    if tmux has-session -t RSS; then
+        tmux attach -t RSS
+        exit
+    fi
+
+    tmux new-session -d -s RSS -n newsbeuter
+    tmux send-keys -t RSS:newsbeuter "newsbeuter" Enter
+    tmux attach -t RSS:newsbeuter
+}
+
+y() {
+    if tmux has-session -t YT; then
+        tmux attach -t YT
+        exit
+    fi
+
+    tmux new-session -d -s YT -n mpsyt
+    tmux send-keys -t YT:mpsyt "mpsyt" Enter
+    tmux split-window -t YT:mpsyt -h
+    tmux resize-pane -t YT:mpsyt -R 10
+    tmux attach -t YT:mpsyt.left
+}
+
+function yt() {
+    youtube-dl --config-location=~/.config/youtube-dl/"$1" "$2"
+}
+
+rd() {
+    if tmux has-session -t RTV; then
+        tmux attach -t RTV
+        exit
+    fi
+
+    tmux new-session -d -s RTV -n reddit
+    tmux send-keys -t RTV:reddit "rtv" Enter
+    tmux split-window -t RTV:reddit -h
+    tmux resize-pane -t RTV:reddit -R 10
+    tmux attach -t RTV:reddit.left
+}
+
+how_in() {
+    where="$1"; shift
+    IFS=+ curl "https://cht.sh/$where/$*"
+}
+
+contains() { [[ "$1" =~ (^|[[:space:]])"$2"($|[[:space:]]) ]] ;}
+
+vu() {
+    export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
+    cleanup() {
+        rm "$FIFO_UEBERZUG" 2>/dev/null
+        pkill -P $$ 2>/dev/null
+    }
+    rm "$FIFO_UEBERZUG" 2>/dev/null
+    mkfifo "$FIFO_UEBERZUG"
+    trap cleanup EXIT
+    tail --follow "$FIFO_UEBERZUG" | ueberzug layer --silent --parser bash &
+    vifm "$@"
+    cleanup
+}
+
+escr() {
+    FILE=$( whereis "$1" | cut -d' ' -f2 )
+    if [ "$(stat -c %U "$FILE")" == "$USER" ]; then
+        vim "$FILE"
+    else
+        sudo vim "$FILE"
+    fi
+}
+

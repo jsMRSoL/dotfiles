@@ -1,0 +1,270 @@
+vim shortcuts
+
+MISCELLANEOUS
+=============
+i	Insert text before cursor
+a	Insert text after the cursor (append)
+A	Insert text at the end of the line (append to line)
+s	Delete current character and enter edit mode
+S	Delete current line and enter edit mode
+o	Begin a new line below the cursor (open lower line)
+O	Begin a new line above the cursor (open upper line)
+r{text}	Replace the character under the cursor with {text} (replace)
+R	Replace characters instead of inserting them (Replace continous)
+ESC	Command mode
+:	Last line mode
+v	Enter visual mode per character
+;	Repeat last f, t, F, T [count] times
+. 	Repeat last f, t, F, T in opposite direction [count] times
+V	Enter visual mode per line
+C-v	Visual block mode# allows you to highlight a column. Esc executes the same operation, e.g. inserting a word, in all highlighted places.
+>	Shift highlighted text right
+<	Shift highlighted text left
+~   toggle case
+yy	copy (yank) current line into storage buffer
+y3y copy (yank) current line and next two into storage buffer
+p	paste storage buffer after current line
+P	paste storage buffer before current line
+u	undo the last operation.
+Ctrl+r	redo the last undo.
+:q	Quits Vim but fails when file has been changed
+:w	Save the file
+:w new_name	Save the file with the new_name filename
+:wq	Save the file and quit Vim.
+:q!	Quit Vim without saving the changes to the file.
+
+WHOLE FILE
+==========
+gg	move to the beginning of the file.
+G	move to the end of the file
+dgg	delete to the beginning of the file.
+dG	delete to the end of the file.
+
+WHOLE LINE
+==========
+0	Home
+$	End
+^	First non-empty character of the line
+(	Start of sentence
+)	End of sentence
+d0  Delete/cut to line start
+d$  Delete/cut to line end
+D   Delete/cut to line end
+dd	delete line
+3dd	delete three lines
+d)	delete to the end of sentence.
+
+WHOLE PARAGRAPH
+===============
+ap – a paragraph and trailing white space.
+ip – inner paragraph
+{   Start of paragraph
+}   End of paragraph
+
+WHOLE SENTENCE
+==============
+dis	Delete sentence.
+das	Delete sentence and surrouding white space.
+cis	Delete sentence and enter edit mode.
+cas	Delete sentence and surrounding white space and enter edit mode
+vis	Visually select sentence.
+yis	Yank sentence.
+
+TEXT OBJECT
+===========
+a” – a double quoted string including the quotes
+i” – inner double quoted string
+a’ – a single quoted string including the quotes
+i’ – inner single quoted string
+Test	'Here is the first part.' "Here is the second."
+a` – a back quoted string including the quotes
+i` – inner back quoted string
+at	a tag block string including the tags
+it	inner tag block string <p>Hello world!!</p>
+a> – a single tag <div id=main><p>Hello world!</p></div>
+i> – inner single tag
+a) – a parenthesized block
+i) – inner parenthesized block
+a] – a bracketed block
+i] – inner bracketed block
+a} – a brace block
+i} – inner brace block
+
+TEXT RANGE
+==========
+dfL	Delete until you find 'L' and delete it too.
+dtL	Delete up to but not including 'L'.
+c/{term}+Ret	Delete up to and including term and enter edit mode.
+2fe Find the second letter 'e' in this line.
+fe  Find e. ; moves to the next occurrence.
+
+WORD
+====
+w   Forward one alphanumeric word
+5w	move forward five words
+W   Forward one word by white space
+b	Backward one alphanumeric word
+B	Backward one word by white space
+dw	delete a word.
+db  Delete previous word
+
+CHARACTERS
+==========
+x   delete character at cursor [shift following text left one char]
+X	delete character left of cursor
+h	moves the cursor one character to the left.
+j 	moves the cursor down one line.
+k 	moves the cursor up one line.
+l	moves the cursor one character to the right.
+
+SEARCH AND REPLACE
+==================
+/search_text	search document for search_text going forward
+?search_text	search document for search_text going backward
+n	move to the next instance of the result from the search
+N	move to the previous instance of the result
+&	repeat last substitution on the current line
+:%s/original/replacement	Search for the first occurrence of the string “original” and replace it with “replacement”
+:%s/original/replacement/g	Search and replace all occurrences of the string “original” with “replacement”
+:%s/original/replacement/gc	Search for all occurrences of the string “original” but ask for confirmation before replacing them with “replacement”
+:s/original/replacement/g	Replace all occurrences of original in the current line
+:1,.3s/original/replacement/g	Replace all occurrences of original in lines 1 and the three after the current line
+:%s/\s\+/ /g	Replace all multiple spaces with single space
+:%/\s\+\$//e	Replace all end-of-line trailing white space (e suppresses errors)
+:/Section 1/+,/Section 2/- y     Yank every line between Section 1 and Section 2  
+:$ normal p     Paste last yank at the end of the file
+:\/             Search for next match of last used search pattern
+:\?             Search for previous match of last used search pattern
+:\&             Search for next match of last used substitution pattern
+:.s:/dir1/dir2/:/dira/dirb:g    Replace strings with slashes without backslashitis
+:.s/\v<vi>/VIM/g            Replace vi at word boundaries with VIM using very magic mode
+:.s/\<vi\>/VIM/g            As previous used backslashing.
+:.s/^vi\>/VIM/g             Replace the word vi at sentence start with VIM
+:.s/vi$/VIM/g               Replace the word vi at sentence end with VIM
+:.s/[Vv]i/VIM/g             Replace Vi or vi with VIM.
+:.s/\v<[Vv]i/VIM/g          Replace the word Vi or vi with VIM using very magic mode
+:.s/\<[Vv]i\>/VIM/g         As above with backslashitis.
+:s/[65]/Dig/g   Replace all 5s and 6s with Dig.
+:s/65/Dig/g     Replace all 65s with Dig.
+:/"[^"]\+"/     Match a " followed by multiple non-"'s and then a ", i.e a quoted string
+:/\.\s\+[a-z]/  Match a sentence starting with a lowercase letter
+                i.e. a period, some whitespace, a lowercase letter.
+:s:\(\w\+\)\(s\+\)\(\w\+\):\3\2\1:  Match a word followed by whitespace and
+                                    another word. Swap the words round.
+
+BOOKMARKS
+=========
+m {a-z A-Z}	Set bookmark {a-z A-Z} at the current cursor position
+:marks	List all bookmarks
+`{a-z A-Z}	Jumps to the bookmark {a-z A-Z}
+
+FILES/COMMAND LINE
+==================
+:!ls	List files in current directory
+:ls	List files currently open in vim
+:n	Go to next file open in vim
+:w !sudo tee %	Write current changes with superuser privileges
+:1,10w newfile	Write lines 1-10 to newfile.
+
+WINDOWS
+=======
+:split {file} Create horizontal split {and open file}
+:vsplit	Create vertical split
+C-w C-w	Switch between windows
+C-w h,j,k,l Move between windows.
+C-w q	Close split
+C-w o   Close all other windows
+C-w T   Convert current split to tab
+
+TABS
+====
+:tabedit {file}	Open file in new tab
+gt	Switch between tabs (next)
+gT	Switch between tabs (previous)
+:tabs	List all tabs
+
+CONSTANTS
+=========
+C-a	Increment value
+C-x	Decrement value 
+
+BUFFERS
+=======
+:badd file	Open a new buffer, load file into it, buffer's name is 'file'
+:bn	Switch to next buffer
+:bp	Switch to previous buffer
+:bdelete [no./name]	Close buffer
+:bwipeout [no./name]	Erase all record of buffer (won't be listed by ..! commands below)
+:ls	List open buffers
+:ls!	List open and closed buffers
+:files	List open buffers
+:files!	List open and closed buffers
+:buffers	List open buffers
+:buffers!	List open and closed buffers
+
+MACROS
+======
+q[a-Z]	Record macro and attach to [a-Z]	
+5@[a-Z]	Run macro 5 times
+
+COMMANDLINE HISTORY
+==================
+q:	List command history
+q/	List search history
+:C-f	List command history
+/C-f	List search history
+C-c	Select command/search for editing
+C-c C-C Exit history window
+
+NEXT LEVEL!!
+============
+xp	swap next two characters around
+G=gg	auto (re)indent entire document
+G<gg    shift all lines left (also >)
+guu	lowercase line
+gUU	uppercase line
+C-O	retrace movements (backward)
+C-I	retrace movements forward
+
+:reg	display contents of all registers
+"*p	paste last text copied with C-c
+"+p	paste last text highlighted with mouse.
+"0p	paste last yank
+"1p	paste last delete/change
+"2p	paste last but one delete/change
+d/-	delete up to (not inc) - 
+dt-	delete up to (not inc) -
+"- dt-	delete up to (not inc) - (to "- reg)
+"- df-	delete up to and inc - (to "- reg)
+Vp  select line and paste over it.
+
+GET OUTPUT FROM SHELL COMMANDS
+==============================
+:r!ls	reads in output of ls
+:r!grep "^ebay" file.txt	reads in output of grep
+:r!date insert date on current line
+:%!sort -u	Sort contents of file, keep only unique lines
+:'v,'w!sort	Sort lines between marks v and w
+!!date	becomes :.!date. Same as :r!date
+!!tr -d AE	translate current line deleting As and Es
+:norm		Run normal mode commands from the command line
+
+GLOBAL COMMAND
+==============
+:g/one\|two/ list lines containing "one" or "two"
+:v/one\|two/ list lines not containing "one" or "two"
+:v is the same as :g!
+
+INSERT MODE
+===========
+C-r 1		Paste contents of register 1
+
+VISUAL MODE
+===========
+o   Jump between beginning and end of block
+ALL motions work as normal!
+'<,'>!sort  Sorts visually selected block
+
+REPEAT OPERATOR
+===============
+. can have a number e.g. 3. for 3 repeats.

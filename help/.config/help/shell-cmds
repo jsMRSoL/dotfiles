@@ -1,0 +1,72 @@
+##COMMAND LINE
+##To find a file based on part of the name (-iname = case-insensitive)
+find ~/Data/Documents -iname *vetta*
+# To find files and do some operation, e.g. transcode
+find /home/simon/Music -iname "*.ogg" -exec bash -c 'ffmpeg -i "$1" -c:a vorbis "$1".ogg' - {} \;
+# To repeat last command: !!
+sudo !!
+# To repeat argument of last command: !$
+mkdir -p newdir/newdir
+cd !$
+# Change to previous directory
+cd -
+##### Managing processes
+# Within a CLI application
+C-z	Suspend
+jobs	List jobs in the background
+fg %n	Bring job n to the foreground
+bg %n	Continue job n in the background
+
+# Remote copying
+rsync -avzP /path/to/source/ user@host:/path/to/dest
+# Just copy newer files from source to dest
+rsync -rutv user@host:/path/to/source/ /path/to/dest
+#
+# SED commands
+# Remove all blank lines (with any kind of whitespace)
+sed '/^\s*$/d' file
+# Print first 20 lines
+sed -n 1,20p file
+# Print non-adjacent lines e.g. lines 3 and 5
+sed -n '3p;5p'
+# Match and extract a string of four digits
+sed 's/.*\([0-9]\{4\}\).*/\1/'
+# Join lines where the first matches a pattern (here four digits)
+## match four digits, append next line (N), and replace newline char with -)
+sed '/[0-9]\{4\}/{N;s/\n/-/}'
+# Change strings in file
+sed -i 's/old/new/g' file
+# As above but make backup first
+sed -i .bak 's/old/new/g' file
+#
+# Basic substitution syntax
+sed 's/{regex match}/{substitution}/' <input_file >output_file
+# Basic deletion syntax
+sed '/{regex match}/d' <input_file >output_file
+# Delete lines containing a string of five numbers in ;'s.
+sed -r '/;[1-9]{5};/d' <test.csv >output.csv # -r and {5} are the regex quantifier expression.
+# Use capture groups and variables in a substitution
+# E.g. match 'true' or 'false' (and store the match in variable '\1') followed by ; followed by 'true' or 'false' (and store the match in variable '\2') all at the end of the line, then substitute the entire match for variable '\2'
+sed -r 's/(true|false);(true|false)$/\2/' <test.csv >output.csv
+#
+#To reload .Xdefaults
+#no longer needed as I found the alpha switch for wal (-a 80)
+xrdb .Xdefaults
+# To get detailed battery info
+upower -i /org/freedesktop/UPower/devices/battery_BAT0
+# To record an iso from the command line
+sudo wodim -eject -tao speed=0 dev=/dev/sr0 -v -data target.iso
+# To check a filesystem
+sudo umount /dev/sdbX
+## if fsck complains that the filesystem is in use
+sudo systemctl stop nfs-server
+sudo systemctl stop smbd
+sudo systemctl stop apache2
+sudo systemctl stop udev
+## if fsck still complains
+sudo init 1
+## finally
+### dry run
+sudo fsck -nf /dev/sdbX 
+### fix all errors
+sudo fsck -y /dev/sdbX 

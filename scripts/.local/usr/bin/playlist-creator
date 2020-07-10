@@ -1,0 +1,58 @@
+#!/bin/bash
+# -- playlist-creator ---
+# To produce a file of youtube playlist links which can
+# be parsed by my other script playlist-browser.
+# =======================
+
+# get playlist link from user
+while [ ! -n "$playlink" ]
+do 
+    read -p 'Enter playlist link: ' playlink
+done
+
+# get destination file from user
+while [ ! -n "$destinationfile" ]
+do
+    read -p 'Enter destination file: ' destinationfile
+done
+
+# capture filename from link for unique filename creation
+jsonfile="plylnkfile-${playlink:(-5)}"
+echo "Assigned name of $jsonfile to json file"
+
+#   get json file from youtube-dl
+youtube-dl -j --flat-playlist "$playlink" >"/tmp/$jsonfile"
+
+if [ -f "/tmp/$jsonfile" ]; then
+    echo "Temporary $jsonfile file populated"
+else
+    echo "Error: $jsonfile file not created"
+fi
+
+# read json file into destination file
+cat "/tmp/$jsonfile" | \
+    jq -r '. | "https://www.youtube.com/watch?v=\(.id) \(.title)"' \
+    >"$destinationfile"
+
+if [ -s $destinationfile ]; then
+    echo "$destinationfile complete"
+else
+    echo "Error: $destination file not created"
+fi
+
+# Tidy up
+rm "/tmp/$jsonfile"
+if [ -f "/tmp/$jsonfile" ]; then
+    echo "Delete of temporary $jsonfile file failed!"
+else
+    echo "Temporary $jsonfile file deleted"
+fi
+
+mv "$destinationfile" "/home/simon/Videos/"
+if [ -f "/home/simon/Videos/$destinationfile" ]; then
+    echo "$destinationfile moved to /home/simon/Videos"
+else
+    echo "Error: $destination file not moved!"
+fi
+
+exit 0

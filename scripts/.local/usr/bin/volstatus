@@ -1,0 +1,2 @@
+#!/bin/sh
+amixer sget Master | grep "Left: Playback" | grep -o "\[on\]\|\[off\]" | tr -d '[]' | tr 'off' 'Muted'

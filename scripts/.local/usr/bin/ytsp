@@ -1,0 +1,12 @@
+#!/bin/bash
+    linktarget="$1"
+    DIR="/home/simon/Videos"
+    echo "Opening $linktarget..."
+    notify-send "Opening $linktarget..."
+    youtube-dl -f 18/21/medium/best "$linktarget" -o "$DIR/%(title)s_%(id)s.%(ext)s" --no-part 2>&1 > /dev/null &
+    fname="$(youtube-dl "$linktarget" --get-filename)"
+    notify-send "fname is $fname"
+    sleep 10
+    mpv "$DIR/$fname" --quiet > /dev/null
+    exit 0
+

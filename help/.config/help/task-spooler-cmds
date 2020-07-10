@@ -1,0 +1,14 @@
+## package is task-spooler. cmd is tsp. Go figure.
+tsp COMMAND
+E.g. tsp wget -c 'http://mywebsite.co.uk/myfile.txt'
+##########
+tsp		Show task list (shows running, queued, finished jobs with IDs)
+tsp -c ID 	Cats output of current task. C-c to exit (doesn't kill task)
+tsp -C 		Clear finished jobs.
+tsp -r [ID]	Remove last job or job specified by ID
+
+
+## Specific sockets / queues
+TS_SOCKET=/tmp/whatever tsp COMMAND
+####
+Commands as above but prefixed with TS_SOCKET=/tmp/whatever

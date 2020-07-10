@@ -1,0 +1,116 @@
+1. Download netinst (about 250-300MB)
+
+2. Set up networking
+To find the names of your interfaces you will want to look here: $ ls /sys/class/net/ 
+
+vi /etc/network/interfaces
+# add custom lines for ethernet
+auto eth0 #for laptops remove this later, seems to slow start up
+iface eth0 inet dhcp
+
+# make interfaces file more secure
+chmod 0600 /etc/network/interfaces
+
+# work out preshared key
+wpa_passphrase myssid my_very_secret_passphrase
+
+# add lines for wifi
+auto wlan0
+iface wlan0 inet dhcp
+        wpa-ssid myssid
+        wpa-psk passphrase
+
+# restart networking
+/etc/init.d/networking restart
+
+3. Install sudo
+apt-get install sudo
+# open visudo for editing
+su
+visudo
+# add custom lines
+simon   ALL=(ALL:ALL) ALL
+simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
+
+## Install git
+git clone https://github.com/jsMRSoL/config.git ~/.dotfiles
+
+## Install vim
+apt-get install vim
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+## Install lightdm
+apt-get install lightdm
+apt install blackbird-gtk-theme
+
+## Install various packages
+apt-get install build-essential alsa-utils ssh curl urlview screenfetch python3-pip vim ranger mpd mpc ncmpcpp w3m w3m-img compton libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv finch surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv texlive-latex-base pandoc mpv
+
+## Clone dwm and st and compile
+git clone https://git.suckless.org/dwm ~/.dwmsrc
+git clone https://git.suckless.org/st ~/.stsrc
+# with st clone it, patch it, then copy the custom config.h across, finally compile
+sudo make clean install
+sudo apt-get install dmenu
+sudo update-alternatives --install /usr/bin/x-session-manager x-session-manager /usr/local/bin/dwmstart 60
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/st 60
+
+## Binds for /etc/fstab
+/mnt/data/Desktop	/home/simon/Desktop	none	defaults,bind 0	0
+/mnt/data/Documents	/home/simon/Documents	none	defaults,bind 0	0
+/mnt/data/Downloads	/home/simon/Downloads	none	defaults,bind 0	0
+/mnt/data/Music		/home/simon/Music	none	defaults,bind 0	0
+/mnt/data/Pictures	/home/simon/Pictures	none	defaults,bind 0	0
+/mnt/data/Public	/home/simon/Public	none	defaults,bind 0	0
+/mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
+/mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
+
+## git clones fzf and fasd and pywal
+git clone https://github.com/junegunn/fzf.git ~/.fzfsrc
+git clone https://github.com/clvv/fasd.git ~/.fasdsrc
+git clone https://github.com/dylanaraps/pywal.git ~/.pywalsrc
+git clone https://github.com/mps-youtube/mps-youtube ~/.mpsyt
+#make wallpaper directory
+mkdir ~/.wallpaper
+git clone https://github.com/LukeSmithxyz/wallpapers.git ~/.wallpaper
+
+## fonts
+# add contrib to /etc/apt/sources.list
+sudo apt-get install ttf-mscorefonts-installer
+
+## gui apps
+sudo apt-get install gimp firefox-esr libreoffice simple-scan
+
+## install lxappearance to choose dark widgets for gui apps
+sudo apt install lxappearance
+
+## browser
+# waterfox e.g.
+https://storage-waterfox.netdna-ssl.com/releases/linux64/installer/waterfox-56.2.0.en-US.linux-x86_64.tar.bz2
+# ssh keyless login
+# generate keys (accept all defaults)
+ssh-keygen -t rsa
+# copy pub key to remote server's authorized keys file
+ssh-id-copy host@server
+# disable password access on the server /etc/ssh/sshd_config
+PasswordAuthentication no
+sudo systemctl restart ssh
+
+# Printing
+# Cups should already be installed. See above.
+# Check the service is running:
+systemctl status cups
+# Go to the web interface /localhost:631/
+# Attempt to install the (network printer)
+# If the correct printer is not listed, 
+# install lsb
+sudo apt install lsb
+# and the correct driver from www.openprinting.org
+sudo dpkg -i driver.deb
+# add user to lpadmin
+sudo adduser simon lpadmin
+# make lpr (for printing from vim) work with cups by setting default
+lpstat -t # should give queue name
+lpoptions -d queuename # sets default.
+# Test with 
+lpr myfile

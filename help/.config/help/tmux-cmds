@@ -1,0 +1,37 @@
+C-b ?		Show hotkeys
+###### Panes ########################
+C-b <arrow key>	Switch panes
+C-b C-arrow	Resize split
+C-b o		Hop between panes
+C-b %		Split current pane vertically
+C-b "		Split current pane horizontally
+C-b z		Zoom on current pane
+###### Windows ######################
+C-b c		Create new window
+C-b 1		Switch to window one
+C-b ,		Rename the current window
+C-b n/p		Change to next/previous window
+###### Sessions #####################
+C-b d		Detach from session
+tmux attach [-t n]	Attach to session [number]
+C-b $		Rename the current session
+C-b s		List sessions
+#########################################
+Copy and Paste Procedure - VIM STYLE Configuration
+#########################################
+C-b ESC		Enter copy mode Default: [
+hjkl		Vim directions to navigate screen
+v		Begin copy (highlight with hjkl)
+V		Highlight line
+y		Copy to paste buffer Default: Enter
+C-b p		Paste Default: ]
+C-b P		Show paste buffers Default: #
+##########################################
+###### General ###########################
+C-b PgUp/PgDn	Scroll up (q to quit)
+C-b f		Search in open windows
+C-b r		Reload configuration
+C-b e		Edit and reload configuration
+C-b m		Display test message (see if config is being read)
+C-b v		Send screen to urlview
+

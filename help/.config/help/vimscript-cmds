@@ -1,0 +1,45 @@
+Notes from "Learn Vimscript the Hard Way" (Steve Losh)
+
+# Echoing messages
+:echo "string" # echoes string to the bottom of vim window
+:echom "string" # same but also logs to :messages
+
+# Setting options
+
+:set booleanoption and set nobooleanoption set options on and off.
+:set booleanoption! toggles booleanoption.
+:set option? queries state of booleanoption.
+
+:set valueoption=integer
+:set valueoption?
+
+
+# Leaders
+:nnoremap <buffer> <leader>x dd
+# Local leader
+The local leader is a second leader key, a prefix
+for mappings that take effect for certain types of files
+e.g. python or html.
+let maplocalleader = "\\" #sets to \ . Could also use '\'
+#
+# Disabling keys
+# E.g.
+:inoremap <esc> <nop>
+#
+# Buffer-local options 
+:setlocal nowrap # Set option for current buffer only
+# Buffer-local mappings
+# E.g. dd map for active buffer
+:nnoremap <buffer> <leader>x dd
+# The following is preferred in plugins to avoid conflicts
+# with a user's leader mappings.
+:nnoremap <buffer> <localleader>x dd
+# where a buffer-local mapping and global mapping share
+# the same key, vim gives precedence to the buffer-local one.
+#
+# Autocommands
+:autocmd BufWritePre,BufRead *.html :normal gg=G # Re-indent any html file on reading and before writing.
+:autocmd BufNewFile,BufRead *.html setlocal nowrap
+:autocmd FileType python    nnoremap <buffer> <localleader>c I#<Esc>
+
+print foo(bar }}})

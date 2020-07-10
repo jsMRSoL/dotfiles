@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# dmenu function
+x=$(echo -e "copy it\nopen it\ndownload it" | dmenu -i -p "How to open?")
+
+case "$x" in
+    "copy it") printf '%s' "$1" | xclip -selection clipboard ;;
+	"open it") open-it "$1" ;;
+	"download it") dl-it "$1" ;;
+esac

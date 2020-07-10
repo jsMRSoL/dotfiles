@@ -1,0 +1,4 @@
+--external-downloader aria2c
+--no-part
+--format 18/21/medium/best
+--output ./%(title)s-%(id)s.%(ext)s

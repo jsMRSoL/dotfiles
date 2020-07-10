@@ -1,0 +1,47 @@
+## W3m
+ H	   Help 
+ C-c	     Close menu,Cancel command
+ U	   URL enter
+ B	   Back 
+ b	   back/page up
+ SPC,C-v	 page down
+ q	   Quit with y/n
+ Q	   Quit instantly
+ o	   options
+### Tabs
+ T	   Tab open
+ Esc t	       Tabs list
+ {,}	     Tab prev,next
+ C-q	     Quit tab (don't press Q (shift q) instead)
+### Link handling
+ L	   Links list
+ Esc l	       Popup links list with shortcuts
+ Esc e	       Edit local copy of page in editor
+ a	   Download link
+ Esc I	       Image download
+ I	   Image - view in external app
+ i	   Image url reveal
+ M	   Move to other browser
+ 2M 		Move to second browser (Don't use.)
+ Esc M		Open target in other browser
+ 2 Esc M	Open target with webview.sh
+ c	   Url reveal current
+ u	   Url reveal link 
+### Navigation
+ hjkl	      Vim directions
+ [,]		Link: go to first,last
+ w/W	     Word next/previous
+ g	   Go to top
+ G	   Go to bottom
+ /	   Search forward
+ ?	   Search backward
+ n	   Next search
+### Page handling
+ v	   view html toggle
+ V	   Load file (for reading html as text)
+ s	   Summon previous pages buffer
+ S	   Save buffer to:
+### Info
+ C-k	     Cookies, view
+ r	   Reveal version of w3m
+ m	   mouse toggle (?) 

@@ -1,0 +1,48 @@
+dmenu is not just an application launcher.
+
+dmenu reads lines, offers them as options and returns the chosen one. (Note all the \n's (imitating lines in a file)
+--------------------------------------------------------
+./prompt "Do you want to shutdown?" "shutdown -h now"
+
+[ $echo -e "No\nYes" | dmenu -i -p "$1") \
+	== "Yes" ] && $2
+
+-i = case insensitive
+-p = prompt (Far left of dmenu (options 'Yes No' follow)
+--------------------------------------------------------
+#!/bin/sh
+
+choices="laptop\nlaptopdual\nVGA\nManual selection"
+
+chosen=$(echo -e "$choices" | dmenu -i)
+
+case "$chosen" in 
+	laptop) xrandr --output LVDS-1 --auto --output VGA-1 --off && polybar_launch ;;
+	laptopdual) xrandr --output LVDS-1 --auto --output VGA-1 --auto --right-of LVDS-1 && polybar_launch ;;
+	VGA) xrandr --output VGA-1 --auto --output LVDS-1 --off && polybar_launch ;;
+	HDMI) xrandr --output HDMI-1 --auto --output LVDS-1 --off && polybar_launch ;;
+	"Manual selection") arandr && polybar_launch ;;
+esac
+---------------------------------------------------------
+#!/bin/bash
+#input is a link. dmenu offers ways of opening it.
+
+#Shorten URL if necessary
+if [[ "${#1}" -gt 30 ]]; then
+	visual="${1:0:20}"..."${1: -7}"
+else
+	visual="$1"
+fi
+echo $visual
+
+x=$(echo -e "mpv\nmpv (loop)\nwget\nfeh\nw3m\nfirefox" | dmenu -i -p "How to open '$visual'?")
+case "$x" in
+	mpv) mpv -quiet "$1" 2&>/dev/null & disown ;;
+	"mpv (loop)") mpv -quiet --loop "$1" 2&>/dev/null & disown ;;
+	wget) wget "$1" 2&>/dev/null & disown ;;
+	feh) feh --zoom max "$1" 2&>/dev/null & disown ;;
+	w3m) w3m "$1" 2&>/dev/null & disown ;;
+	firefox) firefox "$1" 2&>/dev/null & disown ;;
+esac
+----------------------------------------------------------
+

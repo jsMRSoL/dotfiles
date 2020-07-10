@@ -1,0 +1,15 @@
+ssh <server> 'command | command | command' | less   # run three commands on server, transfer the output here and run it through less
+
+sed -E  's/(ab)*//g'    # the same as sed 's/\(ab\)*//g'
+# To check that your pattern matches all lines, replace at first with nothing. If you get anything back, you need to fix your pattern.
+
+uniq -c # give counts for each entry in the list in the format "count entry"
+
+sort -n # sort numerically
+
+paste -sd','    # paste stream input as a comma-separated list.
+
+xargs <cmd>   # append lines of input as argument list for specified command. Default cmd is echo.
+
+jobs    # list background jobs
+kill -STOP %1   # stop background job 1.

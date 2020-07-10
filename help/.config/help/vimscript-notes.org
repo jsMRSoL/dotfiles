@@ -1,0 +1,163 @@
+* 
+* Variables
+      b: local to current buffer
+      w: local to current window
+      t:                  tab
+      l:                  function
+      s:                  source'ed vim script
+      a:                  function argument (only inside a function)
+      g: global
+      v: global predefined by vim
+
+* Using functions
+** Passing params/arguments
+   - function Name(...) # call with as many args as you like
+      - args go into array call a:000
+   - function Name(title, first, last) # call with explicit args
+   - function Block(comment, ...) # call with one required arg and
+            as many others as you like
+** Referencing params/arguments
+      a:0   number of arguments
+      a:1   first argument
+** Calling
+   - 1,$call FunctionName() # calls functions on lines 1 to lastline.
+   - function FunctionName() range # passes range to function
+      - the range modifier makes a:firstline and a:lastline accessible to
+            the function.
+** Vs procedures
+   - A procedure (or subroutine?) is a function with no return value or one
+     that isn't used. 'call' must be used to call a procedure. Functions can
+     simply be named.
+      - e.g call add(list, newval)
+      - cf. join(list, delimiter)
+
+* Built-in functions
+** empty(string)
+   - returns 1 is string is empty, zero otherwise.
+** submatch(nr[,list])
+   - used only in a substitute command or function
+   - returns the nr'th submatch of the matched text
+     - I think this means 'referring to the sub-expressions captured in brackets
+** printf(format, args)
+   - format is specified as follows: % [flags][field-width][.precision][type]
+   - Example format: "%-*s%*s%s"
+      - is string with three substrings
+        - %-*s    left-justified string
+        - %*s     * means 'field width to be passed as arg'
+        - %s      string
+        - %d      decimal number
+        - %f      floating point number
+        - %f.2    float to 2dpl.
+** match({expr}, {pat}[, {start}[, {count}]])
+   - returns index of first pat match.
+** getline(firstline, lastline)
+   - returns a list of lines in the range
+** matchstr(line, pattern)
+   - returns the part of the given line that matches the pattern.
+** matchlist(list, pattern)
+   - returns a list of fields captured by the regex pattern
+   - the first element is always the entire match (here the line)
+   - the second, third, nth elements are those related to the pattern
+   - if the match fails, returns an empty list
+** filter(lines, pattern)
+** map(list, string/Funcrref)
+   - performs a transformation on all items in list
+   - if second arg is a string, inside the string v:val has the value of the
+     current item)
+   - E.g. maxvalue = max( map(copy(original_list), 'len(v:val[1])'
+   -
+** max ({list})
+   - returns max value from list.
+
+* Vim Regex
+  Some of the following is not unique to vim.
+  - \(...\) captures a match
+  - \%(...\) does the same as above but 'without counting it as a sub-expression'.
+      - I think this means you can't refer back to it. But it's faster.
+  - Escaped characters / metacharacters
+    |----+----------------------------------------------------|
+    | .  | any character except new line                      |
+    | \. | literal period                                     |
+    | \s | whitespace character                               |
+    | \S | non-whitespace character                           |
+    | \d | digit                                              |
+    | \D | non-digit                                          |
+    | \x | hex digit                                          |
+    | \X | non-hex digit                                      |
+    | \o | octal digit                                        |
+    | \O | non-octal digit                                    |
+    | \h | head of word character (a,b,c...z,A,B,C...Z and _) |
+    | \H | non-head of word character                         |
+    | \p | printable character                                |
+    | \P | like \p, but excluding digits                      |
+    | \w | word character                                     |
+    | \W | non-word character                                 |
+    | \a | alphabetic character                               |
+    | \A | non-alphabetic character                           |
+    | \l | lowercase character                                |
+    | \L | non-lowercase character                            |
+    | \u | uppercase character                                |
+    | \U | non-uppercase character                            |
+    |----+----------------------------------------------------|
+  - Quantifiers, Greedy
+    |------------+---------------------------------------------------------------------|
+    | Quantifier | Description                                                         |
+    |------------+---------------------------------------------------------------------|
+    | *          | matches 0 or more of the preceding characters,                      |
+    |            | ranges or metacharacters .* matches everything including empty line |
+    | \+         | matches 1 or more of the preceding characters...                    |
+    | \=         | matches 0 or 1 more of the preceding characters...                  |
+    | \?         | matches 0 or 1 more of the preceding characters...                  |
+    | \{n,m}     | matches from n to m of the preceding characters...                  |
+    | \{n}       | matches exactly n times of the preceding characters...              |
+    | \{,m}      | matches at most m (from 0 to m) of the preceding characters...      |
+    | \{n,}      | matches at least n of of the preceding characters... k              |
+    |------------+---------------------------------------------------------------------|
+      where n and m are positive integers.
+  - Quantifiers, Non-Greedy
+    |------------+-------------------------------------------------------------|
+    | Quantifier | Description                                                 |
+    |------------+-------------------------------------------------------------|
+    | \{-}       | matches 0 or more of the preceding atom, as few as possible |
+    | \{-n,m}    | matches 1 or more of the preceding characters...            |
+    | \{-n,}     | matches at lease or more of the preceding characters...     |
+    | \{-,m}     | matches 1 or more of the preceding characters...            |
+    |------------+-------------------------------------------------------------|
+  - Character ranges
+      - [...] specifies a range of characters
+      - [^..] excludes a range of characters
+      - N.B. All metacharacters behave as normal characters inside the []
+  - Grouping and Backreferences
+      - \(...\) specifies a group.
+      - \1 refers back to the first group
+      - \(....\)\(.\{-}\)\(...\) is a key pattern: the shortest match of two
+        patterns separated by some other text.
+      - 
+  - Multi patterns
+    |/\@>|  \@>   \@>   1, like matching a whole pattern (*)
+    |/\@=|  \@=   \@=   nothing, requires a match |/zero-width| (*)
+    |/\@!|  \@!   \@!   nothing, requires NO match |/zero-width| (*)
+    |/\@<=| \@<=  \@<=  nothing, requires a match behind |/zero-width| (*)
+    |/\@<!| \@<!  \@<!  nothing, requires NO match behind |/zero-width| (*)
+
+  - Example
+      - [-+*/%|&]\? means as many as poss of chars in this range
+      - =\@<! =    looks for = and then checks for no match of the preceding range.
+      - [=~]\@!    means = followed by a range with no match required
+* Lists
+  A scalar value is a single value. It may be a number, character, string
+  or object. A list is a sequence of scalar values.
+  In most languages, a list is a value, an immutable ordered sequence of
+  simpler values. Vimscript lists are mutable and far more like arrays.
+** Example list
+  let data = [1,2,3,4,5,6,"seven"]
+  echo data[0]                 |" echoes: 1
+  let data[1] = 42             |" [1,42,3,4,5,6,"seven"]
+  let data[2] += 99            |" [1,42,102,4,5,6,"seven"]
+  let data[6] .= ' samurai'    |" [1,42,102,4,5,6,"seven samurai"]
+  let data[-1] .=  ' samurai'
+
+* Links
+      [[https://www.ibm.com/developerworks/library/l-vim-script-3/index.html][Damian Conway on vimscript]]
+      [[http://learnvimscriptthehardway.stevelosh.com/][Learn Vimscript the Hard Way, Steve Losh]]
+

@@ -1,0 +1,11 @@
+gpg --full-generate-key
+# follow instructions
+
+#list keys 
+gpg --list-keys
+(lists public key)
+
+gpg --list-secret-keys
+(lists private key)
+
+
