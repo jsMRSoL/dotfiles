@@ -1,0 +1,180 @@
+" basic keybindings
+    nnoremap <F12> :call LookUpSetText()<CR>
+    nnoremap <F11> :EMR<CR>
+
+function! SetDictionary()
+    let g:ChosenDictionary = input("Choose dictionary file: ",
+            \ "/home/simon/",
+            \ "file")
+endfunction
+
+function! DictionaryIsSet()
+    if !exists('g:ChosenDictionary')
+        let g:ChosenDictionary = input("Choose dictionary file: ",
+            \ "/home/simon/.config/vim/bundle/vim-amores2/amores2vocab.txt",
+            \ "file")
+    endif
+endfunction
+
+
+function! AnalysesIsSet()
+    if !exists('g:AnalysesFileLatin')
+        let g:AnalysesFileLatin = "/home/simon/.config/vim/bundle/vim-amores2/latin-analyses2.txt"
+    endif
+endfunction
+
+function! RealignWordColumns(line1, line2, count) range
+    if a:count == -1
+        echo "This function works on two lines!"
+        return
+    endif
+    let indent = matchstr(getline(a:line2), '^\s*')
+    let topline = indent
+    let bottomline = indent
+    let topline_parts = split(getline(a:line1), '\s\s\s*')
+    " echo len(topline_parts)
+    " echo topline_parts
+    let bottomline_parts = split(getline(a:line2), '\s\s*')
+    " echo bottomline_parts
+    " echo len(bottomline_parts)
+    let tpct = 0
+    for part in range(len(bottomline_parts))
+        if len(substitute(bottomline_parts[part], '[^A-z]', '', 'g')) == 0
+            let pattern = '%-' . expand(len(bottomline_parts[part]) + 2) . 's'
+            let topline = topline . printf(pattern, '')
+            let bottomline = bottomline . printf(pattern, bottomline_parts[part])
+        elseif len(topline_parts[tpct]) > len(bottomline_parts[part])
+            let pattern = '%-' . expand(len(topline_parts[tpct]) + 2) . 's'
+            let topline = topline . printf(pattern, topline_parts[tpct])
+            let bottomline = bottomline . printf(pattern, bottomline_parts[part])
+            let tpct += 1
+        else
+            let pattern = '%-' . expand(len(bottomline_parts[part]) + 2) . 's'
+            let topline = topline . printf(pattern, topline_parts[tpct])
+            let bottomline = bottomline . printf(pattern, bottomline_parts[part])
+            let tpct += 1
+        endif
+    endfor
+    call setline(a:line1, topline)
+    call setline(a:line2, bottomline)
+    call setpos('.', [0, a:line1, 1, 0])
+endfunction
+    command! -nargs=0 -range RWC call RealignWordColumns(<line1>, <line2>, <count>)
+
+function! InsertVocabLine()
+    execute 'silent g/^\d\:\|^##/d'
+    if search('------\n------', 'n') > 0
+        echo "Vocab format incorrect!"
+        return
+    endif
+    execute 'silent %s/[^-#]\zs\n\ze[^-#]/, /e'
+    execute 'silent %s/\n------------\n/  /'
+    let vocabline = getline('.')
+    bdelete!
+    normal! O<Esc>
+    call setline('.', vocabline)
+    call RealignWordColumns(expand(line('.')), expand(line('.') + 1) , 2)
+endfunction
+    command! -narg=0 IVL call InsertVocabLine()
+
+function! DisplayLookUps(lookupslist)
+    35vsplit Set_text_vocabulary
+    set nonumber
+    set norelativenumber
+    normal! ggdG
+    for entry in range(len(a:lookupslist))
+        " echo entry
+        " echo a:lookupslist[entry]
+        call append(line('$') - 1, (entry + 1) . ': ' . string(a:lookupslist[entry][1]))
+        for subentry in range(len(a:lookupslist[entry][2]))
+            call append(line('$') - 1, '## Def.' . (subentry + 1) . ': '
+            \ . string(a:lookupslist[entry][2][subentry][0]))
+            call append(line('$') - 1, a:lookupslist[entry][2][subentry][1])
+        endfor
+        call append(line('$') - 1, "------------")
+    endfor
+    normal! dd
+    execute  'silent %s/,\s/\r/g'
+    execute  'silent %s/^I //'
+    normal! gg
+    nnoremap <buffer> <F12> :IVL<CR>
+endfunction
+
+function! LookUpSetText()
+    call DictionaryIsSet()
+    call AnalysesIsSet()
+    "get indent
+    let indent = matchstr(getline('.'), '^\s*')
+    let topline = indent
+    let bottomline = indent
+    "split line into words and punctuation chunks
+    "each item in the list is a list [word + punctuation, word]
+    let words = SplitAndKeepString(getline('.'))
+    "loop through chunks
+    for word in words
+        "Remember\:
+        "word[0] will be word and any punctuation (but no spaces)
+        "word[1] will be the word stripped of any punctuation
+        "get headword versions of word[1]
+        call add(word,AssembleHeadwordsAndDefinitions(word[1]))
+    endfor
+    " echo "Words list: "
+    " echo words
+    call DisplayLookUps(words)
+endfunction
+
+function! AssembleHeadwordsAndDefinitions(cleanword)
+    "For a given word stripped of punctuation and whitespace
+    "return a list of the following form
+    "[[headword 1, [meaning1, meaning2]], [headword2, [meaning1, meaning2]]]
+    "start with some Error checking
+    "since cleanword has len 0 if the original word was punctuation
+    "this prevents unnecessary calls for headwords and definitions
+    if len(a:cleanword) == 0
+        echo "No word given. Nothing to find headword for! Aborting..."
+        return
+    endif
+    "Start lookup
+    let headwords = systemlist('hermes2.sh ' 
+        \ . g:AnalysesFileLatin . ' ' . shellescape(a:cleanword))
+    " echo "Headwords: "
+    " echo headwords
+    " echo "len of headwords"
+    " echo len(headwords)
+    if len(headwords) == 0
+        call add(headwords, input("Supply headword for " . a:cleanword . ": ", a:cleanword))
+    endif
+    let lookups = []
+    for headword in range(len(headwords))
+        " echo "Iteration: "
+        " echo headword
+        let lookup = []
+        call add(lookup, headwords[headword])
+        call add(lookup, systemlist('deffinder.sh ' . g:ChosenDictionary . ' '
+        \ . shellescape(headwords[headword])))
+        " echo "Lookup: "
+        " echo lookup
+        call add(lookups, lookup)
+        " echo "LookupS updated?"
+        " echo lookups
+    endfor
+    return lookups
+endfunction
+
+function! EditMeaningsRow()
+    let line = getline('.')
+    normal dd
+    35vsplit Edit_Definitions
+    set nonumber
+    set norelativenumber
+    normal! ggdG
+    call setline(1, line)
+    execute 'silent s/^\s*//'
+    execute 'silent s/\s*$//'
+    execute 'silent s/\s\s\s*/\r------------\r/ge'
+    execute 'silent %s/, /\r/ge'
+    normal! gg
+    let &hlsearch = 0
+    nnoremap <buffer> <F12> :IVL<CR>
+endfunction
+    command! -narg=0 EMR call EditMeaningsRow()

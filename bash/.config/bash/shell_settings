@@ -1,0 +1,208 @@
+################################################################################
+## PATH 
+################################################################################
+## user's private bin 
+if [ -d "$HOME/.local/usr/bin" ] ; then
+    PATH="$HOME/.local/usr/bin:$PATH"
+fi
+## set PATH so it includes .local/bin if it exists
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+## cargo
+if [ -d "$HOME/.cargo/bin" ] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
+## surfraw. To remove use surfraw-update-path -remove
+    PATH=$PATH:/usr/lib/surfraw
+export PATH
+################################################################################
+## End PATH 
+################################################################################
+################################################################################
+## Environmental variables 
+################################################################################
+## convenience environmental variables
+export DOTFILES="$HOME/.dotfiles"
+export CONFIGS="$HOME/.config"
+## set XDG directories
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DOWNLOAD_DIR="$HOME/Downloads"
+export XDG_TEMPLATES_DIR="$HOME/Templates"
+export XDG_PUBLICSHARE_DIR="$HOME/Public"
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_MUSIC_DIR="$HOME/Music"
+export XDG_PICTURES_DIR="$HOME/Pictures"
+export XDG_VIDEOS_DIR="$HOME/Videos"
+## printer
+export PRINTER=Epson
+## Direct gpg to the terminal
+export GPG_TTY=$(tty)
+## mail directory
+export MAILDIR="/home/simon/.mail/Yahoo"
+## default programs
+export EDITOR="nvim"
+export BROWSER="surf"
+export PAGER="less"
+export RTV_BROWSER="w3m"
+export PLAYER="mpv"
+## set up nvm (node version manager)
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  ## This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  ## This loads nvm bash_completion
+## racer
+export RUST_SRC_PATH=/home/simon/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
+## To make python3 virtual environments work
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+################################################################################
+## End environmental variables
+################################################################################
+################################################################################
+## Program settings ####
+################################################################################
+## ranger
+RANGER_LOAD_DEFAULT_RC=FALSE
+## fzf integration
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+## broot
+source /home/simon/.config/broot/launcher/bash/br
+## python virtualenvwrapper
+source /home/simon/.local/bin/virtualenvwrapper.sh
+################################################################################
+## End program settings ####
+################################################################################
+################################################################################
+## aliases 
+################################################################################
+alias brc='source ~/.bashrc'
+alias gb='cd ~/.local/usr/bin'
+alias gc='cd ~/.config'
+alias gd='cd ~/Documents'
+alias go='cd ~/Downloads'
+alias gh='cd ~'
+alias gj='cd ~/Projects'
+alias gm='cd ~/Music'
+alias gM='cd /mnt'
+alias gp='cd ~/Pictures'
+alias gr='cd ~/.config/ranger'
+alias gt='cd ~/tmp'
+alias gv='cd ~/Videos'
+alias gw='cd ~/.wine/drive_c'
+## shell commands
+alias la='ls -lah'
+alias ll='ls -lh'
+alias gla='ls -lah | grep'
+alias gps='ps aux | grep'
+## programs
+alias r='ranger'
+#alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
+alias wwwd='w3m www.duckduckgo.com'
+alias start-mpd='mpd ~/.config/mpd/mpd.conf'
+alias servefiles='python -m SimpleHTTPServer'
+alias pb='playlist-browser'
+alias sx='sxiv-handler'
+alias ty='tsp youtube-dl'
+alias yt='youtube-dl --external-downloader=aria2c'
+alias ytv='youtube-dl --config-location ~/.config/youtube-dl/ytv'
+alias ytvv='youtube-dl --config-location ~/.config/youtube-dl/ytvv'
+alias yta='youtube-dl --config-location ~/.config/youtube-dl/yta'
+alias ytva='youtube-dl --config-location ~/.config/youtube-dl/ytva'
+## shortcut files
+alias min='vim ~/.dotfiles/help/minimal-debian-install'
+## config files
+alias cfg-ncmpcpp='vim ~/.config/ncmpcpp/config'
+alias cfg-mpd='vim ~/.config/mpd/mpd.conf'
+alias cfg-ranger='vim ~/.config/ranger/rc.conf'
+alias cfg-ba='vim ~/.bash_aliases'
+alias cfg-brc='vim ~/.bashrc'
+################################################################################
+## End aliases
+################################################################################
+################################################################################
+## custom functions
+################################################################################
+function tagger() {
+	lltag --clear --yes "$1" && \
+	lltag -a "$2" --yes "$1" && \
+	lltag -t "$3" --yes "$1"
+}
+
+function vff() {
+    [ -z "$1" ] && echo "\$1 must be a directory" ; return
+	vim "$(find "$1" | fzf -e --select-1)"
+
+}
+
+function vf() { find . | fzf | xargs bash -c '</dev/tty $EDITOR "$@"' ignoreme ;}
+
+function cheat() {
+	vim "$(find /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1)"
+}
+
+function cfg() {
+	vim "$(find /home/simon/.config | fzf -e --query="$1" --select-1)"
+}
+
+function snipper() {
+	options="-i ${1} -ss ${2} -t ${3} -c:a copy -c:v copy ${4}";
+	ffmpeg "$options"
+}
+
+function bak() {
+    for file in "$@"; do
+        cp "$file" "$file.bak"
+    done
+}
+
+function m() {
+    if tmux has-session -t music; then
+        tmux attach -t music
+        exit
+    fi
+
+    tmux new-session -d -s music -n playlist
+    tmux set status off
+    tmux set-window-option -t music:playlist window-style 'bg=#1d1f21'
+    tmux send-keys -t music:playlist "ncmpcpp -c ~/.config/ncmpcpp/config" Enter
+    tmux split-window -t music:playlist -h
+    tmux send-keys -t music:playlist.right "ncmpcpp" Enter
+    tmux send-keys -t music:playlist.right "8" Enter
+    tmux split-window -t music:playlist.right -v
+    tmux send-keys -t music:playlist.bottom-right "ncmpcpp" Enter
+    tmux send-keys -t music:playlist.bottom-right "2" Enter
+    tmux resize-pane -t music:playlist.left -R 10
+    tmux attach -t music:playlist.left
+}
+
+function how_in() {
+    where="$1"; shift
+    IFS=+ curl "https://cht.sh/$where/$*"
+}
+
+function contains() { [[ "$1" =~ (^|[[:space:]])"$2"($|[[:space:]]) ]] ;}
+
+function vu() {
+    export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
+    cleanup() {
+        rm "$FIFO_UEBERZUG" 2>/dev/null
+        pkill -P $$ 2>/dev/null
+    }
+    rm "$FIFO_UEBERZUG" 2>/dev/null
+    mkfifo "$FIFO_UEBERZUG"
+    trap cleanup EXIT
+    tail --follow "$FIFO_UEBERZUG" | ueberzug layer --silent --parser bash &
+    vifm "$@"
+    cleanup
+}
+
+function escr() {
+    FILE=$( whereis "$1" | cut -d' ' -f2 )
+    if [ "$(stat -c %U "$FILE")" == "$USER" ]; then
+        vim "$FILE"
+    else
+        sudo vim "$FILE"
+    fi
+}
+################################################################################
+## END custom functions
+################################################################################

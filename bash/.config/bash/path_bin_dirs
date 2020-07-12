@@ -1,28 +1,26 @@
-# set PATH so it includes user's private bin if it exists
+################################################################################
+## PATH 
+################################################################################
+## user's private bin 
 if [ -d "$HOME/.local/usr/bin" ] ; then
     PATH="$HOME/.local/usr/bin:$PATH"
 fi
-
-# set PATH so it includes .local/bin if it exists
+## set PATH so it includes .local/bin if it exists
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
-
-# include cargo dir in path
+## cargo
 if [ -d "$HOME/.cargo/bin" ] ; then
     PATH="$HOME/.cargo/bin:$PATH"
 fi
-
-### Added by surfraw. To remove use surfraw-update-path -remove
+## surfraw. To remove use surfraw-update-path -remove
     PATH=$PATH:/usr/lib/surfraw
-### End surfraw addition.
 export PATH
-
-# To make racer work
-    RUST_SRC_PATH=/home/simon/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
-
-export RUST_SRC_PATH
-
-# To make python3 virtual environments work
+################################################################################
+## Environmental variables
+################################################################################
+## racer
+export RUST_SRC_PATH=/home/simon/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
+## To make python3 virtual environments work
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 

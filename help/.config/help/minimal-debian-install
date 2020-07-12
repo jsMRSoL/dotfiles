@@ -32,19 +32,29 @@ visudo
 simon   ALL=(ALL:ALL) ALL
 simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
 
+# set up hosts file
+127.0.0.1       localhost
+192.168.1.1     router
+192.168.1.112   debdev
+192.168.1.103   ant # 00:1F:D0:69:B9:DD
+192.168.1.102   sam # 78:E4:00:39:40:99
+192.168.1.113   derek # 5C:F9:DD:E6:E4:2D
+
 ## Install git
-git clone https://github.com/jsMRSoL/config.git ~/.dotfiles
+git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
+# this contains my api keys
+git clone simon@ant:/mnt/media/git/private.git ~/.private
 
 ## Install vim
 apt-get install vim
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+#git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 ## Install lightdm
 apt-get install lightdm
 apt install blackbird-gtk-theme
 
 ## Install various packages
-apt-get install build-essential alsa-utils ssh curl urlview screenfetch python3-pip vim ranger mpd mpc ncmpcpp w3m w3m-img compton libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv finch surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv texlive-latex-base pandoc mpv
+apt-get install build-essential alsa-utils ssh curl urlview python3-pip vim mpd mpc ncmpcpp w3m w3m-img libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv mpv sxhkd
 
 ## Clone dwm and st and compile
 git clone https://git.suckless.org/dwm ~/.dwmsrc
@@ -65,14 +75,6 @@ sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emula
 /mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
 /mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
 
-## git clones fzf and fasd and pywal
-git clone https://github.com/junegunn/fzf.git ~/.fzfsrc
-git clone https://github.com/clvv/fasd.git ~/.fasdsrc
-git clone https://github.com/dylanaraps/pywal.git ~/.pywalsrc
-git clone https://github.com/mps-youtube/mps-youtube ~/.mpsyt
-#make wallpaper directory
-mkdir ~/.wallpaper
-git clone https://github.com/LukeSmithxyz/wallpapers.git ~/.wallpaper
 
 ## fonts
 # add contrib to /etc/apt/sources.list
@@ -85,8 +87,6 @@ sudo apt-get install gimp firefox-esr libreoffice simple-scan
 sudo apt install lxappearance
 
 ## browser
-# waterfox e.g.
-https://storage-waterfox.netdna-ssl.com/releases/linux64/installer/waterfox-56.2.0.en-US.linux-x86_64.tar.bz2
 # ssh keyless login
 # generate keys (accept all defaults)
 ssh-keygen -t rsa
@@ -95,6 +95,9 @@ ssh-id-copy host@server
 # disable password access on the server /etc/ssh/sshd_config
 PasswordAuthentication no
 sudo systemctl restart ssh
+# set up config file if using specific keys for specific sites/hosts
+Host github.com
+    IdentityFile ~/.ssh/github_rsa
 
 # Printing
 # Cups should already be installed. See above.
@@ -114,3 +117,10 @@ lpstat -t # should give queue name
 lpoptions -d queuename # sets default.
 # Test with 
 lpr myfile
+
+## git clones fzf and mps-youtube and ranger
+git clone https://github.com/junegunn/fzf.git ~/.fzfsrc
+git clone https://github.com/mps-youtube/mps-youtube ~/.mpsyt
+insert ranger address here!
+
+# install waterfox
