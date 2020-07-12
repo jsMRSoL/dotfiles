@@ -93,6 +93,7 @@ alias la='ls -lah'
 alias ll='ls -lh'
 alias gla='ls -lah | grep'
 alias gps='ps aux | grep'
+alias glog='git log --all --graph --decorate --oneline'
 ## programs
 alias r='ranger'
 #alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
