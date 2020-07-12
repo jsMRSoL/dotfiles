@@ -1,0 +1,46 @@
+dominus in cubiculo recumbit.
+
+;; return line beginning's position
+(line-beginning-position)
+
+;; return line end's position
+(line-end-position)
+
+;; returns the position for the beginning/end of buffer, taking account of narrow-to-region
+(point-min)
+(point-max)
+
+;; get the string from pos 71 to 300
+(setq myStr (buffer-substring 71 300))
+
+;; split a string into parts, returns a list
+(split-string "ry_007_cardioid" "_")
+
+Buffers
+;; return the name of current buffer
+(buffer-name)
+
+;; return the full path of current file
+(buffer-file-name)
+
+;; switch to the buffer named xyz
+(set-buffer "xyz")
+
+;; save current buffer
+(save-buffer)
+
+;; close a buffer named xyz
+(kill-buffer "xyz")
+
+;; temporarily sets a buffer as current to work with
+(with-current-buffer "xyz"
+  ;; do something here. delete/insert text, etc.
+)
+
+To grab current line, use:
+
+(setq myLine
+      (buffer-substring-no-properties
+       (line-beginning-position)
+       (line-end-position)
+       ))
