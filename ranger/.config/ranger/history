@@ -1,4 +1,3 @@
-mkdir .config/ranger
 shell vim 
 mkdir .config/rtv
 mkdir .local/usr/bin
@@ -46,5 +45,6 @@ mkdir emacs
 mkdir .emacs.d
 terminal 
 shell 
-delete
 cd .dotfiles/help/.config/help/
+rename .vim
+delete
