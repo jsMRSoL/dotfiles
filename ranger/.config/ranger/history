@@ -1,9 +1,3 @@
-term
-rename mw-past
-mkdir mpd
-mkdir .config/mps-youtube
-mkdir .config/ncmpcpp
-mkdir .config/newsbeuter
 mkdir .config/ranger
 shell vim 
 mkdir .config/rtv
@@ -39,12 +33,18 @@ shell git push
 rename vim
 mkdir sxhkd
 mkdir .config
-delete
 open_with gimp
 cd .private
 cd .dotfiles/
-cd .dotfiles
-terminal 
 rename bash_custom
 rename bash_functions
 rename shell_settings
+cd .dotfiles
+rename elisp-examples
+search .spacemacs
+mkdir emacs
+mkdir .emacs.d
+terminal 
+shell 
+delete
+cd .dotfiles/help/.config/help/

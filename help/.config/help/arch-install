@@ -1,38 +1,84 @@
-1. Download netinst (about 250-300MB)
+# 1. Preliminaries
+# 1a. Download installation iso (about 650MB)
+# https://www.archlinux.org/download/
+# 1b. create a bootable usb
+# dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress && sync
+# 2. boot live environment and set default keyboard layout for it
+loadkeys uk.map
+# 3. partition hard disks
+fdisk -l
+fdisk /dev/sda
+# g to create a gpt partition table
+# d to delete partition
+# n to create a new partition
+# for UEFI systems, create an ESP partition
+n
+1
+[accept default block size]
++512M
+# change type to EFI
+t
+# L to list all types, 1 was efi last time
+1
+# create root with e.g. 40G of disk space
+n
+2
+[accept default block size]
++40G
+# create data partition with all remaining space
+n
+3
+[accept default block size]
+[accept default end]
+# write changes to disk
+w
+# 4. create filesystems
+mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+# etc.
+# 5. connect to network
+# if on wired
+ip link
+ping google.com
+# if on wifi 
+wifi-menu
+ping google.com
+# 5. set mirrors
+# sync repositories
+pacman -Syy
+# install reflector
+pacman -S reflector
+# backup default mirror list
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+# get good mirror list and save
+reflector -c "GB" -f 12 -l 10 -n 12 --save /etc/pacman.d/mirrorlist
 
-2. Set up networking
-To find the names of your interfaces you will want to look here: $ ls /sys/class/net/ 
+# 6. Install the base system (assuming /dev/sda2 is /)
+mount /dev/sda2 /mnt
+pacstrap /mnt base linux linux-firmware vim
 
-vi /etc/network/interfaces
-# add custom lines for ethernet
-auto eth0 #for laptops remove this later, seems to slow start up
-iface eth0 inet dhcp
+# 7. Write a fstab for the new system
+genfstab -U /mnt >> /mnt/etc/fstab
 
-# make interfaces file more secure
-chmod 0600 /etc/network/interfaces
-
-# work out preshared key
-wpa_passphrase myssid my_very_secret_passphrase
-
-# add lines for wifi
-auto wlan0
-iface wlan0 inet dhcp
-        wpa-ssid myssid
-        wpa-psk passphrase
-
-# restart networking
-/etc/init.d/networking restart
-
-3. Install sudo
-apt-get install sudo
-# open visudo for editing
-su
-visudo
-# add custom lines
-simon   ALL=(ALL:ALL) ALL
-simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
-
-# set up hosts file
+# 8. Configure the new system
+arch-chroot /mnt
+# install grub
+pacman -S grub efibootmgr
+mkdir /boot/efi
+mount /dev/sda1 /boot/efi
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
+# set locale
+sed -i 's/#en_GB.UTF-8/en_GB.UTF.8' /etc/locale.gen
+timedatectl set-timezone Europe/Paris
+sed -i 's/#en_GB.UTF-8/en_GB.UTF.8' /etc/locale.gen
+sed -i 's/#el_GR.UTF-8/el_GR.UTF.8' /etc/locale.gen
+locale.gen
+echo LANG=en_GB.UTF-8 > /etc/locale.conf
+# configure networking
+echo derek > /etc/hostname
+touch /etc/hosts
 127.0.0.1       localhost
 192.168.1.1     router
 192.168.1.112   debdev
@@ -40,26 +86,31 @@ simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
 192.168.1.102   sam # 78:E4:00:39:40:99
 192.168.1.113   derek # 5C:F9:DD:E6:E4:2D
 
+# Install sudo
+pacman -S sudo
+# open visudo for editing
+visudo
+# add custom lines
+simon   ALL=(ALL:ALL) ALL
+simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
+
 ## Install git
 git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
 # this contains my api keys
 git clone simon@ant:/mnt/media/git/private.git ~/.private
 
-## Install vim
-apt-get install vim
-#git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 ## Install lightdm
-apt-get install lightdm
+pacman -S lightdm
 ## install a greeter / copy a custom greeter to /etc/lightdm
 ln -sT /etc/lightdm/lightdm-gtk-greeter.conf ~/.dotfiles/suckless/.config/suckless/dmw/lightdm-gtk-greeter.conf
 ## enable in systemd
 systemctl enable lightdm
 ## my *greeter.conf uses the blackbird-gtk-theme, so...
-apt install blackbird-gtk-theme
+pacman -S blackbird-gtk-theme
 
 ## Install various packages
-apt-get install build-essential alsa-utils ssh curl urlview python3-pip vim mpd mpc ncmpcpp w3m w3m-img libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv mpv sxhkd
+pacman -S build-essential alsa-utils ssh curl urlview python3-pip vim mpd mpc ncmpcpp w3m w3m-img libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv mpv sxhkd
 
 ## Clone dwm and st and compile
 git clone https://git.suckless.org/dwm ~/.dwmsrc
@@ -83,13 +134,13 @@ sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emula
 
 ## fonts
 # add contrib to /etc/apt/sources.list
-sudo apt-get install ttf-mscorefonts-installer
+pacman -S ttf-mscorefonts-installer
 
 ## gui apps
-sudo apt-get install gimp firefox-esr libreoffice simple-scan
+pacman -S gimp firefox-esr libreoffice simple-scan
 
 ## install lxappearance to choose dark widgets for gui apps
-sudo apt install lxappearance
+pacman -S lxappearance
 
 ## browser
 # ssh keyless login
