@@ -1,0 +1,50 @@
+mkdir .config/ranger
+shell vim 
+mkdir .config/rtv
+mkdir .local/usr/bin
+mkdir .config/surfraw
+mkdir .config/tmux
+rename urlview
+rename suckless
+mkdir .config/suckless/st
+mkdir dwm
+mkdir slock
+rename slock
+mkdir .config/help
+mkdir 
+mkdir nvim/.config/nvim
+mkdir systemd
+mkdir youtube-dl
+
+mkdir .vim
+rename nvim
+mkdir bash/.config/bash
+mkdir .config/w3m
+touch stow-cmds
+open_with nvim
+mkdir htop/.config
+rename .bash_aliases
+rename .bashrc
+rename .inputrc
+rename .profile
+rename .selected_editor
+rename .urlview
+shell git push
+rename vim
+mkdir sxhkd
+mkdir .config
+open_with gimp
+cd .private
+cd .dotfiles/
+rename bash_custom
+rename bash_functions
+rename shell_settings
+cd .dotfiles
+rename elisp-examples
+search .spacemacs
+mkdir emacs
+mkdir .emacs.d
+terminal 
+shell 
+delete
+cd .dotfiles/help/.config/help/

@@ -1,0 +1,182 @@
+# 1. Preliminaries
+# 1a. Download installation iso (about 650MB)
+# https://www.archlinux.org/download/
+# 1b. create a bootable usb
+# dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress && sync
+# 2. boot live environment and set default keyboard layout for it
+loadkeys uk.map
+# 3. partition hard disks
+fdisk -l
+fdisk /dev/sda
+# g to create a gpt partition table
+# d to delete partition
+# n to create a new partition
+# for UEFI systems, create an ESP partition
+n
+1
+[accept default block size]
++512M
+# change type to EFI
+t
+# L to list all types, 1 was efi last time
+1
+# create root with e.g. 40G of disk space
+n
+2
+[accept default block size]
++40G
+# create data partition with all remaining space
+n
+3
+[accept default block size]
+[accept default end]
+# write changes to disk
+w
+# 4. create filesystems
+mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+# etc.
+# 5. connect to network
+# if on wired
+ip link
+ping google.com
+# if on wifi 
+wifi-menu
+ping google.com
+# 5. set mirrors
+# sync repositories
+pacman -Syy
+# install reflector
+pacman -S reflector
+# backup default mirror list
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+# get good mirror list and save
+reflector -c "GB" -f 12 -l 10 -n 12 --save /etc/pacman.d/mirrorlist
+
+# 6. Install the base system (assuming /dev/sda2 is /)
+mount /dev/sda2 /mnt
+pacstrap /mnt base linux linux-firmware vim
+
+# 7. Write a fstab for the new system
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# 8. Configure the new system
+arch-chroot /mnt
+# install grub
+pacman -S grub efibootmgr
+mkdir /boot/efi
+mount /dev/sda1 /boot/efi
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
+# set locale
+sed -i 's/#en_GB.UTF-8/en_GB.UTF.8' /etc/locale.gen
+timedatectl set-timezone Europe/Paris
+sed -i 's/#en_GB.UTF-8/en_GB.UTF.8' /etc/locale.gen
+sed -i 's/#el_GR.UTF-8/el_GR.UTF.8' /etc/locale.gen
+locale.gen
+echo LANG=en_GB.UTF-8 > /etc/locale.conf
+# configure networking
+echo derek > /etc/hostname
+touch /etc/hosts
+127.0.0.1       localhost
+192.168.1.1     router
+192.168.1.112   debdev
+192.168.1.103   ant # 00:1F:D0:69:B9:DD
+192.168.1.102   sam # 78:E4:00:39:40:99
+192.168.1.113   derek # 5C:F9:DD:E6:E4:2D
+
+# Install sudo
+pacman -S sudo
+# open visudo for editing
+visudo
+# add custom lines
+simon   ALL=(ALL:ALL) ALL
+simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
+
+## Install git
+git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
+# this contains my api keys
+git clone simon@ant:/mnt/media/git/private.git ~/.private
+
+
+## Install lightdm
+pacman -S lightdm
+## install a greeter / copy a custom greeter to /etc/lightdm
+ln -sT /etc/lightdm/lightdm-gtk-greeter.conf ~/.dotfiles/suckless/.config/suckless/dmw/lightdm-gtk-greeter.conf
+## enable in systemd
+systemctl enable lightdm
+## my *greeter.conf uses the blackbird-gtk-theme, so...
+pacman -S blackbird-gtk-theme
+
+## Install various packages
+pacman -S build-essential alsa-utils ssh curl urlview python3-pip vim mpd mpc ncmpcpp w3m w3m-img libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv mpv sxhkd
+
+## Clone dwm and st and compile
+git clone https://git.suckless.org/dwm ~/.dwmsrc
+git clone https://git.suckless.org/st ~/.stsrc
+# with st clone it, patch it, then copy the custom config.h across, finally compile
+sudo make clean install
+sudo apt-get install dmenu
+sudo update-alternatives --install /usr/bin/x-session-manager x-session-manager /usr/local/bin/dwmstart 60
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/st 60
+
+## Binds for /etc/fstab
+/mnt/data/Desktop	/home/simon/Desktop	none	defaults,bind 0	0
+/mnt/data/Documents	/home/simon/Documents	none	defaults,bind 0	0
+/mnt/data/Downloads	/home/simon/Downloads	none	defaults,bind 0	0
+/mnt/data/Music		/home/simon/Music	none	defaults,bind 0	0
+/mnt/data/Pictures	/home/simon/Pictures	none	defaults,bind 0	0
+/mnt/data/Public	/home/simon/Public	none	defaults,bind 0	0
+/mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
+/mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
+
+
+## fonts
+# add contrib to /etc/apt/sources.list
+pacman -S ttf-mscorefonts-installer
+
+## gui apps
+pacman -S gimp firefox-esr libreoffice simple-scan
+
+## install lxappearance to choose dark widgets for gui apps
+pacman -S lxappearance
+
+## browser
+# ssh keyless login
+# generate keys (accept all defaults)
+ssh-keygen -t rsa
+# copy pub key to remote server's authorized keys file
+ssh-id-copy host@server
+# disable password access on the server /etc/ssh/sshd_config
+PasswordAuthentication no
+sudo systemctl restart ssh
+# set up config file if using specific keys for specific sites/hosts
+Host github.com
+    IdentityFile ~/.ssh/github_rsa
+
+# Printing
+# Cups should already be installed. See above.
+# Check the service is running:
+systemctl status cups
+# Go to the web interface /localhost:631/
+# Attempt to install the (network printer)
+# If the correct printer is not listed, 
+# install lsb
+sudo apt install lsb
+# and the correct driver from www.openprinting.org
+sudo dpkg -i driver.deb
+# add user to lpadmin
+sudo adduser simon lpadmin
+# make lpr (for printing from vim) work with cups by setting default
+lpstat -t # should give queue name
+lpoptions -d queuename # sets default.
+# Test with 
+lpr myfile
+
+## git clones fzf and mps-youtube and ranger
+git clone https://github.com/junegunn/fzf.git ~/.fzfsrc
+git clone https://github.com/mps-youtube/mps-youtube ~/.mpsyt
+insert ranger address here!
+
+# install waterfox

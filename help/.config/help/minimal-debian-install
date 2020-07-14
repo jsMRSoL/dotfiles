@@ -51,6 +51,11 @@ apt-get install vim
 
 ## Install lightdm
 apt-get install lightdm
+## install a greeter / copy a custom greeter to /etc/lightdm
+ln -sT /etc/lightdm/lightdm-gtk-greeter.conf ~/.dotfiles/suckless/.config/suckless/dmw/lightdm-gtk-greeter.conf
+## enable in systemd
+systemctl enable lightdm
+## my *greeter.conf uses the blackbird-gtk-theme, so...
 apt install blackbird-gtk-theme
 
 ## Install various packages
