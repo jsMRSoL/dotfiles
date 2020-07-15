@@ -102,12 +102,11 @@ git clone simon@ant:/mnt/media/git/private.git ~/.private
 
 ## Install lightdm
 pacman -S lightdm
-## install a greeter / copy a custom greeter to /etc/lightdm
-ln -sT /etc/lightdm/lightdm-gtk-greeter.conf ~/.dotfiles/suckless/.config/suckless/dmw/lightdm-gtk-greeter.conf
-## enable in systemd
-systemctl enable lightdm
-## my *greeter.conf uses the blackbird-gtk-theme, so...
-pacman -S blackbird-gtk-theme
+pacman -S lightdm-gtk-greeter
+
+# fix kernel module issue
+## Add to /etc/modprobe.d/dell-smm-hwmon.conf
+options dell-smm-hwmon ignore_dmi=1
 
 ## Install various packages
 pacman -S build-essential alsa-utils ssh curl urlview python3-pip vim mpd mpc ncmpcpp w3m w3m-img libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv mpv sxhkd

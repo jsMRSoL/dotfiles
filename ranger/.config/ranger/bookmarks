@@ -3,7 +3,11 @@ a:/home/simon/Downloads/.admin
 c:/home/simon/.config
 b:/home/simon/.local/usr/bin
 d:/home/simon/Documents
+<<<<<<< HEAD
 ':/home/simon/.config/suckless/st
+=======
+':/home/simon/.dotfiles
+>>>>>>> 716310d0b66d0dee0479b00bf3c83a807407e913
 f:/home/simon/.dotfiles
 h:/home/simon
 o:/home/simon/Downloads

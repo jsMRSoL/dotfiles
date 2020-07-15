@@ -41,7 +41,7 @@ export GPG_TTY=$(tty)
 ## mail directory
 export MAILDIR="/home/simon/.mail/Yahoo"
 ## default programs
-export EDITOR="nvim"
+export EDITOR="vim"
 export BROWSER="surf"
 export PAGER="less"
 export RTV_BROWSER="w3m"
