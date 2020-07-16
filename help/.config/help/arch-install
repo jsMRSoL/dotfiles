@@ -71,7 +71,7 @@ grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
 grub-mkconfig -o /boot/grub/grub.cfg
 # set locale
 sed -i 's/#en_GB.UTF-8/en_GB.UTF.8' /etc/locale.gen
-timedatectl set-timezone Europe/Paris
+timedatectl set-timezone Europe/London
 sed -i 's/#en_GB.UTF-8/en_GB.UTF.8' /etc/locale.gen
 sed -i 's/#el_GR.UTF-8/el_GR.UTF.8' /etc/locale.gen
 locale.gen
@@ -121,7 +121,9 @@ git clone simon@ant:/mnt/media/git/private.git ~/.private
 ## Install lightdm
 pacman -S lightdm
 pacman -S lightdm-gtk-greeter
-echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
+# The following does NOT work:
+# echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
+# This line must be placed in the [Seat:*] section!
 ln -sT /etc/lightdm/lightdm-gtk-greeter.conf /home/simon/.dotfiles/suckless/.config/suckless/dwm/lightdm-gtk-greeter.conf
 ## Add to /etc/modprobe.d/dell-smm-hwmon.conf
 # options dell-smm-hwmon ignore_dmi=1
