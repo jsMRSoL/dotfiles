@@ -65,9 +65,9 @@ RANGER_LOAD_DEFAULT_RC=FALSE
 ## fzf integration
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 ## broot
-source /home/simon/.config/broot/launcher/bash/br
+# source /home/simon/.config/broot/launcher/bash/br
 ## python virtualenvwrapper
-source /home/simon/.local/bin/virtualenvwrapper.sh
+# source /home/simon/.local/bin/virtualenvwrapper.sh
 ################################################################################
 ## End program settings ####
 ################################################################################
