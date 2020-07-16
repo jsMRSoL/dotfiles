@@ -40,7 +40,7 @@ mkfs.ext4 /dev/sda3
 # 5. connect to network
 # if on wired
 ip link
-ping google.com
+# test with: ping www.google.com
 # if on wifi 
 wifi-menu
 ping google.com
@@ -52,7 +52,7 @@ pacman -S reflector
 # backup default mirror list
 cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
 # get good mirror list and save
-reflector -c "GB" -f 12 -l 10 -n 12 --save /etc/pacman.d/mirrorlist
+reflector --protocol http -c "GB" -f 12 -l 10 -n 12 --save /etc/pacman.d/mirrorlist
 
 # 6. Install the base system (assuming /dev/sda2 is /)
 mount /dev/sda2 /mnt
@@ -79,46 +79,84 @@ echo LANG=en_GB.UTF-8 > /etc/locale.conf
 # configure networking
 echo derek > /etc/hostname
 touch /etc/hosts
+cat <<EOT >> /etc/hostname
 127.0.0.1       localhost
 192.168.1.1     router
 192.168.1.112   debdev
 192.168.1.103   ant # 00:1F:D0:69:B9:DD
 192.168.1.102   sam # 78:E4:00:39:40:99
 192.168.1.113   derek # 5C:F9:DD:E6:E4:2D
+EOT
 
 # Install sudo
 pacman -S sudo
 # open visudo for editing
-visudo
+# visudo
 # add custom lines
-simon   ALL=(ALL:ALL) ALL
-simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
+# simon   ALL=(ALL:ALL) ALL
+# simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
+
+# install ssh
+pacman -S openssh
+systemctl enable sshd
+systemctl start sshd
+
+# ssh keyless login
+# generate keys (accept all defaults)
+# ssh-keygen -t rsa
+# copy pub key to remote server's authorized keys file
+# ssh-id-copy host@server
+# disable password access on the server /etc/ssh/sshd_config
+# PasswordAuthentication no
+# sudo systemctl restart ssh
+# set up config file if using specific keys for specific sites/hosts
+# Host github.com
+#    IdentityFile ~/.ssh/github_rsa
 
 ## Install git
 git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
-# this contains my api keys
+# this contains my api keys and ssh keys
 git clone simon@ant:/mnt/media/git/private.git ~/.private
-
 
 ## Install lightdm
 pacman -S lightdm
 pacman -S lightdm-gtk-greeter
-
-# fix kernel module issue
+echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
+ln -sT /etc/lightdm/lightdm-gtk-greeter.conf /home/simon/.dotfiles/suckless/.config/suckless/dwm/lightdm-gtk-greeter.conf
 ## Add to /etc/modprobe.d/dell-smm-hwmon.conf
-options dell-smm-hwmon ignore_dmi=1
+# options dell-smm-hwmon ignore_dmi=1
 
 ## Install various packages
-pacman -S build-essential alsa-utils ssh curl urlview python3-pip vim mpd mpc ncmpcpp w3m w3m-img libx11-dev libxft-dev libxrandr-dev libxext-dev task-spooler imagemagick rtv surfraw acpi mupdf tmux nfs-common catdoc atool caca-utils highlight mediainfo exiftool odt2txt docx2txt xlsx2csv cups-bsd cups sxiv mpv sxhkd
+pacman -S fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd gimp firefox-esr libreoffice simple-scan python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel
+
+? w3m-img
+? cups-bsd
+? firefox-esr
+
+## Install yay
+git clone https://aur.archlinux.org/yay.git ~/tmp/yay
+cd ~/tmp/yay
+makepkg -si
+
+yay -S urlview
+yay -S task-spooler
+yay -S python-xlsx2csv
+yay -S ttf-ms-fonts
+yay -S ttf-vista-fonts
+
+# pip install python 
+pip install youtube-dl
 
 ## Clone dwm and st and compile
-git clone https://git.suckless.org/dwm ~/.dwmsrc
-git clone https://git.suckless.org/st ~/.stsrc
-# with st clone it, patch it, then copy the custom config.h across, finally compile
+git clone https://git.suckless.org/dwm ~/tmp/dwmsrc
+git clone https://git.suckless.org/st ~/tmp/stsrc
+make
 sudo make clean install
 sudo apt-get install dmenu
-sudo update-alternatives --install /usr/bin/x-session-manager x-session-manager /usr/local/bin/dwmstart 60
-sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/st 60
+cp ~/.dotfiles/suckless/.config/suckless/dwm/dwm.desktop /usr/share/xsessions/
+## lightdm should now be able to start dwm. 
+## If it doesn't, check .xsession-errors. Errors raised by .profile (including
+## errors from sourced files (oops!)) can prevent launching.
 
 ## Binds for /etc/fstab
 /mnt/data/Desktop	/home/simon/Desktop	none	defaults,bind 0	0
@@ -129,30 +167,6 @@ sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emula
 /mnt/data/Public	/home/simon/Public	none	defaults,bind 0	0
 /mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
 /mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
-
-
-## fonts
-# add contrib to /etc/apt/sources.list
-pacman -S ttf-mscorefonts-installer
-
-## gui apps
-pacman -S gimp firefox-esr libreoffice simple-scan
-
-## install lxappearance to choose dark widgets for gui apps
-pacman -S lxappearance
-
-## browser
-# ssh keyless login
-# generate keys (accept all defaults)
-ssh-keygen -t rsa
-# copy pub key to remote server's authorized keys file
-ssh-id-copy host@server
-# disable password access on the server /etc/ssh/sshd_config
-PasswordAuthentication no
-sudo systemctl restart ssh
-# set up config file if using specific keys for specific sites/hosts
-Host github.com
-    IdentityFile ~/.ssh/github_rsa
 
 # Printing
 # Cups should already be installed. See above.
@@ -174,8 +188,11 @@ lpoptions -d queuename # sets default.
 lpr myfile
 
 ## git clones fzf and mps-youtube and ranger
-git clone https://github.com/junegunn/fzf.git ~/.fzfsrc
 git clone https://github.com/mps-youtube/mps-youtube ~/.mpsyt
-insert ranger address here!
 
 # install waterfox
+
+# two monitors
+# xrandr will give names of monitors
+xrandr --output VGA1 --auto -right-of eDP1
+
