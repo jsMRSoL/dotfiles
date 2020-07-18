@@ -1,6 +1,6 @@
-*.log
-*.swp
-*.un~
+.log
+.swp
+.un~
 ranger/.config/ranger/bookmarks
 ranger/.config/ranger/history
 scripts/.local/bin
