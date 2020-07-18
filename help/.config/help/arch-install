@@ -33,6 +33,20 @@ simon   ALL=(ALL:ALL) ALL
 simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
 EOT
 
+## Binds for /etc/fstab
+cat <<EOT >> /etc/fstab
+
+### Binds for data partition
+/mnt/data/Desktop	/home/simon/Desktop	none	defaults,bind 0	0
+/mnt/data/Documents	/home/simon/Documents	none	defaults,bind 0	0
+/mnt/data/Downloads	/home/simon/Downloads	none	defaults,bind 0	0
+/mnt/data/Music		/home/simon/Music	none	defaults,bind 0	0
+/mnt/data/Pictures	/home/simon/Pictures	none	defaults,bind 0	0
+/mnt/data/Public	/home/simon/Public	none	defaults,bind 0	0
+/mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
+/mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
+EOT
+
 # install ssh
 pacman -S openssh
 systemctl enable sshd
@@ -50,25 +64,16 @@ systemctl start sshd
 # Host github.com
 #    IdentityFile ~/.ssh/github_rsa
 
-## Set up home directory from git
-mkdir .local .config
-git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles && stow *
-# this contains my api keys and ssh keys
-git clone simon@ant:/mnt/media/git/private.git ~/.private
-
 ## Install lightdm
 pacman -S lightdm
-pacman -S lightdm-gtk-greeter
 # The following does NOT work:
 # echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
 # This line must be placed in the [Seat:*] section!
-ln -sT /etc/lightdm/lightdm-gtk-greeter.conf /home/simon/.dotfiles/suckless/.config/suckless/dwm/lightdm-gtk-greeter.conf
 ## Add to /etc/modprobe.d/dell-smm-hwmon.conf
 # options dell-smm-hwmon ignore_dmi=1
 
 ## Install various packages
-pacman -S fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd gimp firefox-esr libreoffice simple-scan python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel
+pacman -S fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd gimp firefox-esr libreoffice simple-scan python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock
 
 ? w3m-img
 ? cups-bsd
@@ -86,53 +91,56 @@ yay -S ttf-vista-fonts
 
 # pip install python 
 pip install youtube-dl
+pip install mps-youtube
 
-## Clone dwm and st and compile
-git clone https://git.suckless.org/dwm ~/tmp/dwmsrc
-git clone https://git.suckless.org/st ~/tmp/stsrc
-make
-sudo make clean install
-sudo apt-get install dmenu
-cp ~/.dotfiles/suckless/.config/suckless/dwm/dwm.desktop /usr/share/xsessions/
 ## lightdm should now be able to start dwm. 
 ## If it doesn't, check .xsession-errors. Errors raised by .profile (including
 ## errors from sourced files (oops!)) can prevent launching.
 
-## Binds for /etc/fstab
-/mnt/data/Desktop	/home/simon/Desktop	none	defaults,bind 0	0
-/mnt/data/Documents	/home/simon/Documents	none	defaults,bind 0	0
-/mnt/data/Downloads	/home/simon/Downloads	none	defaults,bind 0	0
-/mnt/data/Music		/home/simon/Music	none	defaults,bind 0	0
-/mnt/data/Pictures	/home/simon/Pictures	none	defaults,bind 0	0
-/mnt/data/Public	/home/simon/Public	none	defaults,bind 0	0
-/mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
-/mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
 
 # Printing
 # Cups should already be installed. See above.
 # Check the service is running:
-systemctl status cups
+# systemctl status cups
 # Go to the web interface /localhost:631/
 # Attempt to install the (network printer)
 # If the correct printer is not listed, 
 # install lsb
-sudo apt install lsb
+# sudo apt install lsb
 # and the correct driver from www.openprinting.org
-sudo dpkg -i driver.deb
+# sudo dpkg -i driver.deb
 # add user to lpadmin
-sudo adduser simon lpadmin
+# sudo adduser simon lpadmin
 # make lpr (for printing from vim) work with cups by setting default
-lpstat -t # should give queue name
-lpoptions -d queuename # sets default.
+# lpstat -t # should give queue name
+# lpoptions -d queuename # sets default.
 # Test with 
-lpr myfile
-
-## git clones fzf and mps-youtube and ranger
-git clone https://github.com/mps-youtube/mps-youtube ~/.mpsyt
-
-# install waterfox
+# lpr myfile
 
 # two monitors
 # xrandr will give names of monitors
-xrandr --output VGA1 --auto -right-of eDP1
+# xrandr --output VGA1 --auto -right-of eDP1
 
+## Set up home directory from git
+useradd -m simon
+su simon
+mkdir .local .config .vim .vim/bundle .emacs.d .emacs.d/private
+git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles && stow *
+# this contains my api keys and ssh keys
+git clone simon@ant:/mnt/media/git/private.git ~/.private
+cp ~/.private/ssh_derek ~/ssh
+
+# drop to root
+exit
+# cp system files for dwm and lightdm
+DOTFILES=/home/simon/.dotfiles
+cp $DOTFILES/suckless/.config/suckless/dwm/lightdm.conf /etc/lightdm/lightdm.conf
+cp $DOTFILES/suckless/.config/suckless/dwm/dwm.desktop /usr/share/xsessions
+## Compile dwm and st
+cd $DOTFILES/suckless/.config/suckless/dwm
+make
+sudo make clean install
+cd $DOTFILES/suckless/.config/suckless/st
+make
+sudo make clean install
