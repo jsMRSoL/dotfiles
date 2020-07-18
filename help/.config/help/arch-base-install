@@ -1,0 +1,71 @@
+# 1. Preliminaries
+# 1a. Download installation iso (about 650MB)
+# https://www.archlinux.org/download/
+# 1b. create a bootable usb
+# dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress && sync
+# 2. boot live environment and set default keyboard layout for it
+loadkeys uk.map
+# 3. partition hard disks
+fdisk -l
+fdisk /dev/sda
+# g to create a gpt partition table
+# d to delete partition
+# n to create a new partition
+# for UEFI systems, create an ESP partition
+n
+1
+[accept default block size]
++512M
+# change type to EFI
+t
+# L to list all types, 1 was efi last time
+1
+# create root with e.g. 40G of disk space
+n
+2
+[accept default block size]
++40G
+# create data partition with all remaining space
+n
+3
+[accept default block size]
+[accept default end]
+# write changes to disk
+w
+# 4. create filesystems
+mkfs.fat -F32 /dev/sda1
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+# etc.
+# 5. connect to network
+# if on wired
+ip link
+# test with: ping www.google.com
+# if on wifi 
+wifi-menu
+ping google.com
+# 5. set mirrors
+# sync repositories
+pacman -Syy
+# install reflector
+pacman -S reflector
+# backup default mirror list
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+# get good mirror list and save
+reflector --protocol http -c "GB" -f 12 -l 10 -n 12 --save /etc/pacman.d/mirrorlist
+
+# 6. Install the base system (assuming /dev/sda2 is /)
+mount /dev/sda2 /mnt
+pacstrap /mnt base linux linux-firmware vim
+
+# 7. Write a fstab for the new system
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# 8. Configure the new system
+arch-chroot /mnt
+# install grub
+pacman -S grub efibootmgr
+mkdir /boot/efi
+mount /dev/sda1 /boot/efi
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
