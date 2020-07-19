@@ -1,5 +1,5 @@
 # Test if chrooted
-if ["$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)"; then
+if ["$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)"]; then
     echo "Already in chroot. Continuing with installation..."
 else
     arch-chroot /mnt
@@ -7,14 +7,14 @@ else
 fi
 # set time and locale
 timedatectl set-timezone Europe/London
-sed -i 's/#en_GB.UTF-8/en_GB.UTF.8' /etc/locale.gen
-sed -i 's/#el_GR.UTF-8/el_GR.UTF.8' /etc/locale.gen
-locale.gen
+sed -i 's/#en_GB.UTF-8/en_GB.UTF.8/' /etc/locale.gen
+sed -i 's/#el_GR.UTF-8/el_GR.UTF.8/' /etc/locale.gen
+locale_gen
 echo LANG=en_GB.UTF-8 > /etc/locale.conf
 # configure networking
 echo derek > /etc/hostname
 touch /etc/hosts
-cat <<EOT >> /etc/hostname
+cat <<EOT >> /etc/hosts
 127.0.0.1       localhost
 192.168.1.1     router
 192.168.1.112   debdev
@@ -73,23 +73,22 @@ pacman -S lightdm
 # options dell-smm-hwmon ignore_dmi=1
 
 ## Install various packages
-pacman -S fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd gimp firefox-esr libreoffice simple-scan python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock
+packages="iwd dhcpcd fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd gimp firefox libreoffice simple-scan python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock"
+for package in $packages
+do
+    pacman -Ss $package
+    [ $? -eq 0 ] && pacman -S --noconfirm $package || echo "Couldn't find package $package" >> installation.log
+done
 
-? w3m-img
-? cups-bsd
-
-## Install yay
-git clone https://aur.archlinux.org/yay.git ~/tmp/yay
-cd ~/tmp/yay
-makepkg -si
-
-yay -S urlview
-yay -S task-spooler
-yay -S python-xlsx2csv
-yay -S ttf-ms-fonts
-yay -S ttf-vista-fonts
-
+######################################################
+# Enable packages
+######################################################
+systemctl enable org.cups.cupsd
+systemctl enable iwd
+systemctl enable dhcpcd
+######################################################
 # pip install python 
+######################################################
 pip install youtube-dl
 pip install mps-youtube
 
@@ -127,9 +126,10 @@ su simon
 mkdir .local .config .vim .vim/bundle .emacs.d .emacs.d/private
 git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && stow *
+
 # this contains my api keys and ssh keys
 git clone simon@ant:/mnt/media/git/private.git ~/.private
-cp ~/.private/ssh_derek ~/ssh
+cd ~/.private && stow *
 
 # drop to root
 exit
@@ -139,8 +139,17 @@ cp $DOTFILES/suckless/.config/suckless/dwm/lightdm.conf /etc/lightdm/lightdm.con
 cp $DOTFILES/suckless/.config/suckless/dwm/dwm.desktop /usr/share/xsessions
 ## Compile dwm and st
 cd $DOTFILES/suckless/.config/suckless/dwm
-make
-sudo make clean install
+make clean install
 cd $DOTFILES/suckless/.config/suckless/st
-make
-sudo make clean install
+make clean install
+## Install yay
+su simon
+mkdir ~/tmp
+git clone https://aur.archlinux.org/yay.git ~/tmp/yay
+cd ~/tmp/yay
+makepkg -si
+yay-packages="lightdm-slick-greeter urlview task-spooler python-xlsx2csv ttf-ms-fonts ttf-vista-fonts"
+for yay-package in $yay-packages
+do
+    yay -S --answerclean=None --answerdiff=None --answeredit=None --answerupgrade=None $yay-package
+done

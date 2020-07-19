@@ -1,6 +1,6 @@
-.log
-.swp
-.un~
+*.log
+*.swp
+*.un~
 ranger/.config/ranger/bookmarks
 ranger/.config/ranger/history
 scripts/.local/bin
@@ -9,3 +9,5 @@ scripts/.local/lib
 scripts/.local/share
 vim/.vim/.netrwhist
 vim/.vim/tmp
+**/**/cache_py*
+**/**/pid

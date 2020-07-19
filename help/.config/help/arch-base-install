@@ -42,7 +42,8 @@ mkfs.ext4 /dev/sda3
 ip link
 # test with: ping www.google.com
 # if on wifi 
-wifi-menu
+iwctl --passphrase passphrase station wlan0 connect SSID
+# or "iwd" and use help
 ping google.com
 # 5. set mirrors
 # sync repositories
