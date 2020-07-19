@@ -1,18 +1,43 @@
+#!/bin/sh
+######################################################
+# useful functions
+######################################################
+touch /root/installation.log
+LOG=/root/installation.log
+report() {
+    # $1 is success message
+    # $2 is failure message
+    [ $? -eq 0 ] && echo "$1" || echo "$2" >> $LOG
+}
+######################################################
 # Test if chrooted
-if ["$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)"]; then
+######################################################
+if [ "$(awk '$5=="/" {print $1}' </proc/1/mountinfo)" != "$(awk '$5=="/" {print $1}' </proc/$$/mountinfo)" ]; then
     echo "Already in chroot. Continuing with installation..."
 else
     arch-chroot /mnt
     echo "Now running in chroot on /mnt."
 fi
+######################################################
 # set time and locale
+######################################################
 timedatectl set-timezone Europe/London
+report "Set timezone" "Couldn't set timezone"
 sed -i 's/#en_GB.UTF-8/en_GB.UTF.8/' /etc/locale.gen
 sed -i 's/#el_GR.UTF-8/el_GR.UTF.8/' /etc/locale.gen
 locale_gen
+report "Generated locale" "Couldn't generate locale"
 echo LANG=en_GB.UTF-8 > /etc/locale.conf
+export LANG=en_GB.UTF-8
+######################################################
 # configure networking
-echo derek > /etc/hostname
+######################################################
+read -p "Input a hostname: " hostname
+mkdir -p ~/tmp/etc && \
+    touch ~/tmp/etc/hostname && \
+    echo "$hostname" > ~/tmp/etc/hostname
+report "Wrote hostname $hostname to /etc/hostname" "Couldn't write hostname to /etc/hostname"
+
 touch /etc/hosts
 cat <<EOT >> /etc/hosts
 127.0.0.1       localhost
@@ -22,9 +47,11 @@ cat <<EOT >> /etc/hosts
 192.168.1.102   sam # 78:E4:00:39:40:99
 192.168.1.113   derek # 5C:F9:DD:E6:E4:2D
 EOT
-
+######################################################
 # Install sudo
+######################################################
 pacman -S sudo
+report "Installed sudo" "Couldn't install sudo"
 # open visudo for editing
 # visudo
 # add custom lines
@@ -32,66 +59,48 @@ cat <<EOT >>/etc/sudoers
 simon   ALL=(ALL:ALL) ALL
 simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
 EOT
-
-## Binds for /etc/fstab
+report "Updated sudoers" "Couldn't update sudoers"
+######################################################
+# Binds for /etc/fstab
+######################################################
 cat <<EOT >> /etc/fstab
 
-### Binds for data partition
-/mnt/data/Desktop	/home/simon/Desktop	none	defaults,bind 0	0
+# Binds for data partition
 /mnt/data/Documents	/home/simon/Documents	none	defaults,bind 0	0
 /mnt/data/Downloads	/home/simon/Downloads	none	defaults,bind 0	0
 /mnt/data/Music		/home/simon/Music	none	defaults,bind 0	0
 /mnt/data/Pictures	/home/simon/Pictures	none	defaults,bind 0	0
-/mnt/data/Public	/home/simon/Public	none	defaults,bind 0	0
 /mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
 /mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
 EOT
-
-# install ssh
-pacman -S openssh
-systemctl enable sshd
-systemctl start sshd
-
-# ssh keyless login
-# generate keys (accept all defaults)
-# ssh-keygen -t rsa
-# copy pub key to remote server's authorized keys file
-# ssh-id-copy host@server
-# disable password access on the server /etc/ssh/sshd_config
-# PasswordAuthentication no
-# sudo systemctl restart ssh
-# set up config file if using specific keys for specific sites/hosts
-# Host github.com
-#    IdentityFile ~/.ssh/github_rsa
-
-## Install lightdm
-pacman -S lightdm
-# The following does NOT work:
-# echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
-# This line must be placed in the [Seat:*] section!
-## Add to /etc/modprobe.d/dell-smm-hwmon.conf
-# options dell-smm-hwmon ignore_dmi=1
-
-## Install various packages
-packages="iwd dhcpcd fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd gimp firefox libreoffice simple-scan python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock"
+report "Added binds for home directory" "Couldn't add binds for home directory"
+######################################################
+# Install various packages
+######################################################
+packages="lightdm iwd dhcpcd openssh fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd gimp firefox libreoffice simple-scan python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock pass"
 for package in $packages
 do
     pacman -Ss $package
-    [ $? -eq 0 ] && pacman -S --noconfirm $package || echo "Couldn't find package $package" >> installation.log
+    [ $? -eq 0 ] && pacman -S --noconfirm $package && echo "Installed package $package" >> $LOG || echo "Couldn't find package $package" >> $LOG
 done
-
 ######################################################
 # Enable packages
 ######################################################
-systemctl enable org.cups.cupsd
-systemctl enable iwd
-systemctl enable dhcpcd
+services="org.cups.cupsd iwd dhcpcd sshd"
+for service in $services
+do
+    systemctl enable $service
+    report "Installed service $service" "Couldn't install service $service"
+done
 ######################################################
 # pip install python 
 ######################################################
-pip install youtube-dl
-pip install mps-youtube
-
+pippackages="youtube-dl mps-youtube"
+for pippkg in $pippackages
+do
+    pip install $pippkg
+    report "Installed pip package $pippkg" "Couldn't install pip package $pippkg"
+done
 ## lightdm should now be able to start dwm. 
 ## If it doesn't, check .xsession-errors. Errors raised by .profile (including
 ## errors from sourced files (oops!)) can prevent launching.
@@ -120,36 +129,83 @@ pip install mps-youtube
 # xrandr will give names of monitors
 # xrandr --output VGA1 --auto -right-of eDP1
 
-## Set up home directory from git
+######################################################
+# Set up home directory with git and stow
+######################################################
 useradd -m simon
 su simon
 mkdir .local .config .vim .vim/bundle .emacs.d .emacs.d/private
 git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && stow *
-
 # this contains my api keys and ssh keys
 git clone simon@ant:/mnt/media/git/private.git ~/.private
 cd ~/.private && stow *
-
+# permissions on .ssh/{keys} must be 600
+# permissions on .gnupg must be 700
+# permissions on .gnupg must be 600
+# .gnupg/gpg-agent.conf points to my-pinentry at /usr/local/bin, so
+# copy my-pinentry from scripts to there. I don't know why changing
+# the address in the file doesn't work. For now, just copy the file.
 # drop to root
 exit
-# cp system files for dwm and lightdm
+chmod 700 /home/simon/.gnupg
+chmod -R 600 /home/simon/.gnupg/*
+chmod -R 600 /home/simon/.ssh/*
+######################################################
+# cp system files for pinentry, dwm and lightdm
+######################################################
 DOTFILES=/home/simon/.dotfiles
+cp $DOTFILES/scripts/.local/usr/local/bin/my-pinentry /usr/local/bin/
+report "Copied my-pinentry to /usr/local/bin" "Couldn't copy my-pinentry to /usr/local/bin"
 cp $DOTFILES/suckless/.config/suckless/dwm/lightdm.conf /etc/lightdm/lightdm.conf
+report "Copied lightdm.conf to /etc/lightdm" "Couldn't copy lightdm.conf to /etc/lightdm"
+mkdir -p /usr/share/xsessions
 cp $DOTFILES/suckless/.config/suckless/dwm/dwm.desktop /usr/share/xsessions
-## Compile dwm and st
+report "Copied dwm.desktop to /usr/share/xsessions" "Couldn't copy dwm.desktop to /usr/share/xsessions"
+######################################################
+# Compile dwm and st
+######################################################
 cd $DOTFILES/suckless/.config/suckless/dwm
 make clean install
 cd $DOTFILES/suckless/.config/suckless/st
 make clean install
-## Install yay
+######################################################
+# Install yay
+######################################################
 su simon
 mkdir ~/tmp
 git clone https://aur.archlinux.org/yay.git ~/tmp/yay
+report "Downloaded yay from aur" "Couldn't download yay from aur"
 cd ~/tmp/yay
 makepkg -si
+######################################################
+# Install yay packages
+######################################################
 yay-packages="lightdm-slick-greeter urlview task-spooler python-xlsx2csv ttf-ms-fonts ttf-vista-fonts"
 for yay-package in $yay-packages
 do
     yay -S --answerclean=None --answerdiff=None --answeredit=None --answerupgrade=None $yay-package
 done
+
+######################################################
+# Further notes
+######################################################
+# 
+# ssh keyless login
+# generate keys (accept all defaults)
+# ssh-keygen -t rsa
+# copy pub key to remote server's authorized keys file
+# ssh-id-copy host@server
+# disable password access on the server /etc/ssh/sshd_config
+# PasswordAuthentication no
+# sudo systemctl restart ssh
+# set up config file if using specific keys for specific sites/hosts
+# Host github.com
+#    IdentityFile ~/.ssh/github_rsa
+######################################################
+
+# The following does NOT work:
+# echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
+# This line must be placed in the [Seat:*] section!
+## Add to /etc/modprobe.d/dell-smm-hwmon.conf
+# options dell-smm-hwmon ignore_dmi=1
