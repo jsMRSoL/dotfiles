@@ -113,10 +113,11 @@ done
 useradd -m simon
 sudo -i -u simon bash <<EOT
 mkdir .local .config .vim .vim/bundle .emacs.d .emacs.d/private
+git clone http://192.168.1.103/git/private-ace.git ~/.private
+mv ~/.ssh ~/ssh.bak
+cd ~/.private && stow *
 git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && stow *
-git clone simon@ant:/mnt/media/git/private-ace.git ~/.private
-cd ~/.private && stow *
 # vundle!
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 EOT
