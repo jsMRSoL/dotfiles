@@ -84,7 +84,7 @@ done
 ######################################################
 # Enable packages
 ######################################################
-services="org.cups.cupsd iwd dhcpcd sshd"
+services="lightdm org.cups.cupsd iwd dhcpcd sshd"
 for service in $services
 do
     systemctl enable $service
@@ -117,6 +117,7 @@ git clone http://192.168.1.103/git/private-ace.git ~/.private
 mv ~/.ssh ~/ssh.bak
 cd ~/.private && stow *
 git clone https://github.com/jsMRSoL/dotfiles.git ~/.dotfiles
+mv ~/.bashrc ~/.bashrc.bak
 cd ~/.dotfiles && stow *
 # vundle!
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
@@ -136,13 +137,15 @@ chmod -R 600 /home/simon/.ssh/*
 # cp system files for pinentry, dwm and lightdm
 ######################################################
 DOTFILES=/home/simon/.dotfiles
-cp $DOTFILES/scripts/.local/usr/local/bin/my-pinentry /usr/local/bin/
+cp $DOTFILES/scripts/.local/usr/bin/my-pinentry /usr/local/bin/
 report "Copied my-pinentry to /usr/local/bin" "Couldn't copy my-pinentry to /usr/local/bin"
-cp $DOTFILES/suckless/.config/suckless/dwm/lightdm.conf /etc/lightdm/lightdm.conf
+cp $DOTFILES/suckless/.config/suckless/dwm/lightdm.conf /etc/lightdm/
 report "Copied lightdm.conf to /etc/lightdm" "Couldn't copy lightdm.conf to /etc/lightdm"
 mkdir -p /usr/share/xsessions
-cp $DOTFILES/suckless/.config/suckless/dwm/dwm.desktop /usr/share/xsessions
+cp $DOTFILES/suckless/.config/suckless/dwm/dwm.desktop /usr/share/xsessions/
 report "Copied dwm.desktop to /usr/share/xsessions" "Couldn't copy dwm.desktop to /usr/share/xsessions"
+cp $DOTFILES/suckless/.config/suckless/dwm/dwmstart /usr/local/bin
+report "Copied dwmstart to /usr/local/bin" "Couldn't copy dwmstart to /usr/local/bin"
 ######################################################
 # Compile dwm and st
 ######################################################

@@ -12,15 +12,15 @@ report() {
 ######################################################
 # Install yay and yay packages
 ######################################################
-yay-packages="lightdm-slick-greeter urlview task-spooler python-xlsx2csv ttf-ms-fonts ttf-vista-fonts"
+yaypackages="lightdm-slick-greeter urlview task-spooler"
 mkdir ~/aur
-mount -t nfs ant:/mnt/media/aur ~/aur
+sudo mount -t nfs ant:/mnt/media/aur ~/aur
 for yp in $yaypackages
 do
     cd ~/aur/$yp
-    pacman -U *.pkg.tar.zst
+    sudo pacman -U *.pkg.tar.zst
 done
-umount ~/aur
+sudo umount ~/aur
 rmdir ~/aur
 ######################################################
 # Install gui packages
@@ -28,7 +28,7 @@ rmdir ~/aur
 guipackages="firefox libreoffice gimp simple-scan gthumb"
 for gp in $guipackages
 do
-    pacman -S $gp
+    sudo pacman -S $gp
 done
 ######################################################
 # Further notes
