@@ -75,7 +75,7 @@ report "Added binds for home directory" "Couldn't add binds for home directory"
 ######################################################
 # Install various packages
 ######################################################
-packages="lightdm iwd dhcpcd openssh fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock pass git stow rsync"
+packages="lightdm iwd dhcpcd openssh fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock pass git stow rsync gtk2"
 for package in $packages
 do
     pacman -Ss $package
@@ -105,6 +105,7 @@ done
 
 # two monitors
 # xrandr will give names of monitors
+# this can be added to ~/.xprofile
 # xrandr --output VGA1 --auto -right-of eDP1
 
 ######################################################

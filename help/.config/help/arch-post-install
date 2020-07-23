@@ -25,7 +25,7 @@ rmdir ~/aur
 ######################################################
 # Install gui packages
 ######################################################
-guipackages="firefox libreoffice gimp simple-scan gthumb"
+guipackages="firefox libreoffice gimp simple-scan gthumb emacs"
 for gp in $guipackages
 do
     sudo pacman -S $gp
@@ -50,5 +50,12 @@ done
 # The following does NOT work:
 # echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
 # This line must be placed in the [Seat:*] section!
+
+######################################################
+# Dell fan control
+######################################################
+# yay -S i8kutils
+# cp i8kmon.service to /usr/lib/systemd/system/
+# systemctl enable ik8mon
 ## Add to /etc/modprobe.d/dell-smm-hwmon.conf
 # options dell-smm-hwmon ignore_dmi=1
