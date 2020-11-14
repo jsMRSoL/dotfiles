@@ -528,6 +528,14 @@ before packages are loaded."
             (lambda () (org-defkey org-mode-map [(meta return)] 'org-meta-return)))
   ;; map avy-time to s in normal mode
   (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+  ;; set hard wrapping
+  (defun sp/text-mode-config ()
+    (auto-fill-mode 1)
+    (set-fill-column 80)
+    (spacemacs/toggle-fill-column-indicator-on)
+    )
+  (add-hook 'text-mode-hook #'sp/text-mode-config)
+  ;; end of config
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
