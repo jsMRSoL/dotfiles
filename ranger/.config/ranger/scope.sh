@@ -106,6 +106,14 @@ handle_extension() {
             lynx -dump -- "${FILE_PATH}" && exit 5
             elinks -dump "${FILE_PATH}" && exit 5
             ;; # Continue with next handler on failure
+        # csv
+    csv)
+        csv2txt "${FILE_PATH}" - && exit 5
+        ;;
+        # json
+        ytdl|json)
+            jq '.' "${FILE_PATH}" && exit 5
+        ;;
     esac
 }
 
