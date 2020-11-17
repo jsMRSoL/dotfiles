@@ -1,0 +1,18 @@
+# Printing
+# Cups should already be installed. See above.
+# Check the service is running:
+systemctl status cups
+# Go to the web interface /localhost:631/
+# Attempt to install the (network printer)
+# If the correct printer is not listed, 
+install lsb
+sudo apt install lsb
+# and the correct driver from www.openprinting.org
+sudo dpkg -i driver.deb
+# add user to lpadmin
+sudo adduser simon lpadmin
+# make lpr (for printing from vim) work with cups by setting default
+lpstat -t # should give queue name
+lpoptions -d queuename # sets default.
+# Test with 
+lpr myfile

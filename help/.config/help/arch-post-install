@@ -1,0 +1,61 @@
+#!/bin/bash
+######################################################
+# useful functions
+######################################################
+touch ~/installation.log
+LOG=~/installation.log
+report() {
+    # $1 is success message
+    # $2 is failure message
+    [ $? -eq 0 ] && echo "$1" || echo "$2" >> $LOG
+}
+######################################################
+# Install yay and yay packages
+######################################################
+yaypackages="lightdm-slick-greeter urlview task-spooler"
+mkdir ~/aur
+sudo mount -t nfs ant:/mnt/media/aur ~/aur
+for yp in $yaypackages
+do
+    cd ~/aur/$yp
+    sudo pacman -U *.pkg.tar.zst
+done
+sudo umount ~/aur
+rmdir ~/aur
+######################################################
+# Install gui packages
+######################################################
+guipackages="firefox libreoffice gimp simple-scan gthumb emacs"
+for gp in $guipackages
+do
+    sudo pacman -S $gp
+done
+######################################################
+# Further notes
+######################################################
+# 
+# ssh keyless login
+# generate keys (accept all defaults)
+# ssh-keygen -t rsa
+# copy pub key to remote server's authorized keys file
+# ssh-id-copy host@server
+# disable password access on the server /etc/ssh/sshd_config
+# PasswordAuthentication no
+# sudo systemctl restart ssh
+# set up config file if using specific keys for specific sites/hosts
+# Host github.com
+#    IdentityFile ~/.ssh/github_rsa
+######################################################
+
+# The following does NOT work:
+# echo "greeter-session = lightdm-gtk-greeter" >> /etc/lightdm/lightdm.conf
+# This line must be placed in the [Seat:*] section!
+
+######################################################
+# Dell fan control
+######################################################
+# yay -S i8kutils
+# cp i8kmon.service to /usr/lib/systemd/system/
+# systemctl enable ik8mon
+## Add to /etc/modprobe.d/dell-smm-hwmon.conf
+# options dell-smm-hwmon ignore_dmi=1

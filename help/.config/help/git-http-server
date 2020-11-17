@@ -1,0 +1,4 @@
+git init --bare &> /dev/null
+touch git-daemon-export-ok
+git config http.receivepack true
+git update-server-info
