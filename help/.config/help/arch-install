@@ -195,7 +195,7 @@ done
 # generate keys (accept all defaults)
 # ssh-keygen -t rsa
 # copy pub key to remote server's authorized keys file
-# ssh-id-copy host@server
+# ssh-copy-id host@server
 # disable password access on the server /etc/ssh/sshd_config
 # PasswordAuthentication no
 # sudo systemctl restart ssh
