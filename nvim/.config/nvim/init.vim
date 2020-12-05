@@ -84,7 +84,7 @@ filetype plugin indent on
     let no_buffers_menu=1
     set t_Co=256
     set termguicolors
-    silent! colorscheme archman "Iosvkem molokai
+    " silent! colorscheme archman "Iosvkem molokai
     set mousemodel=popup
     set guioptions=egmrti
     set gfn=Monospace\ 10
@@ -209,6 +209,7 @@ filetype plugin indent on
     tnoremap <leader>wl <C-\><C-N><C-w>l
 "}}}
 " Plug config settings {{{
+    source $HOME/.config/nvim/plug-config/jellybeans.vim
     source $HOME/.config/nvim/plug-config/airline.vim
     source $HOME/.config/nvim/plug-config/delimitMate.vim
     source $HOME/.config/nvim/plug-config/easymotion.vim
