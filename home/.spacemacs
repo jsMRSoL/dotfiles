@@ -632,7 +632,7 @@ before packages are loaded."
   (setq org-capture-templates
         '(("t" "Tasks / Projects / Appointments")
           ("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
-           "* TODO  %?\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  %a\n  %i" :empty-lines 1)
+           "* TODO  %^{Title}\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  %?\n  :END:\n  %a\n  %i" :empty-lines 1)
           ("ta" "Appointment" entry
            (file+olp+datetree "~/Documents/org/journal.org")
            "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
