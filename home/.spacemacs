@@ -32,7 +32,9 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(python
+   '(javascript
+     html
+     python
      (rust :variables
            rust-format-on-save t)
      ;; ----------------------------------------------------------------
@@ -42,15 +44,15 @@ This function should only modify configuration layer settings."
      ;; ----------------------------------------------------------------
      (auto-completion :variables
                       auto-completion-return-key-behavior 'complete
-                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-tab-key-behavior 'complete
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.1
-                      auto-completion-minimum-prefix-length 2
-                      auto-completion-idle-delay 0.0
+                      auto-completion-minimum-prefix-length 1
+                      auto-completion-idle-delay 0.1
                       auto-completion-private-snippets-directory "/home/simon/.emacs.d/private/snippets"
                       auto-completion-enable-snippets-in-popup t
-                      auto-completion-enable-help-tooltip nil
-                      auto-completion-use-company-box nil
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-use-company-box t
                       auto-completion-enable-sort-by-usage nil)
      better-defaults
      emacs-lisp
@@ -61,6 +63,7 @@ This function should only modify configuration layer settings."
      multiple-cursors
      org
      (shell :variables
+            shell-default-shell 'vterm
             shell-default-height 30
             shell-default-position 'bottom)
      ;; spell-checking
@@ -545,11 +548,11 @@ before packages are loaded."
           "~/Documents/org/journal.org"
           ))
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-          (sequence "NEXT(n)" "TODO(n)" "WAITING(w)" "SOMEDAY(s)" "PROJ(p)" "|" "DONE(d!)")
+        '((sequence "TODO(t!)" "NEXT(n!)" "|" "DONE(d!)")
+          (sequence "NEXT(n!)" "TODO(n!)" "WAITING(w@/!)" "SOMEDAY(s!)" "PROJ(p!)" "|" "DONE(d!)")
           (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
 
-  ;; ;; refile settings
+  ;; refile settings
   (setq org-refile-allow-creating-parent-nodes 'confirm)
   (setq org-refile-use-outline-path 'file)
   (setq org-outline-path-complete-in-steps nil)
@@ -563,7 +566,7 @@ before packages are loaded."
   ;; tags
   (setq org-tag-alist
         '((:startgroup)
-                                        ; Put mutually exclusive tags here
+          ; Put mutually exclusive tags here
           (:endgroup)
           ("@errand" . ?e)
           ("@home" . ?h)
@@ -624,10 +627,12 @@ before packages are loaded."
                   ((org-agenda-overriding-header "Cancelled Projects")
                    (org-agenda-files org-agenda-files)))))))
 
+  ;; templates
+  ;; key can be found here: https://orgmode.org/manual/Template-expansion.html#Template-expansion
   (setq org-capture-templates
         '(("t" "Tasks / Projects / Appointments")
           ("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
-           "* TODO %?\n  %U\n  %a\n  %i" :empty-lines 1)
+           "* TODO  %?\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  %a\n  %i" :empty-lines 1)
           ("ta" "Appointment" entry
            (file+olp+datetree "~/Documents/org/journal.org")
            "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
@@ -686,7 +691,7 @@ This function is called at the very end of Spacemacs initialization."
      ("XXX+" . "#dc752f")
      ("\\?\\?\\?+" . "#dc752f")))
  '(package-selected-packages
-   '(yapfify stickyfunc-enhance pytest pyenv-mode py-isort pippel pipenv pyvenv pip-requirements lsp-python-ms lsp-pyright live-py-mode importmagic epc ctable concurrent deferred helm-pydoc helm-cscope xcscope cython-mode company-anaconda blacken anaconda-mode pythonic evil-easymotion xterm-color vterm unfill treemacs-magit terminal-here smeargle shell-pop orgit mwim multi-term magit-svn magit-section magit-gitflow magit-popup helm-gitignore helm-git-grep gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ evil-magit magit git-commit with-editor transient eshell-z eshell-prompt-extras esh-help browse-at-remote company-box frame-local org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain htmlize helm-org-rifle helm-org gnuplot evil-org jbeans-theme company-statistics company-quickhelp yasnippet-snippets lsp-ui helm-lsp helm-company helm-c-yasnippet fuzzy flycheck-pos-tip auto-yasnippet yasnippet ac-ispell auto-complete toml-mode ron-mode racer pos-tip helm-gtags ggtags flycheck-rust dap-mode posframe lsp-treemacs bui lsp-mode dash-functional counsel-gtags counsel swiper ivy company cargo markdown-mode rust-mode ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs ht pfuture toc-org symon symbol-overlay string-inflection spaceline-all-the-icons all-the-icons memoize spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck let-alist flycheck-elsa flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils pkg-info epl elisp-slime-nav editorconfig dumb-jump dash s devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra lv hybrid-mode font-lock+ evil goto-chg undo-tree dotenv-mode diminish bind-map bind-key async))
+   '(tide typescript-mode tern nodejs-repl livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc import-js grizzl web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode simple-httpd helm-css-scss haml-mode emmet-mode counsel-css company-web web-completion-data add-node-modules-path yapfify stickyfunc-enhance pytest pyenv-mode py-isort pippel pipenv pyvenv pip-requirements lsp-python-ms lsp-pyright live-py-mode importmagic epc ctable concurrent deferred helm-pydoc helm-cscope xcscope cython-mode company-anaconda blacken anaconda-mode pythonic evil-easymotion xterm-color vterm unfill treemacs-magit terminal-here smeargle shell-pop orgit mwim multi-term magit-svn magit-section magit-gitflow magit-popup helm-gitignore helm-git-grep gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ fringe-helper git-gutter+ evil-magit magit git-commit with-editor transient eshell-z eshell-prompt-extras esh-help browse-at-remote company-box frame-local org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-cliplink org-brain htmlize helm-org-rifle helm-org gnuplot evil-org jbeans-theme company-statistics company-quickhelp yasnippet-snippets lsp-ui helm-lsp helm-company helm-c-yasnippet fuzzy flycheck-pos-tip auto-yasnippet yasnippet ac-ispell auto-complete toml-mode ron-mode racer pos-tip helm-gtags ggtags flycheck-rust dap-mode posframe lsp-treemacs bui lsp-mode dash-functional counsel-gtags counsel swiper ivy company cargo markdown-mode rust-mode ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil treemacs ht pfuture toc-org symon symbol-overlay string-inflection spaceline-all-the-icons all-the-icons memoize spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-superstar open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-mode-manager helm-make helm-ls-git helm-flx helm-descbinds helm-ag google-translate golden-ratio flycheck-package package-lint flycheck let-alist flycheck-elsa flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired f evil-tutor evil-textobj-line evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens evil-args evil-anzu anzu eval-sexp-fu emr iedit clang-format projectile paredit list-utils pkg-info epl elisp-slime-nav editorconfig dumb-jump dash s devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra lv hybrid-mode font-lock+ evil goto-chg undo-tree dotenv-mode diminish bind-map bind-key async))
  '(paradox-github-token t)
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e")))
 (custom-set-faces
