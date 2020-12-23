@@ -25,7 +25,6 @@ def get_file_count(id):
     stdin, stdout, stderr = client.exec_command(f'ls ~/vcol/{id} | tail -n 1')
     with stdin, stdout, stderr as stdin, stdout, stderr:
         output = stdout.read().decode("utf8")
-
         # Get return code from command (0 is default for success)
         if stdout.channel.recv_exit_status() != 0:
             print("Could not get info from server. Exiting...")
@@ -49,17 +48,27 @@ def push2server(id, num):
     currentDir = os.getcwd()
     for file in os.listdir(currentDir):
         filename = os.fsdecode(file)
-        files.append(filename)
+        if os.path.isfile(filename):
+            files.append(filename)
 
+    no_files = len(files)
+    print(f'About to transfer {no_files} files:')
+    filelist = '\n'.join(files)
+    print(filelist)
+
+    counter = 0
     copied_files = []
     for name in files:
         basename, ext = os.path.splitext(name)
         num += 1
+        counter += 1
+        print(f"Copying file {counter} of {no_files}...")
+        print(f"....> {name}")
         scp_cmd = f'scp "{name}" simon@ant:~/vcol/{id}/{id}_{num:0>3}{ext}'
         scp_output = subprocess.run(
             scp_cmd, stdout=subprocess.DEVNULL, shell=True)
         if scp_output.returncode == 0:
-            print(f'{name} successfully copied!')
+            print(f'File {counter} successfully copied!')
             copied_files.append(name)
         else:
             print(f'{name} was NOT copied!')
