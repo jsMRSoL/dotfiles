@@ -118,13 +118,19 @@ let g:which_key_map.q = {
    \ 's' : [':wqa!' , 'save&quit'],
    \}
 
+" workaround because of feedkeys() issue
+nnoremap <leader>rr :reg<CR>
 let g:which_key_map.r = {
    \ 'name' : '+registers',
-   \ 'p' : ['"*gP' , 'paste clipboard'],
-   \ 'x' : ['"+gx' , 'cut to clipboard'],
-   \ 'y' : ['"+gy' , 'yank clipboard'],
+   \ 'c' : ['\"_c' , 'change (bh)'],
+   \ 'd' : ['\"_d' , 'delete (bh)'],
+   \ 'x' : ['\"_x' , 'delete (bh)'],
+   \ 'p' : ['\"*gP' , 'paste clipboard'],
+   \ 'r' : 'registers',
    \}
 
+" workaround because of feedkeys() issue
+nnoremap <leader>sc :nohls<CR>
 let g:which_key_map.s = {
    \ 'name' : '+search',
    \ ':' : [':History:' , 'commands'],
@@ -135,7 +141,7 @@ let g:which_key_map.s = {
    \ 'G' : [':Gfiles' , 'git ls'],
    \ '?' : [':Gfiles?' , 'git status'],
    \ 'C' : [':Colors' , 'colours'],
-   \ 'c' : [':noh' , 'clear'],
+   \ 'c' : 'clear',
    \}
 
 let g:which_key_map.t = {
@@ -143,6 +149,7 @@ let g:which_key_map.t = {
    \ 'd' : [':lcd %:p:h' , 'cwd'],
    \ 'n' : [':set number!' , 'line nr'],
    \ 'r' : [':set relativenumber!' , 'rel nr'],
+   \ 'u' : [':UndotreeToggle' , 'Undotree'],
    \}
 
 let g:which_key_map.w = {

@@ -534,6 +534,9 @@ before packages are loaded."
     (spacemacs/toggle-fill-column-indicator-on)
     )
   (add-hook 'text-mode-hook #'sp/text-mode-config)
+  ;; always follows symlinks
+  (setq vc-follow-symlinks t)
+
   ;; orgmode configuration
 
   (setq org-ellipsis " ▾")
@@ -558,6 +561,7 @@ before packages are loaded."
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-targets
         '((org-agenda-files . (:maxlevel . 1))
+          ("journal.org" . (:maxlevel . 3))
           ("archive.org" . (:maxlevel . 1))))
 
   ;; Save Org buffers after refiling!
