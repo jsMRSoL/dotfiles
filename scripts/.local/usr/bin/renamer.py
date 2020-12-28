@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 
 logging.basicConfig(level=logging.DEBUG)
-# logging.disable(logging.CRITICAL)
+logging.disable(logging.CRITICAL)
 
 
 def files_in_dir(folder):
