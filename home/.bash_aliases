@@ -9,4 +9,4 @@ BASHFILES="/home/simon/.dotfiles/bash/.config/bash"
 [ -f "$BASHFILES/bash_functions" ] && source "$BASHFILES/bash_functions"
 
 # api keys
-[ -f "$HOME/.private/api_keys" ] && source "$HOME/.private/api_keys"
+[ -f "$HOME/.api_keys" ] && source "$HOME/.api_keys"

@@ -1,0 +1,43 @@
+# check for failed systemd services
+systemctl --failed
+
+# check journal
+sudo journalctl -p 3 -xb
+
+# delete cached packages currently not installed
+sudo pacman -Sc
+yay -Sc
+
+# delete all cached packages
+sudo pacman -Scc
+yay -Scc
+
+# remove unwanted dependencies
+yay -Yc
+
+# check for orphaned packages
+pacman -Qtdq
+
+# remove orphaned packages
+sudo pacman -Rns $(pacman -Qtdq)
+
+# check size of cached files folder
+du -sh $HOME/.cache
+
+# manage journal files
+du -sh /var/log/journal
+## delete journal files older than 2 weeks
+sudo journalctl --vacuum-time=2weeks
+
+# update mirrorlist
+sudo reflector -c "GB" -a 12 --sort rate --save
+/etc/pacman.d/mirrorlist
+
+# list AUR packages installed
+pacman -Qqem
+
+# list native packages installed
+pacman -Qqetn
+
+# install packages from a list, not reinstalling installed packages
+sudo pacman -S --needed - < list.txt
