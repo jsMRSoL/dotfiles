@@ -15,6 +15,8 @@ if [ -d "$HOME/.cargo/bin" ] ; then
 fi
 ## surfraw. To remove use surfraw-update-path -remove
     PATH=$PATH:/usr/lib/surfraw
+## doom emacs
+    PATH=$PATH:$HOME/.emacs.d/bin
 export PATH
 ################################################################################
 ## End PATH 
@@ -41,6 +43,7 @@ export GPG_TTY=$(tty)
 ## mail directory
 export MAILDIR="/home/simon/.mail/Yahoo"
 ## default programs
+export TERM="st"
 export EDITOR="vim"
 export BROWSER="surf"
 export PAGER="less"
@@ -94,10 +97,14 @@ alias ll='ls -lh'
 alias gla='ls -lah | grep'
 alias gps='ps aux | grep'
 alias glog='git log --all --graph --decorate --oneline'
+alias rm='echo "Would it be better to use trash-put? (Use \\rm if not.)"'
+alias tp='trash-put'
+alias tl='trash-list'
+alias trr='trash-restore'
 ## programs
-alias r='ranger'
 #alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
 alias wwwd='w3m www.duckduckgo.com'
+alias r='ranger'
 alias start-mpd='mpd ~/.config/mpd/mpd.conf'
 alias servefiles='python -m SimpleHTTPServer'
 alias pb='playlist-browser'
