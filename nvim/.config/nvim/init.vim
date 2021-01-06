@@ -220,5 +220,6 @@ filetype plugin indent on
     " source $HOME/.config/nvim/plug-config/sneak.vim
     source $HOME/.config/nvim/plug-config/startify.vim
     source $HOME/.config/nvim/plug-config/ultisnips.vim
+    source $HOME/.config/nvim/plug-config/undotree.vim
     source $HOME/.config/nvim/keys/which-key.vim
 " }}}
