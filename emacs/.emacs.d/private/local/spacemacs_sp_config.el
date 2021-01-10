@@ -13,10 +13,25 @@
 ;; keybindings configuration
 ;;--------------------------------------------------------------------------
   (spacemacs/set-leader-keys "X" 'org-capture)
+  (spacemacs/set-leader-keys ":" 'eval-expression)
   (spacemacs/set-leader-keys "rp" 'insert-line-and-paste-clipboard)
   (spacemacs/set-leader-keys "fz" 'helm-fzf)
   ;; map avy-timer to s in normal mode
   (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+;;--------------------------------------------------------------------------
+;; theme configuration
+;;--------------------------------------------------------------------------
+  (require 'doom-themes)
+
+;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+;; Enable custom neotree theme
+  (doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
+
+;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
 ;;--------------------------------------------------------------------------
 ;; interface configuration
 ;;--------------------------------------------------------------------------
