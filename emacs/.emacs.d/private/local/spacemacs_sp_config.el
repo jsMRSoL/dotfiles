@@ -5,12 +5,18 @@
 ;;--------------------------------------------------------------------------
   (fset 'insert-line-and-paste-clipboard
         [?O escape ?m ?A ?\" ?* ?P ?0 ?\' ?A])
-  (spacemacs/set-leader-keys "rp" 'insert-line-and-paste-clipboard)
 ;;--------------------------------------------------------------------------
 ;; fuzzy find-file configuration
 ;;--------------------------------------------------------------------------
-  (spacemacs/set-leader-keys "fz" 'helm-fzf)
   (load-file "/home/simon/.emacs.d/private/local/helm-fzf/helm-fzf.el")
+;;--------------------------------------------------------------------------
+;; keybindings configuration
+;;--------------------------------------------------------------------------
+  (spacemacs/set-leader-keys "X" 'org-capture)
+  (spacemacs/set-leader-keys "rp" 'insert-line-and-paste-clipboard)
+  (spacemacs/set-leader-keys "fz" 'helm-fzf)
+  ;; map avy-timer to s in normal mode
+  (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
 ;;--------------------------------------------------------------------------
 ;; interface configuration
 ;;--------------------------------------------------------------------------
@@ -18,14 +24,12 @@
   (setq-default evil-escape-delay 0.2)
   ;; use cool abbreviations in code
   (global-prettify-symbols-mode t)
-  ;; map avy-time to s in normal mode
-  (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
 ;;--------------------------------------------------------------------------
 ;; hard wrapping configuration
 ;;--------------------------------------------------------------------------
   (defun sp/text-mode-config ()
-    (auto-fill-mode 1)
     (set-fill-column 80)
+    (auto-fill-mode 1)
     (spacemacs/toggle-fill-column-indicator-on)
     )
   (add-hook 'text-mode-hook #'sp/text-mode-config)
