@@ -158,6 +158,7 @@
            "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
            :clock-in :clock-resume
            :empty-lines 1)
+
           ("j" "Journal Entries")
           ("jj" "Journal" entry
            (file+olp+datetree "~/Documents/org/journal.org")
@@ -165,9 +166,20 @@
            ;; :clock-in :clock-resume
            :empty-lines 1)
 
+          ("b" "Book log")
+          ("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
+           ;; "| %^{Title} | %^{Author} | %^{Pages} | %^{Started} |  |  | %^{Notes} |" :kill-buffer t)
+           "* %^{Title}\n:PROPERTIES:\n:Title: %\\1\n:Author: %^{Author}\n:Pages: ?\n:Started: %U\n:Finished: ?\n:Sessions: ?\n:Notes: %^{Notes} %?\n:END:"
+           :kill-buffer t)
           ("m" "Metrics Capture")
           ("mw" "Weight" table-line (file+headline "~/Documents/org/metrics.org" "Weight")
-           "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)))
+           "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
+          ("mg" "Guitar" table-line (file+headline "~/Documents/org/metrics.org" "Guitar")
+           "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+          ("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
+           "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+          ("mr" "Reading" table-line (file+headline "~/Documents/org/metrics.org" "Reading")
+          "| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
 ;;--------------------------------------------------------------------------
 ;; python tweaks
 ;;--------------------------------------------------------------------------
