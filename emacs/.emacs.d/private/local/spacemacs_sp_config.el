@@ -239,6 +239,17 @@
   (spacemacs/set-leader-keys-for-major-mode 'dired-mode "f" #'sp/dired-jump-dotfiles)
   (spacemacs/set-leader-keys-for-major-mode 'dired-mode "c" #'sp/dired-jump-config)
   (spacemacs/set-leader-keys-for-major-mode 'dired-mode "b" #'sp/dired-jump-scripts)
+
+;;--------------------------------------------------------------------------
+;; directory navigation
+;;--------------------------------------------------------------------------
+  (spacemacs/set-leader-keys "oh" #'sp/dired-jump-home)
+  (spacemacs/set-leader-keys "od" #'sp/dired-jump-documents)
+  (spacemacs/set-leader-keys "oo" #'sp/dired-jump-downloads)
+  (spacemacs/set-leader-keys "or" #'sp/dired-jump-org)
+  (spacemacs/set-leader-keys "of" #'sp/dired-jump-dotfiles)
+  (spacemacs/set-leader-keys "oc" #'sp/dired-jump-config)
+  (spacemacs/set-leader-keys "ob" #'sp/dired-jump-scripts)
 ;;--------------------------------------------------------------------------
 ;; trash-cli integration
 ;;--------------------------------------------------------------------------
