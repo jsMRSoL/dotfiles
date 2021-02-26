@@ -170,3 +170,26 @@ class killspaces(Command):
             self.fm.thisfile = file_new
 
         return None
+
+class gif(Command):
+    """:gif
+
+    Converts the highlighted file to a gif.
+    """
+
+    def execute(self):
+        from ranger.container.file import File
+        from os import access
+
+        filename = self.fm.thisfile.basename
+        ext = os.path.splitext(filename)[1]
+        new_name = filename.replace(ext, ".gif")
+
+        if access(new_name, os.F_OK):
+            return self.fm.notify("Can't rename: file already exists!", bad=True)
+
+        command = f'convert {filename} {new_name}'
+        self.fm.execute_command(command)
+
+        return None
+
