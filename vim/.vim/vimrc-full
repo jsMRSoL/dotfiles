@@ -1335,7 +1335,7 @@ endfunction
 " {{{expression mappingsdefinition 
    iabbrev   <expr>   dts   strftime('%a %d-%m-%Y %H:%M')
 " }}}
-"
+" LSP {{{
 
 	if (executable('pyls'))
 	    au User lsp_setup call lsp#register_server({
@@ -1382,3 +1382,4 @@ augroup END
 	let g:lsp_diagnostics_echo_delay = 1000
     let g:lsp_highlight_references_enabled = 1
 	let g:lsp_signature_help_enabled = 1
+" }}}
