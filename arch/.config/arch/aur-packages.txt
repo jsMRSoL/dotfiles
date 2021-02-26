@@ -1,0 +1,10 @@
+blockattack
+lightdm-slick-greeter
+pacserve
+python-xlsx2csv
+task-spooler
+ttf-merriweather-sans
+ttf-ms-fonts
+ttf-vista-fonts
+urlview
+yay
