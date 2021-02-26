@@ -22,4 +22,3 @@ scripts/.local/usr/bin/renamer.sh
 suckless/.config/suckless/dwm/dwm
 suckless/.config/suckless/st/st
 systemd/.config/systemd/user/default.target.wants/
-suckless/.config/suckless/st/config.h
