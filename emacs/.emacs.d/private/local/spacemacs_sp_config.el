@@ -195,65 +195,33 @@
 ;;--------------------------------------------------------------------------
   (setq terminal-here-terminal-command '("st"))
 ;;--------------------------------------------------------------------------
-;; dired tweaks
-;;--------------------------------------------------------------------------
-  (defun sp/dired-jump-home()
-    "Jump to home"
-    (interactive)
-    (dired-jump nil "/home/simon/"))
-
-  (defun sp/dired-jump-documents()
-    "Jump to documents"
-    (interactive)
-    (dired-jump nil "/home/simon/Documents/"))
-
-  (defun sp/dired-jump-downloads()
-    "Jump to downloads"
-    (interactive)
-    (dired-jump nil "/home/simon/Downloads/"))
-
-  (defun sp/dired-jump-dotfiles()
-    "Jump to downloads"
-    (interactive)
-    (dired-jump nil "/home/simon/.dotfiles/"))
-
-  (defun sp/dired-jump-config()
-    "Jump to downloads"
-    (interactive)
-    (dired-jump nil "/home/simon/.config/"))
-
-  (defun sp/dired-jump-scripts()
-    "Jump to downloads"
-    (interactive)
-    (dired-jump nil "/home/simon/.local/usr/bin/"))
-
-  (defun sp/dired-jump-org()
-    "Jump to org"
-    (interactive)
-    (dired-jump nil "/home/simon/Documents/org/"))
-
-  (spacemacs/set-leader-keys-for-major-mode 'dired-mode "h" #'sp/dired-jump-home)
-  (spacemacs/set-leader-keys-for-major-mode 'dired-mode "d" #'sp/dired-jump-documents)
-  (spacemacs/set-leader-keys-for-major-mode 'dired-mode "o" #'sp/dired-jump-downloads)
-  (spacemacs/set-leader-keys-for-major-mode 'dired-mode "r" #'sp/dired-jump-org)
-  (spacemacs/set-leader-keys-for-major-mode 'dired-mode "f" #'sp/dired-jump-dotfiles)
-  (spacemacs/set-leader-keys-for-major-mode 'dired-mode "c" #'sp/dired-jump-config)
-  (spacemacs/set-leader-keys-for-major-mode 'dired-mode "b" #'sp/dired-jump-scripts)
-
-;;--------------------------------------------------------------------------
 ;; directory navigation
 ;;--------------------------------------------------------------------------
-  (spacemacs/set-leader-keys "oh" #'sp/dired-jump-home)
-  (spacemacs/set-leader-keys "od" #'sp/dired-jump-documents)
-  (spacemacs/set-leader-keys "oo" #'sp/dired-jump-downloads)
-  (spacemacs/set-leader-keys "or" #'sp/dired-jump-org)
-  (spacemacs/set-leader-keys "of" #'sp/dired-jump-dotfiles)
-  (spacemacs/set-leader-keys "oc" #'sp/dired-jump-config)
-  (spacemacs/set-leader-keys "ob" #'sp/dired-jump-scripts)
+  (defvar sp-common-dirs
+    '((?h . "/home/simon/")
+      (?d . "/home/simon/Documents/")
+      (?o . "/home/simon/Downloads/")
+      (?r . "/home/simon/Documents/org/")
+      (?f . "/home/simon/.dotfiles/")
+      (?e . "/home/simon/.emacs.d/")
+      (?c . "/home/simon/.config/")
+      (?b . "/home/simon/.local/usr/bin/")
+      (?j . "/home/simon/Projects")
+      (?y . "/home/simon/Projects/python/"))
+    "An alist of common-dirs to facilitate quick navigation."
+    )
+
+  (defun sp/dired-jump-dir(char)
+    "Jump to a directory in my common directories list."
+    (interactive "c[h]ome, [d]ocs, d[o]wnloads, [e]macs, o[r]g, dot[f]iles, [c]onfig, .[b]in, pro[j]ects, p[y]thon")
+    (dired-jump nil (alist-get char sp-common-dirs))
+    )
+
+  (spacemacs/set-leader-keys "oj" #'sp/dired-jump-dir)
 ;;--------------------------------------------------------------------------
 ;; trash-cli integration
 ;;--------------------------------------------------------------------------
-  (load-file "/home/simon/.emacs.d/private/local/trash-settings.el")
+(load-file "/home/simon/.emacs.d/private/local/trash-settings.el")
   (setq system-trash-exclude-matches '("#[^/]+#$" ".*~$" "\\.emacs\\.desktop.*"))
   (setq system-trash-exclude-paths '("/tmp"))
 ;;--------------------------------------------------------------------------
