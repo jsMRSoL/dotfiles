@@ -33,8 +33,8 @@ XF86AudioPrev
     mpc prev
 
 # screenshots
-Print
-    gnome-screenshot -a
+@Print
+    screenshot.sh
 
 super + Print
     gnome-screenshot -i
@@ -45,7 +45,7 @@ super + shift + b
 
 # launch gui programs
 super + x ; b
-    waterfox >/dev/null 2>&1
+    firefox >/dev/null 2>&1
 
 super + x ; g
     gimp
