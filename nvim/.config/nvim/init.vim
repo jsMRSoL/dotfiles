@@ -223,3 +223,6 @@ filetype plugin indent on
     source $HOME/.config/nvim/plug-config/undotree.vim
     source $HOME/.config/nvim/keys/which-key.vim
 " }}}
+" My functions {{{
+    source $HOME/.config/nvim/my_functions.vim
+" }}}
