@@ -15,6 +15,7 @@ vim/.vim/tmp
 **/**/cache_py*
 **/**/pid
 mpd/.config/mpd/state
+mpd/.config/mpd/tag_cache
 nvim/.config/nvim/autoload/
 nvim/.config/nvim/plugged/
 nvim/.config/nvim/session/
