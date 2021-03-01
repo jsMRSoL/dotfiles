@@ -64,6 +64,7 @@ Each entry is either:
       :init
       (spacemacs/set-leader-keys-for-minor-mode 'lewisandshort-mode
         "d" 'lewisandshort-get-defs
+        "n" 'lewisandshort-next-entry
         "a" 'lewisandshort-send-to-list)
   ))
 ;;; packages.el ends here

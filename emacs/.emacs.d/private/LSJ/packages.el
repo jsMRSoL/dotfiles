@@ -66,6 +66,6 @@ Each entry is either:
         "d" 'lsj-get-defs
         "a" 'lsj-send-to-list
         "c" 'lsj-remove-trailing-commas
-        "f" 'lsj-find-definition)
-  ))
+        "n" 'lsj-next-entry
+        "f" 'lsj-find-definition)))
 ;;; packages.el ends here
