@@ -78,6 +78,7 @@ RANGER_LOAD_DEFAULT_RC=FALSE
 ## aliases 
 ################################################################################
 alias brc='source ~/.bashrc'
+alias gf='cd ~/.dotfiles'
 alias gb='cd ~/.local/usr/bin'
 alias gc='cd ~/.config'
 alias gd='cd ~/Documents'
