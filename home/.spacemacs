@@ -52,7 +52,7 @@ This function should only modify configuration layer settings."
                       auto-completion-idle-delay 0.1
                       auto-completion-private-snippets-directory "/home/simon/.emacs.d/private/snippets"
                       auto-completion-enable-snippets-in-popup t
-                      auto-completion-enable-help-tooltip t
+                      auto-completion-enable-help-tooltip nil
                       auto-completion-use-company-box t
                       auto-completion-enable-sort-by-usage nil)
      better-defaults
@@ -61,7 +61,15 @@ This function should only modify configuration layer settings."
      helm
      LewisAndShort
      LSJ
-     lsp
+     (lsp :variables
+          lsp-ui-doc-show-with-cursor nil
+          lsp-headerline-breadcrumb-enable t
+          lsp-ui-sideline-enable nil
+          lsp-modeline-code-actions-enable t
+          lsp-eldoc-enable-hover t
+          lsp-modeline-diagnostics-enable nil
+          lsp-signature-auto-activate t
+          lsp-signature-render-documentation nil)
      ;; markdown
      multiple-cursors
      org
@@ -540,6 +548,10 @@ This function is called at the very end of Spacemacs initialization."
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(blink-cursor-mode nil)
  '(column-number-mode t)
+ '(company-backends
+   '(company-bbdb company-semantic company-cmake company-capf company-clang company-files
+                  (company-dabbrev-code company-gtags company-etags company-keywords)
+                  company-oddmuse company-dabbrev company-yasnippet))
  '(custom-enabled-themes '(doom-Iosvkem))
  '(custom-safe-themes
    '("d7f32010a303aa5fe455de4acc7406df98f162fe36559637a85dd3835f529fcb" "cf97f17dca12e0c142e4a9bd6e8a92da928b013a4a16986a0890fe20a846cbbb" "1623aa627fecd5877246f48199b8e2856647c99c6acdab506173f9bb8b0a41ac" "6b80b5b0762a814c62ce858e9d72745a05dd5fc66f821a1c5023b4f2a76bc910" "6084dce7da6b7447dcb9f93a981284dc823bab54f801ebf8a8e362a5332d2753" "6c3b5f4391572c4176908bb30eddc1718344b8eaff50e162e36f271f6de015ca" "7d708f0168f54b90fc91692811263c995bebb9f68b8b7525d0e2200da9bc903c" "3c2f28c6ba2ad7373ea4c43f28fcf2eed14818ec9f0659b1c97d4e89c99e091e" "bf387180109d222aee6bb089db48ed38403a1e330c9ec69fe1f52460a8936b66" "c086fe46209696a2d01752c0216ed72fd6faeabaaaa40db9fc1518abebaf700d" "d5a878172795c45441efcd84b20a14f553e7e96366a163f742b95d65a3f55d71" "5036346b7b232c57f76e8fb72a9c0558174f87760113546d3a9838130f1cdb74" "d6603a129c32b716b3d3541fc0b6bfe83d0e07f1954ee64517aa62c9405a3441" "990e24b406787568c592db2b853aa65ecc2dcd08146c0d22293259d400174e37" "c4bdbbd52c8e07112d1bfd00fee22bf0f25e727e95623ecb20c4fa098b74c1bd" "730a87ed3dc2bf318f3ea3626ce21fb054cd3a1471dcd59c81a4071df02cb601" "e1ef2d5b8091f4953fe17b4ca3dd143d476c106e221d92ded38614266cea3c8b" "79278310dd6cacf2d2f491063c4ab8b129fee2a498e4c25912ddaa6c3c5b621e" "9efb2d10bfb38fe7cd4586afb3e644d082cbcdb7435f3d1e8dd9413cbe5e61fc" "a3b6a3708c6692674196266aad1cb19188a6da7b4f961e1369a68f06577afa16" "e6ff132edb1bfa0645e2ba032c44ce94a3bd3c15e3929cdf6c049802cf059a2a" "2f1518e906a8b60fac943d02ad415f1d8b3933a5a7f75e307e6e9a26ef5bf570" "4bca89c1004e24981c840d3a32755bf859a6910c65b829d9441814000cf6c3d0" "76bfa9318742342233d8b0b42e824130b3a50dcc732866ff8e47366aed69de11" default))
