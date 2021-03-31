@@ -10,7 +10,7 @@
 in a vertical split."
   (interactive)
   (unless lewisandshort-windows-setup (lewisandshort-set-up-windows))
-  (setq latin-word (current-word t t))
+  (setq latin-word (replace-regexp-in-string "^\'" "" (current-word t t)))
   (select-window (get-buffer-window "*Definitions*"))
   (erase-buffer)
   (insert (shell-command-to-string
