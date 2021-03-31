@@ -621,19 +621,20 @@ function! MarrySplitLines()
 endfunction
 "}}}
 "{{{ MarrySelectedLines
-function! MarrySelectedLines(line1, line2) range
-    let lines = getline(a:line1, a:line2)
-    echo 'lines selected'
-    let nolines = line(a:line2) - line(a:line1) + 1
-    echo 'number of lines to be added is ' . nolines
+function! MarrySelectedLines() range
+    let lines = getline(a:firstline, a:lastline)
     normal gvdd
+    let nolines = len(lines) / 2
+    echo 'number of lines to be added is ' . nolines
     for no in range(nolines)
         let newline = lines[no] . ' : ' . lines[no + nolines]
-        call setline(no, newline)
+        call setline(a:firstline + no, newline)
+        call append(a:firstline + no, '')
     endfor
 endfunction
 "}}}
-    command! -narg=0 -range MSL call MarrySelectedLines(<line1>, <line2>)
+    command! -narg=0 -range MSL call MarrySelectedLines(<firstline>, <lastline>)
+    vnoremap <F5>  :call MarrySelectedLines()<CR>
     "{{{ CorrectDiacritics
 function! CorrectDiacritics()
     execute 'silent %s/ä/ā/g'

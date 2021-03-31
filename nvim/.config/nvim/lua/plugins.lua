@@ -1,0 +1,43 @@
+local execute = vim.api.nvim_command
+local fn = vim.fn
+-- bootstrap packer
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+
+if fn.empty(fn.glob(install_path)) > 0 then
+	execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+	execute 'packadd packer.nvim'
+end
+
+-- run packer
+return require('packer').startup(function()
+  -- Packer can manage itself
+  use 'wbthomason/packer.nvim'
+  -- lsp config
+  use 'neovim/nvim-lspconfig'
+  use 'kabouzeid/nvim-lspinstall'
+  -- autocomplete
+  use 'hrsh7th/nvim-compe'
+  use 'hrsh7th/vim-vsnip'
+  -- telescope
+  use 'nvim-lua/popup.nvim'
+  use 'nvim-lua/plenary.nvim'
+  use 'nvim-telescope/telescope.nvim'
+  use 'nvim-telescope/telescope-media-files.nvim'
+  -- explorer
+  use 'kyazdani42/nvim-tree.lua'
+  use 'kyazdani42/nvim-web-devicons'
+  use 'ryanoasis/vim-devicons'
+  use 'airblade/vim-rooter'
+  -- terminal
+  use 'voldikss/vim-floaterm'
+  -- editing
+  use 'andymass/vim-matchup'
+  use 'windwp/nvim-autopairs'
+  use 'terrortylor/nvim-comment'
+  -- keys
+  use 'liuchengxu/vim-which-key'
+  -- ui
+  use 'glepnir/dashboard-nvim'
+  -- undo
+  use 'mbbill/undotree'
+end)

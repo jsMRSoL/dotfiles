@@ -33,52 +33,47 @@ let g:which_key_map.a = {
    \ 'name' : '+apps',
    \ 't' : {
         \ 'name' : '+terminal',
+        \ 't' : [':FloatermToggle', 'float'],
         \ 'b' : [':rightbelow :split term://bash', 'right split'],
-        \ 'r' : [':vertical :botright split term://bash<CR>A', 'right split'],
+        \ 'r' : [':vertical :botright split term://bash', 'right split', 'startinsert'],
         \ 'w' : [':terminal', 'window'],
        \},
    \}
 
 let g:which_key_map.b = {
    \ 'name' : '+buffers',
-   \ 'b' : [':Buffers' , 'switch'],
+   \ 'b' : [':Telescope buffers' , 'switch'],
    \ 'd' : [':bd' , 'delete'],
-   \ 'h' : [':Startify' , 'home'],
+   \ 'h' : [':Dashboard' , 'home'],
    \}
 
 let g:which_key_map.f = {
    \ 'name' : '+files',
-   \ 'b' : [':Ranger' , 'browse'],
-   \ 'f' : [':FZF' , 'find'],
+   \ 'b' : [':FloatermNew ranger' , 'browse'],
+   \ 'f' : [':Telescope find_files' , 'find'],
    \ 'e' : {
    \ 'name' : '+edit init',
-       \ 'd' : [':edit $HOME/.config/nvim/init.vim' , 'init.vim'],
-       \ 'R' : [':source $HOME/.config/nvim/init.vim' , 'reload init'],
+       \ 'd' : [':edit $HOME/.config/nvim/init.lua' , 'init.lua'],
+       \ 'R' : [':luafile $HOME/.config/nvim/init.lua' , 'reload init'],
    \},
-   \ 'h' : [':FZF~' , 'find'],
+   \ 'h' : [':Telescope find_files' , 'find'],
    \ 'n' : [':new' , 'new'],
    \ 'o' : [':source %' , 'source-this'],
-   \ 'r' : [':History' , 'recent'],
+   \ 'r' : [':Telescope oldfiles' , 'recent'],
    \ 's' : [':write' , 'save'],
    \ 't' : {
        \ 'name' : '+tabs',
        \ 't' : [':tabedit' , 'tabedit'],
        \ 'e' : [':tabedit <C-R>=expand("%:p:h") . "/"' , 'fd file'],
    \},
-   \ 'T' : [':NERDTreeToggle' , 'tree'],
+   \ 'T' : [':NvimTreeToggle' , 'tree'],
    \}
 
 let g:which_key_map.g = {
    \ 'name' : '+git',
-   \ 'ga' : [':Gwrite', 'write'],
-   \ 'gc' : [':Gcommit', 'commit'],
-   \ 'gsh' : [':Gpush', 'push'],
-   \ 'gll' : [':Gpull', 'pull'],
-   \ 'gs' : [':Gstatus', 'status'],
-   \ 'gb' : [':Gblame', 'blame'],
-   \ 'gd' : [':Gvdiff', 'vdiff'],
-   \ 'gr' : [':Gremove', 'remove'],
-   \ 'go' : [':Gbrowse', 'browse'], 
+   \ 'g' : [':FloatermNew lazygit', 'lazygit'], 
+   \ 'l' : [':Telescope git_files' , 'git ls'],
+   \ 's' : [':Telescope git_status' , 'git status']
    \}
 " Gbrowse opens current line on GitHub
 
@@ -101,15 +96,13 @@ let g:which_key_map.j = {
 
 let g:which_key_map.l = {
    \ 'name' : '+layouts',
-   \ 'l' : [':SLoad' , 'load'],
-   \ 's' : [':SSave' , 'save'],
-   \ 'd' : [':SDelete' , 'delete'],
-   \ 'x' : [':SClose' , 'save&close'],
+   \ 'l' : [':SessionLoad' , 'load'],
+   \ 's' : [':SessionSave' , 'save'],
    \}
 
 let g:which_key_map.p = {
    \ 'name' : '+projects',
-   \ 't' : [':NERDTreeToggleVCS <C-R>=expand("%:p:h") . "/" <CR>' , 'NERDTree'],
+   \ 't' : [':NvimTreeToggle <C-R>=expand("%:p:h") . "/" <CR>' , 'NERDTree'],
    \}
 
 let g:which_key_map.q = {
@@ -133,14 +126,14 @@ let g:which_key_map.r = {
 nnoremap <leader>sc :nohls<CR>
 let g:which_key_map.s = {
    \ 'name' : '+search',
-   \ ':' : [':History:' , 'commands'],
-   \ '/' : [':History/' , 'searches'],
-   \ 's' : [':BLines' , 'swiper'],
-   \ 'g' : [':Rg' , 'ripgrep'],
-   \ 'a' : [':Ag' , 'ag'],
-   \ 'G' : [':Gfiles' , 'git ls'],
-   \ '?' : [':Gfiles?' , 'git status'],
-   \ 'C' : [':Colors' , 'colours'],
+   \ ':' : [':Telescope command_history' , 'commands'],
+   \ 's' : [':Telescope current_buffer_fuzzy_find' , 'swiper'],
+   \ 'g' : [':Telescope live_grep' , 'ripgrep'],
+   \ 'C' : [':Telescope colorscheme' , 'colours'],
+   \ 'm' : [':Telescope man_pages' , 'man'],
+   \ 'l' : [':Telescope loclist' , 'locations'],
+   \ 'q' : [':Telescope quickfix' , 'quickfix'],
+   \ 'h' : [':Telescope help_tags' , 'help'],
    \ 'c' : 'clear',
    \}
 
