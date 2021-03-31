@@ -44,7 +44,7 @@ export GPG_TTY=$(tty)
 export MAILDIR="/home/simon/.mail/Yahoo"
 ## default programs
 export TERM="st"
-export EDITOR="vim"
+export EDITOR="nvim"
 export BROWSER="surf"
 export PAGER="less"
 export RTV_BROWSER="w3m"
@@ -104,6 +104,7 @@ alias tl='trash-list'
 alias trr='trash-restore'
 ## programs
 #alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
+alias vim='nvim'
 alias wwwd='w3m www.duckduckgo.com'
 alias r='ranger'
 alias start-mpd='mpd ~/.config/mpd/mpd.conf'
