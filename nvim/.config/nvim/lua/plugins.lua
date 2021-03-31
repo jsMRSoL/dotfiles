@@ -34,6 +34,9 @@ return require('packer').startup(function()
   use 'andymass/vim-matchup'
   use 'windwp/nvim-autopairs'
   use 'terrortylor/nvim-comment'
+  use 'tpope/vim-surround'
+  -- navigation
+  use 'easymotion/vim-easymotion'
   -- keys
   use 'liuchengxu/vim-which-key'
   -- ui
