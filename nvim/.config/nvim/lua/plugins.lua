@@ -38,9 +38,15 @@ return require('packer').startup(function()
   -- navigation
   use 'easymotion/vim-easymotion'
   -- keys
-  use 'liuchengxu/vim-which-key'
+  -- use 'liuchengxu/vim-which-key'
+  use {
+      'AckslD/nvim-whichkey-setup.lua',
+      requires = {'liuchengxu/vim-which-key'},
+      }
   -- ui
   use 'glepnir/dashboard-nvim'
+  use 'glepnir/galaxyline.nvim'
+  use 'rbgrouleff/bclose.vim'
   -- undo
   use 'mbbill/undotree'
 end)

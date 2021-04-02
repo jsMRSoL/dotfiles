@@ -8,7 +8,7 @@ vim.o.showmode = false
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.o.scrolloff = 3
-vim.o.lazyredraw = true
+-- vim.o.lazyredraw = true
 -- editing
 vim.o.virtualedit = 'block'
 -- splits
@@ -42,4 +42,8 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.inccommand = 'split'
 -- terminal
-vim.cmd("au BufEnter * if &buftype == 'terminal' | :startinsert | endif")
+vim.cmd([[au BufEnter * if &buftype == 'terminal' |
+        :startinsert |
+        setlocal nonumber |
+        setlocal norelativenumber |
+        endif]])

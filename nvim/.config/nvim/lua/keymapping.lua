@@ -1,5 +1,5 @@
 -- Map leader to space
-vim.api.nvim_set_keymap('n', '<Space>', '<NOP>', {noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('n', '<Space>', '<NOP>', {noremap = true, silent = true})
 vim.g.mapleader = ' '
 
 local function map(mode, lhs, rhs, opts)
@@ -12,6 +12,7 @@ local mappings = {
 	{ 'c', 'fd', '<Esc>', {noremap = true, silent = true} },
 	{ 't', 'fd', '<C-\\><C-n>', {noremap = true, silent = true} },
 	{ 'n', '<Space><Tab>', ':b#<CR>', {noremap = true, silent = true} },
+    -- { 'n', '<leader><leader>', ':', {noremap = true, silent = true} },
 	{ 'n', 'n', 'nzzzv', {noremap = true, silent = true} },
 	{ 'n', 'N', 'Nzzzv', {noremap = true, silent = true} },
 	{ 'v', '<', '<gv', {noremap = true, silent = true} },

@@ -9,7 +9,7 @@ set timeoutlen=500
 let g:which_key_use_floating_win = 0
 " Hide status line
 autocmd! FileType which_key
-autocmd  FileType which_key set laststatus=0 ruler
+autocmd  FileType which_key set laststatus=0 noruler
   \| autocmd BufLeave <buffer> set laststatus=2 ruler
 
 " highlight default link WhichKey          Function
@@ -27,7 +27,11 @@ highlight default link WhichKeyGroup     Comment
 highlight default link WhichKeyDesc      Comment
 
 " Create a map to add keys to
-let g:which_key_map = {}
+let g:which_key_map = {
+   \ '\' : [':', 'ex']
+\}
+" Top level mappings
+" nnoremap <leader><\Space> :
 " Mappings
 let g:which_key_map.a = {
    \ 'name' : '+apps',
@@ -43,7 +47,7 @@ let g:which_key_map.a = {
 let g:which_key_map.b = {
    \ 'name' : '+buffers',
    \ 'b' : [':Telescope buffers' , 'switch'],
-   \ 'd' : [':bd' , 'delete'],
+   \ 'd' : [':Bclose' , 'delete'],
    \ 'h' : [':Dashboard' , 'home'],
    \}
 
@@ -53,12 +57,13 @@ let g:which_key_map.f = {
    \ 'f' : [':Telescope find_files' , 'find'],
    \ 'e' : {
    \ 'name' : '+edit init',
-       \ 'd' : [':edit $HOME/.config/nvim/init.lua' , 'init.lua'],
+       \ 'd' : [':edit $HOME/.config/nvim/init.lua' , 'init.lua'], 
        \ 'R' : [':luafile $HOME/.config/nvim/init.lua' , 'reload init'],
    \},
    \ 'h' : [':Telescope find_files' , 'find'],
    \ 'n' : [':new' , 'new'],
-   \ 'o' : [':source %' , 'source-this'],
+   \ 'o' : [':source %' , 'source %'],
+   \ 'l' : [':luafile %' , 'luafile %'],
    \ 'r' : [':Telescope oldfiles' , 'recent'],
    \ 's' : [':write' , 'save'],
    \ 't' : {
