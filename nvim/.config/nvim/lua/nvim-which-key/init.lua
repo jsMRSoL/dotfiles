@@ -68,16 +68,19 @@ local keymap = {
 
     j = {
         name = '+jumps',
-        j = {'<Plug>(easymotion-j)<CR>' , 'line-j'},
-        k = {'<Plug>(easymotion-k)<CR>' , 'line-k'},
-        w = {'<Plug>(easymotion-w)<CR>' , 'word-w'},
-        b = {'<Plug>(easymotion-b)<CR>' , 'word-b'},
-        S = {'<Plug>(easymotion-s)<CR>' , 'word-s'},
-        s = {'<Plug>(easymotion-s2)<CR>' , 'word-s2'},
+        j = {'<Cmd>call EasyMotion#JK(0,0)<CR>' , 'line-j'},
+        k = {'<Cmd>call EasyMotion#overwin#line()<CR>' , 'line-k'},
+        w = {'<Cmd>call EasyMotion#overwin#w()<CR>' , 'word-w'},
+        s = {'<Cmd>call EasyMotion#OverwinF(2)<CR>' , 'word-s2'},
        },
 
-    l = {
-        name = '+layouts',
+   l = {
+       name = '+lsp',
+       w = { name = '+workspace'}
+       },
+
+    S = {
+        name = '+sessions',
         l = {'<Cmd>SessionLoad<CR>' , 'load'},
         s = {'<Cmd>SessionSave<CR>' , 'save'},
        },
@@ -105,14 +108,19 @@ local keymap = {
     s = {
         name = '+search',
         [':'] = {':Telescope command_history<CR>' , 'commands'},
-        s = {'<Cmd>Telescope current_buffer_fuzzy_find<CR>' , 'swiper'},
-        g = {'<Cmd>Telescope live_grep<CR>' , 'ripgrep'},
         C = {'<Cmd>Telescope colorscheme<CR>' , 'colours'},
-        m = {'<Cmd>Telescope man_pages<CR>' , 'man'},
-        l = {'<Cmd>Telescope loclist<CR>' , 'locations'},
-        q = {'<Cmd>Telescope quickfix<CR>' , 'quickfix'},
-        h = {'<Cmd>Telescope help_tags<CR>' , 'help'},
+        M = {'<Cmd>Telescope man_pages<CR>' , 'man'},
         c = {'<Cmd>nohls<CR>', 'clear'},
+        f = {"<Cmd>lua require('nvim-telescope').search_dotfiles()<CR>" , 'dotfiles'},
+        g = {'<Cmd>Telescope live_grep<CR>' , 'ripgrep'},
+        h = {'<Cmd>Telescope help_tags<CR>' , 'help'},
+        i = {"<Cmd>lua require('nvim-telescope').search_configs()<CR>" , 'configs'},
+        k = {'<Cmd>Telescope keymaps<CR>' , 'keymaps'},
+        l = {'<Cmd>Telescope loclist<CR>' , 'locations'},
+        m = {'<Cmd>Telescope media_files<CR>' , 'media'},
+        n = {"<Cmd>lua require('nvim-telescope').search_nvim()<CR>" , 'neovim'},
+        q = {'<Cmd>Telescope quickfix<CR>' , 'quickfix'},
+        s = {'<Cmd>Telescope current_buffer_fuzzy_find<CR>' , 'swiper'},
        },
 
     t = {
@@ -125,19 +133,20 @@ local keymap = {
 
     w = {
         name = '+windows',
+        ['='] = {'<C-w>=' , 'balance'},
         d = {'<Cmd>close<CR>' , 'delete'},
-        s = {'<Cmd>split<CR>' , 'horizontal'},
-        v = {'<Cmd>vsplit<CR>' , 'vertical'},
+        h = {'<C-w>h' , 'left'},
         j = {'<C-w>j' , 'down'},
         k = {'<C-w>k' , 'up'},
         l = {'<C-w>l' , 'right'},
-        h = {'<C-w>h' , 'left'},
+        n = {'<Cmd>tabedit<CR>' , 'new'},
         o = {'<C-w>o' , 'only'},
-        w = {'<C-w>w' , 'other'},
         r = {'<C-w>r' , 'rotate'},
-        x = {'<C-w>x' , 'exchange'},
+        s = {'<Cmd>split<CR>' , 'horizontal'},
         t = {'<C-w>T' , 'to tab'},
-        ['='] = {'<C-w>=' , 'balance'},
+        v = {'<Cmd>vsplit<CR>' , 'vertical'},
+        w = {'<C-w>w' , 'other'},
+        x = {'<C-w>x' , 'exchange'},
        },
 }
 -- To hide mappings under leader from whichkey menu:

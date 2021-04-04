@@ -1,7 +1,7 @@
 local actions = require('telescope.actions')
 -- Global remapping
 ------------------------------
-require('telescope').load_extension('media_files')
+
 require('telescope').setup {
     defaults = {
         vimgrep_arguments = {'rg', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case'},
@@ -14,7 +14,7 @@ require('telescope').setup {
         sorting_strategy = "descending",
         layout_strategy = "horizontal",
         layout_defaults = {horizontal = {mirror = false}, vertical = {mirror = false}},
-        file_sorter = require'telescope.sorters'.get_fuzzy_file,
+        file_sorter = require'telescope.sorters'.get_fzy_sorter,
         file_ignore_patterns = {},
         generic_sorter = require'telescope.sorters'.get_generic_fuzzy_sorter,
         shorten_path = true,
@@ -31,8 +31,7 @@ require('telescope').setup {
         file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
         grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
         qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
-
-        -- Developer configurations: Not meant for general override
+        --Developer configurations: Not meant for general override
         buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker,
         mappings = {
             i = {
@@ -67,6 +66,37 @@ require('telescope').setup {
             -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
             filetypes = {"png", "webp", "jpg", "jpeg"},
             find_cmd = "rg" -- find command (defaults to `fd`)
+        },
+        fzy_native = {
+            override_generic_sorter = false,
+            override_file_sorter = true,
         }
     }
 }
+
+require('telescope').load_extension('media_files')
+require('telescope').load_extension('fzy_native')
+
+local M = {}
+M.search_nvim = function()
+    require("telescope.builtin").find_files({
+        prompt_title = "<= neovim config =>",
+        cwd = "~/.config/nvim",
+    })
+end
+M.search_dotfiles = function()
+    require("telescope.builtin").git_files({
+        prompt_title = "<= .dotfiles =>",
+        cwd = "~/.dotfiles",
+        -- find_cmd = {'find', '/home/simon/.config/'},
+    })
+end
+M.search_configs = function()
+    require("telescope.builtin").find_files({
+        prompt_title = "<= .config =>",
+        cwd = "~/.config",
+        hidden = true,
+        follow = true,
+    })
+end
+return M

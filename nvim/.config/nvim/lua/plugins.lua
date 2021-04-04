@@ -18,10 +18,15 @@ return require('packer').startup(function()
   -- autocomplete
   use 'hrsh7th/nvim-compe'
   use 'hrsh7th/vim-vsnip'
+  use 'hrsh7th/vim-vsnip-integ'
+  -- snippets
+  -- use 'rust-lang/vscode-rust'
+  use 'rafamadriz/friendly-snippets'
   -- telescope
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use 'nvim-telescope/telescope.nvim'
+  use 'nvim-telescope/telescope-fzy-native.nvim'
   use 'nvim-telescope/telescope-media-files.nvim'
   -- explorer
   use 'kyazdani42/nvim-tree.lua'

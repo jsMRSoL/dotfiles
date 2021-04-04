@@ -15,7 +15,7 @@ vim.o.virtualedit = 'block'
 vim.o.splitbelow = true
 vim.o.splitright = true
 -- colours
-vim.cmd('colorscheme ' .. 'archman')
+vim.cmd('colorscheme ' .. 'jellybeans')
 vim.o.termguicolors = true
 -- cursor
 vim.o.t_Co = '256' -- Support 256 colors
@@ -47,3 +47,5 @@ vim.cmd([[au BufEnter * if &buftype == 'terminal' |
         setlocal nonumber |
         setlocal norelativenumber |
         endif]])
+-- lua files
+vim.cmd([[au FileType lua setlocal ts=2 sw=2]])
