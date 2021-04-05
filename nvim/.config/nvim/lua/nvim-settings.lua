@@ -24,6 +24,8 @@ vim.o.guicursor = 'n-v-c:block-Normal,i-ci-ve:ver25-iCursor,r-cr:hor20-rCursor,o
 vim.o.fileformats = 'unix,dos,mac'
 vim.o.fileencoding = 'utf-8'
 -- tabs, folds, linebreaks
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.cmd('set ts=4')
 vim.cmd('set sw=4')
 vim.o.fillchars = 'vert:│,fold:·'
