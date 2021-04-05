@@ -82,7 +82,6 @@ function lsp_config.common_on_attach(client, bufnr)
     vim.api.nvim_exec([[
     autocmd CursorHold,CursorHoldI * lua require'lsp_extensions'.inlay_hints{ prefix = '» ', highlight = "Comment", only_current_line = true, enabled = {"TypeHint", "ChainingHint", "ParameterHint"} }
     ]], false)
-
 end
 
 function lsp_config.tsserver_on_attach(client, bufnr)
