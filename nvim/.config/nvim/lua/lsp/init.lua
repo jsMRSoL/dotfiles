@@ -38,6 +38,7 @@ function lsp_config.common_on_attach(client, bufnr)
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.cmd([[set signcolumn=yes]])
     -- Mappings.
     local opts = { noremap=true, silent=true }
     buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -50,6 +51,7 @@ function lsp_config.common_on_attach(client, bufnr)
     buf_set_keymap('n', '<space>lwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
     buf_set_keymap('n', '<space>ld', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
     buf_set_keymap('n', '<space>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    buf_set_keymap('n', '<space>lc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
     buf_set_keymap('n', '<space>ll', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
     buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
@@ -76,6 +78,11 @@ function lsp_config.common_on_attach(client, bufnr)
           augroup END
         ]], false)
     end
+    -- Enable type inlay hints
+    vim.api.nvim_exec([[
+    autocmd CursorHold,CursorHoldI * lua require'lsp_extensions'.inlay_hints{ prefix = '» ', highlight = "Comment", only_current_line = true, enabled = {"TypeHint", "ChainingHint", "ParameterHint"} }
+    ]], false)
+
 end
 
 function lsp_config.tsserver_on_attach(client, bufnr)
