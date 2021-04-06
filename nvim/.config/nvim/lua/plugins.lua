@@ -23,6 +23,8 @@ return require('packer').startup(function()
   use 'hrsh7th/vim-vsnip-integ'
   -- treesitter
   use 'nvim-treesitter/nvim-treesitter'
+  -- dap
+  use 'mfussenegger/nvim-dap'
   -- snippets
   -- use 'rust-lang/vscode-rust'
   use 'rafamadriz/friendly-snippets'

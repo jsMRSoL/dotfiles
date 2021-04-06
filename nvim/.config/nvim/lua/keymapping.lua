@@ -39,4 +39,5 @@ vim.cmd('cnoreabbrev WQ wq')
 vim.cmd('cnoreabbrev W w')
 vim.cmd('cnoreabbrev Q q')
 vim.cmd('cnoreabbrev Qall qall')
-
+-- dap commands
+vim.cmd [[ command! -complete=file -nargs=* DebugRust lua require('dap-settings.rust-debug').start_rust_debugger({<f-args>}) ]]
