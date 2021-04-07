@@ -51,3 +51,5 @@ vim.cmd([[au BufEnter * if &buftype == 'terminal' |
         endif]])
 -- lua files
 vim.cmd([[au FileType lua setlocal ts=2 sw=2]])
+-- python files
+vim.cmd([[au FileType python setlocal foldmethod=indent]])
