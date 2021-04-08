@@ -19,7 +19,7 @@ def get_file_count(id):
     # Check if folder exists
     stdin, stdout, stderr = client.exec_command(f'ls ~/vcol/{id}')
     if 'No such file or directory' in stderr.read().decode("utf8"):
-        stdin, stdout, stderr = client.exec_command(f'mkdir ~/vcol/{id}')
+        stdin, stdout, stderr = client.exec_command(f'mkdir ~/vcol/{id}/thumbs -p')
         if stdout.channel.recv_exit_status() != 0:
             print(f'Folder {id} does not exist in ~/vcol & cannot be created')
             sys.exit(0)
@@ -37,6 +37,8 @@ def get_file_count(id):
     client.close()
 
     logging.debug(output)
+    if output == '':
+        output = 'dummy_000.jpg'
 
     try:
         num = output.split("_")[1]
@@ -95,9 +97,10 @@ def make_thumbs(id):
     # Check if folder exists
     path = '/home/simon/.local/usr/bin'
     p1 = f'cd ~/vcol/{id}'
+    p1a = '[[ -d thumbs ]] || mkdir thumbs'
     p2 = f'{path}/dirdiff.py . thumbs -thumb.jpg'
     p3 = f'xargs {path}/squarethumb.sh'
-    cmd = f'{p1}; {p2} | {p3}'
+    cmd = f'{p1}; {p1a}; {p2} | {p3}'
     stdin, stdout, stderr = client.exec_command(cmd)
     # output = stdout.read().decode("utf8")
     # err = stderr.read().decode("utf8")
