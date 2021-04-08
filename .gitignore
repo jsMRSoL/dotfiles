@@ -12,6 +12,7 @@ scripts/.local/lib
 scripts/.local/share
 vim/.vim/.netrwhist
 vim/.vim/tmp
+vim/.vim/bundle
 **/**/cache_py*
 **/**/pid
 mpd/.config/mpd/state
