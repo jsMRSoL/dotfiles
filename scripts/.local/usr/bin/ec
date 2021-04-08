@@ -1,0 +1,5 @@
+#!/bin/sh
+case $# in
+  0) /usr/bin/emacs & ;;
+  *) /usr/bin/emacsclient -cn -a emacs "$@" & ;;
+esac

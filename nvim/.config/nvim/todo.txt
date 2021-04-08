@@ -1,0 +1,5 @@
+DONE config whichkey with telescope instead of fzf
+watch primeagen on Telescope - understand customisation
+work out how to make Telescope search from home or .config
+add options to dashboard e.g. new file
+DONE set colourscheme

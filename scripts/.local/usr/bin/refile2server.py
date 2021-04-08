@@ -4,6 +4,10 @@ from paramiko import SSHClient
 import os
 import sys
 import subprocess
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logging.disable(logging.CRITICAL)
 
 
 def get_file_count(id):
@@ -15,14 +19,14 @@ def get_file_count(id):
     # Check if folder exists
     stdin, stdout, stderr = client.exec_command(f'ls ~/vcol/{id}')
     if 'No such file or directory' in stderr.read().decode("utf8"):
-        stdin, stdout, stderr = client.exec_command(f'mkdir ~/vcol/{id}')
+        stdin, stdout, stderr = client.exec_command(f'mkdir ~/vcol/{id}/thumbs -p')
         if stdout.channel.recv_exit_status() != 0:
             print(f'Folder {id} does not exist in ~/vcol & cannot be created')
             sys.exit(0)
-        return 0
 
     # Get last filename
-    stdin, stdout, stderr = client.exec_command(f'ls ~/vcol/{id} | tail -n 1')
+    cmd = f'find ~/vcol/{id} -maxdepth 1 -type f | sort | tail -n 1'
+    stdin, stdout, stderr = client.exec_command(cmd)
     with stdin, stdout, stderr as stdin, stdout, stderr:
         output = stdout.read().decode("utf8")
         # Get return code from command (0 is default for success)
@@ -32,11 +36,18 @@ def get_file_count(id):
     # Close the client itself
     client.close()
 
-    num = output.split("_")[1]
-    num = num.split(".")[0]
+    logging.debug(output)
+    if output == '':
+        output = 'dummy_000.jpg'
 
     try:
+        num = output.split("_")[1]
+        num = num.split(".")[0]
         return int(num)
+    except IndexError as e:
+        print("Filename was not in expected format.")
+        print(f"Error: {e}")
+        sys.exit(0)
     except ValueError as e:
         print("Server did not return an integer. Exiting...")
         print(f"Error: {e}")
@@ -77,6 +88,33 @@ def push2server(id, num):
     subprocess.run(f'rm {list}', stdout=subprocess.DEVNULL, shell=True)
 
 
+def make_thumbs(id):
+    print("Generating thumbnails...")
+    client = SSHClient()
+    client.load_system_host_keys()
+    client.connect('ant', username='simon')
+
+    # Check if folder exists
+    path = '/home/simon/.local/usr/bin'
+    p1 = f'cd ~/vcol/{id}'
+    p1a = '[[ -d thumbs ]] || mkdir thumbs'
+    p2 = f'{path}/dirdiff.py . thumbs -thumb.jpg'
+    p3 = f'xargs {path}/squarethumb.sh'
+    cmd = f'{p1}; {p1a}; {p2} | {p3}'
+    stdin, stdout, stderr = client.exec_command(cmd)
+    # output = stdout.read().decode("utf8")
+    # err = stderr.read().decode("utf8")
+    # print(f'Output: {output}')
+    # print(f'Error: {err}')
+    if stdout.channel.recv_exit_status() != 0:
+        print('diffdir.py encountered an error.\nThis command failed:')
+        print(f'{cmd}')
+        sys.exit(0)
+
+    # Close the client itself
+    client.close()
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Please supply a folder name, e.g. BL")
@@ -85,3 +123,4 @@ if __name__ == "__main__":
     id = sys.argv[-1]
     num = get_file_count(id)
     push2server(id, num)
+    make_thumbs(id)

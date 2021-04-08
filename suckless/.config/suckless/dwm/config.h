@@ -15,7 +15,7 @@ static const char norm_bg[] = "#000000";
 static const char norm_border[] = "#08080D"; // indicates inactive window
 
 static const char sel_fg[] = "#bbbbbb";
-static const char sel_bg[] = "#44475a"; // shows active tag /is window title bg
+static const char sel_bg[] = "#262829"; // shows active tag /is window title bg/ previously 44475a
 static const char sel_border[] = "#bbbbbb"; // indicates active window
 
 static const char urg_fg[] = "#a9c0ca";
