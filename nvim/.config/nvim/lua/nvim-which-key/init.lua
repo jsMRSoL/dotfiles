@@ -43,13 +43,14 @@ local keymap = {
   f = {
     name = '+files',
     b = {'<Cmd>FloatermNew ranger<CR>' , 'browse'},
-    f = {'<Cmd>Telescope find_files<CR>' , 'find'},
+    f = {"<Cmd>lua require('nvim-telescope').search_home()<CR>" , 'find'},
+    -- f = {'<Cmd>Telescope find_files<CR>' , 'find'},
     e = {
       name = '+edit init',
       d = {'<Cmd>edit $HOME/.config/nvim/init.lua<CR>' , 'init.lua'},
       R = {'<Cmd>luafile $HOME/.config/nvim/init.lua<CR>' , 'reload init'},
     },
-    h = {'<Cmd>Telescope find_files<CR>' , 'find'},
+    p = {'<Cmd>Telescope find_files<CR>' , 'find in project'},
     n = {'<Cmd>new<CR>' , 'new'},
     o = {'<Cmd>source %<CR>' , 'source %'},
     l = {'<Cmd>luafile %<CR>' , 'luafile %'},
