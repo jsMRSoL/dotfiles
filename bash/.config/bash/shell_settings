@@ -13,6 +13,10 @@ fi
 if [ -d "$HOME/.cargo/bin" ] ; then
     PATH="$HOME/.cargo/bin:$PATH"
 fi
+## luarocks
+if [ -d "$HOME/.luarocks/bin" ] ; then
+    PATH="$HOME/.luarocks/bin:$PATH"
+fi
 ## surfraw. To remove use surfraw-update-path -remove
     PATH=$PATH:/usr/lib/surfraw
 ## doom emacs

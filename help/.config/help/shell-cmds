@@ -58,6 +58,8 @@ upower -i /org/freedesktop/UPower/devices/battery_BAT0
 sudo wodim -eject -tao speed=0 dev=/dev/sr0 -v -data target.iso
 # To check a filesystem
 sudo umount /dev/sdbX
+## Make sure you unmount all the nfs folders from /dev/sdbX, e.g.
+sudo umount /export/ChildrenMovies
 ## if fsck complains that the filesystem is in use
 sudo systemctl stop nfs-server
 sudo systemctl stop smbd
@@ -67,6 +69,6 @@ sudo systemctl stop udev
 sudo init 1
 ## finally
 ### dry run
-sudo fsck -nf /dev/sdbX 
+sudo fsck -nf /dev/sdbX
 ### fix all errors
-sudo fsck -y /dev/sdbX 
+sudo fsck -y /dev/sdbX

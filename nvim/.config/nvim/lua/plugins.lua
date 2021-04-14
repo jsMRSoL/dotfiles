@@ -17,6 +17,8 @@ return require('packer').startup(function()
   use 'nvim-lua/lsp_extensions.nvim'
   use 'kabouzeid/nvim-lspinstall'
   use 'onsails/lspkind-nvim'
+  -- linting and fixing
+  use 'dense-analysis/ale'
   -- autocomplete
   use 'hrsh7th/nvim-compe'
   use 'hrsh7th/vim-vsnip'

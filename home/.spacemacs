@@ -63,7 +63,7 @@ This function should only modify configuration layer settings."
      LSJ
      (lsp :variables
           lsp-ui-doc-show-with-cursor nil
-          lsp-headerline-breadcrumb-enable t
+          lsp-headerline-breadcrumb-enable nil
           lsp-ui-sideline-enable nil
           lsp-modeline-code-actions-enable t
           lsp-eldoc-enable-hover t
