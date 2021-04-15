@@ -12,6 +12,7 @@ local wk = require('whichkey_setup')
 local keymap = {
   [' '] = {'<Esc>:', ':'},
   ['<CR>'] = {'@@', 'repeat macro'},
+  ["'"] = {'<Cmd>FloatermToggle<CR>', 'toggle term'},
   a = {
     name = '+apps',
     t = {
@@ -68,11 +69,24 @@ local keymap = {
     name = '+git',
     g = {'<Cmd>FloatermNew lazygit<CR>', 'lazygit'},
     l = {'<Cmd>Telescope git_files<CR>' , 'git ls'},
-    s = {'<Cmd>Telescope git_status<CR>' , 'git status'}
+    s = {'<Cmd>Telescope git_status<CR>' , 'git status'},
+    i = {
+      name = '+inc sel',
+      s = {'<Cmd>lua require("nvim-treesitter").incremental_selection.init_selection()', 'start'},
+      n = {'<Cmd>lua require("nvim-treesitter").incremental_selection.node_incremental()', 'node inc'},
+      d = {'<Cmd>lua require("nvim-treesitter").incremental_selection.node_decremental()', 'node dec'},
+      c = {'<Cmd>lua require("nvim-treesitter").incremental_selection.scope_incremental()', 'scop inc'},
+    },
   },
 
   h = {
-    name = '+help',
+    name = '+hunks/help',
+    R = {'<Cmd>lua require("gitsigns").reset_buffer()<CR>', 'reset all'},
+    b = {'<Cmd>lua require("gitsigns").blame_line()<CR>', 'blame line'},
+    p = {'<Cmd>lua require("gitsigns").preview_hunk()<CR>', 'preview'},
+    r = {'<Cmd>lua require("gitsigns").reset_hunk()<CR>', 'reset'},
+    s = {'<Cmd>lua require("gitsigns").stage_hunk()<CR>', 'stage'},
+    u = {'<Cmd>lua require("gitsigns").undo_stage_hunk()<CR>', 'undo stage'},
     h = {
       name = 'helpwin'
     },
@@ -160,6 +174,15 @@ local keymap = {
     w = {'<C-w>w' , 'other'},
     x = {'<C-w>x' , 'exchange'},
   },
+
+  z = {
+    name = '+folds',
+    a = {'zA' , 'toggle all'},
+    c = {'zC' , 'close all'},
+    o = {'zO' , 'open all'},
+    m = {'zM' , 'max level'},
+    r = {'zR' , 'min level'},
+  }
 }
 -- To hide mappings under leader from whichkey menu:
 -- x = 'which_key_ignore'
