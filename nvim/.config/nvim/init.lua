@@ -1,5 +1,7 @@
 -- load globals
 require('nvim-globals')
+-- personal settings (set last)
+require('nvim-settings')
 -- load plugins
 require('plugins')
 -- plugin settings
@@ -17,14 +19,12 @@ require('nvim-galaxyline')
 require('nvim-vsnip')
 require('nvim-gitsigns')
 require('nvim-tree-sitter')
--- personal settings (set last)
-require('nvim-settings')
+require('nvim-lspkind')
 -- vimscript plugins
 -- vim.cmd('source ~/.config/nvim/vimscript/which-key.vim')
 vim.cmd('source ~/.config/nvim/vimscript/ale-settings.vim')
 -- lsp
 require('lsp')
-require('lspkind')
 require('lsp.lua-ls')
 require('lsp.bash-ls')
 require('lsp.python-ls')
