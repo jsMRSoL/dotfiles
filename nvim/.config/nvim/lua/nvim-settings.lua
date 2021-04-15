@@ -18,7 +18,7 @@ vim.o.splitright = true
 vim.cmd('colorscheme ' .. 'jellybeans')
 vim.o.termguicolors = true
 -- cursor
-vim.o.t_Co = '256' -- Support 256 colors
+-- vim.o.t_Co = '256' -- Support 256 colors
 vim.o.guicursor = 'n-v-c:block-Normal,i-ci-ve:ver25-iCursor,r-cr:hor20-rCursor,o:hor50,sm:block-blinkwait175-blinkoff150-blinkon175'
 -- file settings
 vim.o.fileformats = 'unix,dos,mac'
@@ -38,11 +38,16 @@ vim.o.textwidth = 80
 -- clipboard
 vim.o.clipboard = 'unnamedplus'
 -- searching
-vim.o.hlsearch = true
 vim.o.incsearch = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.inccommand = 'split'
+-- vim.o.hlsearch = true
+vim.cmd([[augroup vimrc-incsearch-highlight |
+          autocmd! |
+          autocmd CmdlineEnter /,\? :set hlsearch |
+          autocmd CmdlineLeave /,\? :set nohlsearch |
+        augroup END]])
 -- terminal
 vim.cmd([[au BufEnter * if &buftype == 'terminal' |
         :startinsert |
