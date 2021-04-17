@@ -41,6 +41,15 @@ local keymap = {
     },
   },
 
+  e = {
+    name = '+eval',
+    l = {
+      name = '+lua',
+      l = {"<Cmd>EvalLuaLine<CR>", 'line'},
+      r = {"<Cmd>ResetFuncs<CR>", 'reset'}
+    }
+  },
+
   f = {
     name = '+files',
     b = {'<Cmd>FloatermNew ranger<CR>' , 'browse'},

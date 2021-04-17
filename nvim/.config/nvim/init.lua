@@ -2,6 +2,7 @@
 require('nvim-globals')
 -- personal settings (set last)
 require('nvim-settings')
+require('commands')
 -- load plugins
 require('plugins')
 -- plugin settings
