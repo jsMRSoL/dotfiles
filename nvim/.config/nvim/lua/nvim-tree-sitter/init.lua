@@ -16,7 +16,7 @@ require'nvim-treesitter.configs'.setup {
       init_selection = "<leader>gis",
       node_incremental = "<leader>gin",
       scope_incremental = "<leader>gic",
-      node_decremental = "<leader>gdn",
+      node_decremental = "<leader>gid",
     },
   },
   indent = {
