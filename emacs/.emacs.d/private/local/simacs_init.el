@@ -466,6 +466,8 @@
           ("m" "Metrics Capture")
           ("mw" "Weight" table-line (file+headline "~/Documents/org/metrics.org" "Weight")
            "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
+          ("ma" "Activity" table-line (file+headline "~/Documents/org/metrics.org" "Activity")
+          "| %U | %^{Activity} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
           ("mg" "Guitar" table-line (file+headline "~/Documents/org/metrics.org" "Guitar")
            "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
           ("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
