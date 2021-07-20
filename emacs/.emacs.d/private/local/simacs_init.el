@@ -11,13 +11,14 @@
 ;;(electric-pair-mode 1)
 ;; how to have no bells?
 (setq visual-bell t)
+(setq ring-bell-function 'ignore)
 
 ;; Initialize package sources
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
-			 ("elpa" . "https://elpa.gnu.org/packages")))
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 (unless package-archive-contents
@@ -155,7 +156,6 @@
  "t" '(hydra-toggles/body :which-key "toggles")
  "TAB" '(evil-buffer :which-key "last buffer"))
 
-(use-package page-break-lines)
 (use-package dashboard
   :config
   (dashboard-setup-startup-hook)
@@ -184,8 +184,8 @@
 
 (use-package avy)
 
-(require 'smartparens-config)
-(smartparens-global-mode 1)
+;;(require 'smartparens-config)
+;;(smartparens-global-mode 1)
 
 (use-package hydra)
 
@@ -231,6 +231,18 @@
            ("C-k" . #'company-select-previous)) 
   :init
   (global-company-mode 1))
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :config
+  (lsp-enable-which-key-integration t))
+
+(use-package python-mode)
+
+(use-package gnu-elpa-keyring-update)
+
+;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+
 ;; Don't edit below here.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -238,10 +250,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(company winum hydra smartparens avy evil-snipe projectile dashboard page-break-lines evil-escape counsel ivy-rich which-key rainbow-delimiters doom-themes doom-modeline use-package ivy)))
+   '(spinner gnu-elpa-keyring-update lsp-mode python-mode winum which-key use-package rainbow-delimiters projectile page-break-lines ivy-rich hydra general evil-snipe evil-escape doom-themes doom-modeline dashboard counsel company avy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 120 :width normal)))))
