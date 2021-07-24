@@ -1,0 +1,3 @@
+#!/bin/sh
+emacs --with-profile simacs -f sp/open-with-tasks-and-capture &
+exit 0

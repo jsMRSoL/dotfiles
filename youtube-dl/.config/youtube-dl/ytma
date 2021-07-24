@@ -1,0 +1,5 @@
+--external-downloader aria2c
+--extract-audio
+--no-part
+--format 140/18/21/medium/best
+--output /home/simon/Music/%(title)s-%(id)s.%(ext)s

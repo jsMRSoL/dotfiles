@@ -1,7 +1,7 @@
 ################################################################################
-## PATH 
+## PATH
 ################################################################################
-## user's private bin 
+## user's private bin
 if [ -d "$HOME/.local/usr/bin" ] ; then
     PATH="$HOME/.local/usr/bin:$PATH"
 fi
@@ -23,10 +23,10 @@ fi
     PATH=$PATH:$HOME/.emacs.d/bin
 export PATH
 ################################################################################
-## End PATH 
+## End PATH
 ################################################################################
 ################################################################################
-## Environmental variables 
+## Environmental variables
 ################################################################################
 ## convenience environmental variables
 export DOTFILES="$HOME/.dotfiles"
@@ -79,7 +79,7 @@ RANGER_LOAD_DEFAULT_RC=FALSE
 ## End program settings ####
 ################################################################################
 ################################################################################
-## aliases 
+## aliases
 ################################################################################
 alias brc='source ~/.bashrc'
 alias gf='cd ~/.dotfiles'
@@ -120,6 +120,7 @@ alias yt='youtube-dl --external-downloader=aria2c'
 alias ytv='youtube-dl --config-location ~/.config/youtube-dl/ytv'
 alias ytvv='youtube-dl --config-location ~/.config/youtube-dl/ytvv'
 alias yta='youtube-dl --config-location ~/.config/youtube-dl/yta'
+alias ytma='youtube-dl --config-location ~/.config/youtube-dl/ytma'
 alias ytva='youtube-dl --config-location ~/.config/youtube-dl/ytva'
 ## shortcut files
 alias min='vim ~/.dotfiles/help/minimal-debian-install'

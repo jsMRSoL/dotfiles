@@ -1,0 +1,852 @@
+#+TITLE: Configuration for simacs.
+#+STARTUP: overview
+#+PROPERTY: header-args:emacs-lisp :tangle ~/.simacs_dir/init.el :mkdirp yes
+
+* Package system setup
+  #+begin_src emacs-lisp
+    (require 'package)
+
+    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			     ("org" . "https://orgmode.org/elpa/")
+			     ("elpa" . "https://elpa.gnu.org/packages/")))
+
+    (package-initialize)
+    (unless package-archive-contents
+      (package-refresh-contents))
+
+    (unless (package-installed-p 'use-package)
+      (package-install 'use-package))
+
+    (require 'use-package)
+    (setq use-package-always-ensure t)
+
+  #+end_src
+
+* Basic UI Configuration
+  #+begin_src emacs-lisp
+
+    (setq inhibit-startup-message t)
+
+    (if (display-graphic-p)
+	(progn 
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (set-fringe-mode 10)))
+
+    (menu-bar-mode -1)
+    ;;(electric-pair-mode 1)
+    ;; how to have no bells?
+    (setq visual-bell t)
+    (setq ring-bell-function 'ignore)
+
+    (column-number-mode)
+    (global-display-line-numbers-mode t)
+    (global-hl-line-mode t)
+    ;; disable line numbers for these modes:
+    (dolist (mode '(org-mode-hook
+		    term-mode-hook
+		    treemacs-mode-hook
+		    shell-mode-hook
+		    eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+    (defalias 'yes-or-no-p 'y-or-n-p)
+
+  #+end_src   
+
+* Theming
+  #+begin_src emacs-lisp
+
+    (use-package doom-modeline
+      :init (doom-modeline-mode 1))
+
+    (use-package doom-themes
+      :init (load-theme 'doom-dracula t)
+      :custom
+      (setq doom-themes-enable bold t
+	    doom-themes-enable-italic t)
+      (doom-themes-org-config))
+
+    (custom-set-faces '(default ((t
+				  (:family "Source Code Pro"
+					   :foundry "ADBO" :slant normal
+					   :weight normal :height 120
+					   :width normal)))))
+    (global-prettify-symbols-mode t)
+
+  #+end_src
+  
+* Startup
+  #+begin_src emacs-lisp
+
+    (use-package dashboard
+      :config
+      (dashboard-setup-startup-hook)
+      (setq dashboard-center-content t)
+      (setq dashboard-items '((recents . 10)
+			      (bookmarks . 5)
+			      (projects . 5)
+			      ;; (agenda . 5)	;
+			      ;; (registers . 5)
+			      )))
+
+  #+end_src
+
+* Text editing: Evil
+  #+begin_src emacs-lisp
+    ;; (defun sp/evil-hook ()
+    ;;   (dolist (mode '(dashboard-mode
+    ;; 		  ))
+    ;;     (add-to-list 'evil-emacs-state-modes mode)))
+
+    (use-package evil
+      :init
+      (setq evil-want-integration t)
+      (setq evil-want-keybinding nil)
+      (setq evil-want-C-u-scroll t)
+      (setq evil-want-C-i-jump t)
+      ;; :hook (evil-mode . sp/evil-hook)
+      :config
+      (evil-mode 1)
+      (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+      ;; Use visual line motions
+      (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+      (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+      (evil-set-initial-state 'dashboard-mode 'normal)
+      (evil-set-initial-state 'messages-buffer-mode 'normal)
+      (evil-set-initial-state 'rustic-popup-mode 'emacs))
+
+
+    (use-package evil-escape
+      :init
+      (evil-escape-mode 1)
+      :config
+      (setq-default evil-escape-key-sequence "fd"
+		    evil-escape-delay 0.2))
+
+    (use-package evil-collection
+      :after evil
+      :config
+      (evil-collection-init))
+
+    (use-package smartparens
+      :init
+      (require 'smartparens-config))
+
+
+    (defhydra hydra-parens (:color pink
+				  :hint nil)
+    "
+    ^Navigate sexp^         ^Change sexp^              
+    ^^^^^^^^--------------------------------------------------
+    _n_: next    _u_: up      _s_: slurp        _d_: kill      
+    _p_: prev    _v_: down    _S_: bkwd slurp   _D_: bkwd kill
+    _f_: fwd     _e_: end     _b_: barf         
+    _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit            
+    "
+
+    ("n" sp-next-sexp)
+    ("p" sp-previous-sexp)
+    ("f" sp-forward-sexp)
+    ("c" sp-backward-sexp)
+    ("e" sp-end-of-sexp)
+    ("E" eval-last-sexp)
+    ("u" sp-up-sexp)
+    ("v" sp-down-sexp)
+    ("d" sp-kill-sexp)
+    ("D" sp-backward-kill-sexp)
+    ("s" sp-forward-slurp-sexp)
+    ("S" sp-backward-slurp-sexp)
+    ("b" sp-forward-barf-sexp)
+    ("B" sp-backward-barf-sexp)
+    ("q" (message "Done") :exit t :color blue))
+
+    (use-package avy)
+
+    (use-package evil-nerd-commenter
+      :init
+      (evil-define-key 'normal 'global
+	"gcc" 'evilnc-comment-or-uncomment-lines
+	"gcp" 'evilnc-copy-and-comment-lines))
+
+
+  #+end_src
+  
+* Window manipulation
+  #+begin_src emacs-lisp
+
+    (use-package winum
+      :defer
+      :init
+      (winum-mode 1)
+      :bind
+      ("M-1" . winum-select-window-1)
+      ("M-2" . winum-select-window-2)
+      ("M-3" . winum-select-window-3)
+      ("M-4" . winum-select-window-4)
+      ("M-5" . winum-select-window-5)
+      ("M-6" . winum-select-window-6))
+
+
+    (defun sp/delete-chosen-window()
+      "Enter a window no to delete."
+      (interactive)
+      (let ((chosen-win (read-from-minibuffer
+			 "Enter window no.: "
+			 "")))
+      (if (equal chosen-win "")
+	  (message "No window entered. Cancelling...")
+	;; (message (format "Chosen window %s" chosen-win))
+	  (let ((current-prefix-arg (concat "-" chosen-win)))
+	    (call-interactively 'winum-select-window-by-number)
+	    ))))
+
+  #+end_src
+
+* Tabs
+  #+begin_src emacs-lisp
+    (setq tab-bar-new-tab-choice "*scratch*"
+	  tab-bar-show nil)
+  #+end_src
+
+* Workspaces
+  #+begin_src emacs-lisp
+    (use-package perspective
+      :init
+      (persp-mode)
+      (setq persp-state-default-file "~/.simacs_dir/layouts/layouts"))
+  #+end_src
+  
+* Text macros
+  #+begin_src emacs-lisp
+
+    (fset 'insert-line-and-paste-clipboard
+	  [?O escape ?m ?A ?\" ?* ?P ?0 ?\' ?A])
+
+  #+end_src
+* Menu: Ivy & Counsel
+  #+begin_src emacs-lisp
+
+    (use-package ivy
+	:diminish
+	:bind (
+		:map ivy-minibuffer-map
+		("TAB" . ivy-alt-done)
+		("C-l" . ivy-alt-done)
+		("C-j" . ivy-next-line)
+		("C-k" . ivy-previous-line)
+		:map ivy-switch-buffer-map
+		("C-k" . ivy-previous-line)
+		("C-l" . ivy-done)
+		("C-d" . ivy-switch-buffer-kill)
+		:map ivy-reverse-i-search-map
+		("C-k" . ivy-previous-line)
+		("C-d" . ivy-reverse-i-search-kill))
+	:config
+	(ivy-mode 1))
+
+    (use-package ivy-rich
+	:init
+	(ivy-rich-mode 1))
+
+    (use-package counsel
+	:bind (("M-x" . counsel-M-x)))
+
+  #+end_src
+
+* Helpful Help Commands
+
+#+begin_src emacs-lisp
+
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+
+#+end_src
+
+* Completion
+  #+begin_src emacs-lisp
+
+    (use-package company
+      :defer
+      :bind (
+	     :map company-active-map
+	     ("C-j" . #'company-select-next)
+	     ("C-k" . #'company-select-previous)) 
+      :init
+      (global-company-mode 1)
+      :custom
+      (company-transformers '(company-sort-prefer-same-case-prefix)))
+
+    (use-package company-box
+      :hook (company-mode . company-box-mode))
+
+    (use-package yasnippet
+      :init
+      (setq-default yas-snippet-dirs '("~/.dotfiles/emacs/.emacs.d/private/snippets"))
+      (yas-global-mode 1))
+
+  #+end_src
+  
+* Keys: which-key, hydra and general
+  #+begin_src emacs-lisp
+
+	(use-package which-key
+	  :init (which-key-mode)
+	  :diminish which-key-mode
+	  :config
+	  (setq which-key-idle-delay 0.5))
+
+	(use-package hydra)
+
+	(defhydra hydra-zoom (:color pink
+				     :hint nil)
+	  "
+			   _j_: in      _k_: out      _q_: quit
+			  " 
+
+	  ("j" text-scale-increase)
+	  ("k" text-scale-decrease)
+	  ("q" (message "Done") :exit t :color blue))
+
+	(defhydra hydra-toggles nil
+	  "toggles"
+	  ("f" auto-fill-mode "fill")
+	  ("t" toggle-truncate-line "truncate")
+	  ("q" nil "cancel"))
+
+	(use-package general
+	  :config
+	  (general-evil-setup t)
+
+	  (general-create-definer sp/leader-keys
+	    :keymaps '(normal insert visual emacs dashboard)
+	    :prefix "SPC"
+	    :global-prefix "C-SPC"))
+
+	(defun sp/open-init ()
+	  "Open init.el for simacs."
+	  (interactive)
+	  (find-file "~/.simacs_dir/simacs.org"))
+
+	(defun sp/open-journal ()
+	  "Open journal.org for simacs."
+	  (interactive)
+	  (find-file "~/Documents/org/journal.org"))
+
+	(defun sp/open-tasks ()
+	  "Open tasks.org for simacs."
+	  (interactive)
+	  (find-file "~/Documents/org/tasks.org"))
+
+	(defun sp/open-with-tasks-and-capture ()
+	  "Open tasks.org and org-capture for simacs.
+
+    This is mainly intended to be used from the command line as a startup convenience."
+	  (interactive)
+	  (find-file "~/Documents/org/tasks.org")
+	  (org-capture))
+
+	(sp/leader-keys
+	  "1" '(winum-select-window-1 :which-key "win 1")
+	  "2" '(winum-select-window-2 :which-key "win 2")
+	  "SPC" '(counsel-M-x :which-key "M-x")
+	  ":" '(eval-expression :which-key "M-:")
+	  "TAB" '(evil-buffer :which-key "last buffer")
+	  "u" '(universal-argument :which-key "c-u")
+	  "`" '(org-capture :which-key "org capture")
+	  "a" '(:ignore t :which-key "apps")
+	  "ad" '(dired-jump :which-key "dired-jump")
+	  "at" '(vterm :which-key "terminal")
+	  "au" '(undo-tree-visualize :which-key "undo-tree")
+	  "ax" '(org-capture :which-key "org capture")
+	  "b" '(:ignore t :which-key "buffers")
+	  "bb" '(persp-counsel-switch-buffer :which-key "switch")
+	  "bd" '(kill-buffer-and-window :which-key "delete")
+	  "c" '(:ignore t :which-key "code")
+	  "cc" '(comment-line :which-key "comment")
+	  "f" '(:ignore t :which-key "files")
+	  "fed" '(sp/open-init :which-key "edit init.el")
+	  "ff" '(counsel-find-file :which-key "find file")
+	  "fr" '(counsel-recentf :which-key "find recent")
+	  "fs" '(save-buffer :which-key "save")
+	  "ft" '(treemacs :which-key "treemacs")
+	  "g" '(:ignore t :which-key "git")
+	  "gs" '(magit-status :which-key "status")
+	  "q" '(:ignore t :which-key "quit")
+	  "qa" '(evil-quit-all :which-key "quit all")
+	  "qq" '(evil-quit :which-key "quit")
+	  "j" '(:ignore t :which-key "jump")
+	  "jo" '(sp/dired-jump-dir :which-key "open common")
+	  "jj" '(sp/open-journal :which-key "journal.org")
+	  "jt" '(sp/open-tasks :which-key "tasks.org")
+	  "k" '(:ignore t :which-key "lisp")
+	  "kk" '(hydra-parens/body :which-key "hydra")
+	  "ke" '(eval-last-sexp :which-key "evaluate")
+	  "kw" '(:ignore t :which-key "wrap")
+	  "kwr" '(sp-rewrap-sexp :which-key "rewrap")
+	  "kw{" '(sp-wrap-curly :which-key "curly")
+	  "kw(" '(sp-wrap-round :which-key "round")
+	  "kw[" '(sp-wrap-square :which-key "square")
+	  "kwu" '(sp-unwrap-sexp :which-key "unwrap next")
+	  "kwU" '(sp-backward-unwrap-sexp :which-key "unwrap prev")
+	  "l" '(:ignore t :which-key "layouts")
+	  "la" '(persp-add-buffer :which-key "add buffer")
+	  "lA" '(persp-set-buffer :which-key "add buf excl")
+	  "lb" '(persp-ivy-switch-buffer :which-key "switch buf")
+	  "lc" '(persp-kill :which-key "close layout")
+	  "lk" '(persp-remove-buffer :which-key "remove buffer")
+	  "ll" '(persp-switch-last :which-key "last layout")
+	  "lr" '(persp-rename :which-key "rename layout")
+	  "ls" '(persp-switch :which-key "switch layout")
+	  "ln" '(persp-next :which-key "next layout")
+	  "lp" '(persp-prev :which-key "prev layout")
+	  "l C-s" '(persp-state-save :which-key "save layout")
+	  "l C-l" '(persp-state-load :which-key "load layout")
+	  "o" '(:ignore t :which-key "org")
+	  "ob" '(:ignore t :which-key "babel")
+	  "obt" '(org-babel-tangle :which-key "tangle")
+	  "oi" '(:ignore t :which-key "insert")
+	  "oh" '(sp/hydra-org-headings/body :which-key "headings")
+	  "oc" '(:ignore t :which-key "checkbox")
+	  "occ" '(sp/org-insert-checkbox :which-key "insert")
+	  "oct" '(org-toggle-checkbox :which-key "toggle")
+	  "och" '(org-toggle-checkbox-half :which-key "toggle half")
+	  "ot" '(org-todo :which-key "todo")
+	  "or" '(org-refile :which-key "refile")
+	  "o!" '(org-time-stamp-inactive :which-key "timestamp")
+	  "o." '(org-time-stamp :which-key "timestamp")
+	  "p" '(projectile-command-map :which-key "projects")
+	  "r" '(:ignore t :which-key "registers")
+	  "rl" '(evil-show-registers :which-key "list")
+	  "rp" '(insert-line-and-paste-clipboard :which-key "insert line paste")
+	  "s" '(:ignore t :which-key "search")
+	  "sp" '(swiper :which-key "swiper")
+	  "ss" '(avy-goto-char-2 :which-key "char2")
+	  "sl" '(avy-goto-line :which-key "line")
+	  "t" '(:ignore t :which-key "tabs")
+	  "tn" '(tab-bar-new-tab :which-key "new")
+	  "tc" '(tab-bar-close-tab :which-key "close")
+	  "tt" '(tab-bar-switch-to-tab :which-key "switch")
+	  "w" '(:ignore t :which-key "windows")
+	  "wv" '(evil-window-vsplit :which-key "vsplit")
+	  "ws" '(evil-window-split :which-key "split")
+	  "wh" '(evil-window-left :which-key "go left")
+	  "wj" '(evil-window-down :which-key "go down")
+	  "wk" '(evil-window-up :which-key "go up")
+	  "wl" '(evil-window-right :which-key "go right")
+	  "wo" '(delete-other-windows :which-key "only")
+	  "wd" '(sp/delete-chosen-window :which-key "delete")
+	  "z" '(hydra-zoom/body :which-key "zoom")
+	  "T" '(hydra-toggles/body :which-key "toggles"))
+
+	(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+
+  #+end_src
+  
+* File management: Dired
+  #+begin_src emacs-lisp
+
+      (use-package dired
+	:ensure nil
+	:commands (dired dired-jump)
+	:custom ((dired-listing-switches "-agho --group-directories-first"))
+	:config
+	(evil-collection-define-key 'normal 'dired-mode-map
+	  "h" 'dired-single-up-directory
+	  "l" 'dired-single-buffer
+	  (kbd "SPC") nil))
+
+      (use-package dired-single)
+
+      (use-package all-the-icons-dired
+	:hook (dired-mode . all-the-icons-dired-mode))
+
+      (use-package dired-hide-dotfiles
+	:hook (dired-mode . dired-hide-dotfiles-mode)
+	:config
+	(evil-collection-define-key 'normal 'dired-mode-map
+	  "H" 'dired-hide-dotfiles-mode))
+
+    (defvar sp-common-dirs
+      `((?h . "/home/simon/")
+	(?d . "/home/simon/Documents/")
+	(?o . "/home/simon/Downloads/")
+	(?r . "/home/simon/Documents/org/")
+	(?f . "/home/simon/.dotfiles/")
+	(?e . ,user-emacs-directory)
+	(?c . "/home/simon/.config/")
+	(?b . "/home/simon/.local/usr/bin/")
+	(?j . "/home/simon/Projects")
+	(?y . "/home/simon/Projects/python/"))
+      "An alist of common-dirs to facilitate quick navigation.")
+
+    (defun sp/dired-jump-dir(char)
+      "Jump to a directory in my common directories list."
+      (interactive "c[h]ome, [d]ocs, d[o]wnloads, [e]macs, o[r]g, dot[f]iles, [c]onfig, .[b]in, pro[j]ects, p[y]thon")
+      (dired-jump nil (alist-get char sp-common-dirs)))
+
+  #+end_src
+  
+* Internal files
+  #+begin_src emacs-lisp
+    (setq backup-directory-alist
+          `(("." . ,(concat user-emacs-directory "backup-files"))))
+  #+end_src
+* Shell
+  #+begin_src emacs-lisp
+
+    (use-package vterm
+      :commands vterm)
+
+  #+end_src
+  
+* Git integration
+  #+begin_src emacs-lisp
+
+    (use-package magit
+      :custom
+      (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+    (setq vc-follow-symlinks t)
+
+  #+end_src
+
+* Syntax checking
+  #+begin_src emacs-lisp
+
+    (use-package flycheck)
+
+  #+end_src
+
+* Project management
+  #+begin_src emacs-lisp
+
+    (use-package projectile
+      :diminish projectile-mode
+      :config
+      (projectile-mode +1)
+      :custom ((projectile-completion-system 'ivy)))
+
+    (use-package counsel-projectile
+      :config (counsel-projectile-mode))
+
+  #+end_src
+
+* LSP
+  #+begin_src emacs-lisp
+
+    (use-package lsp-mode
+      :commands (lsp lsp-deferred)
+      :init 
+      (setq lsp-keymap-prefix "C-c l")
+      :config
+      (lsp-enable-which-key-integration t))
+
+    (use-package lsp-ui
+      :hook (lsp-mode . lsp-ui-mode)
+      :custom
+      (lsp-ui-doc-position 'bottom))
+
+    (use-package lsp-treemacs
+      :after lsp)
+
+    (use-package lsp-ivy)
+
+  #+end_src
+
+* Language-specific settings
+
+** Python
+   #+begin_src emacs-lisp
+     (use-package pyvenv
+       :defer)
+
+     (use-package lsp-pyright
+       :defer)
+
+     (defun sp/setup-python-lsp ()
+       (require 'pyvenv)
+       (pyvenv-mode 1)
+       (require 'lsp-pyright)
+       ;; (fset 'lsp-format-buffer 'yapfify-buffer)
+       ;; (fset 'lsp-format-region 'yapfify-region)
+       (lsp-deferred) ;; or lsp
+       (require 'yapfify)
+       (push '(company-capf :with company-yasnippet) company-backends)
+       (general-define-key
+	:keymaps 'lsp-mode-map
+	:prefix lsp-keymap-prefix
+	"= =" '(yapfify-buffer :which-key "format buffer")
+	"= r" '(yapfify-region-or-buffer :which-key "format region")))
+
+     (use-package python-mode
+       :mode "\\.py\\'"
+       :hook
+       (python-mode . sp/setup-python-lsp)
+       :custom
+       (python-shell-interpreter "python")
+       (dap-python-executable "python")
+       (dap-python-debugger 'debugpy)
+       :config
+       (require 'dap-python))
+
+   #+end_src
+   
+** Rust
+   #+begin_src emacs-lisp
+
+     (defun sp/setup-rust-lsp ()
+       (lsp-deferred))
+
+     (use-package rustic
+       :hook
+       (rustic-mode . sp/setup-rust-lsp))
+
+   #+end_src
+
+* DAP
+  #+begin_src emacs-lisp
+
+    (use-package dap-mode
+      ;; Uncomment the config below if you want all UI panes to be hidden by default!
+      ;; :custom
+      ;; (lsp-enable-dap-auto-configure nil)
+      ;; :config
+      ;; (dap-ui-mode 1)
+
+      :config
+      ;; Set up Node debugging
+      (require 'dap-node)
+      (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+
+      ;; Bind `C-c l d` to `dap-hydra` for easy access
+      (general-define-key
+	:keymaps 'lsp-mode-map
+	:prefix lsp-keymap-prefix
+	"d" '(dap-hydra t :which-key "debugger")))
+
+  #+end_src
+
+* Org
+
+** Cosmetics
+   #+begin_src emacs-lisp
+     (use-package org-bullets
+       :after org
+       :hook (org-mode . org-bullets-mode)
+       :custom
+       (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+     (setq org-ellipsis " ▾")
+   #+end_src
+
+** Logging
+   #+begin_src emacs-lisp
+
+     (setq org-agenda-start-with-log-mode t)
+     (setq org-log-done 'time)
+     (setq org-log-into-drawer t)
+
+   #+end_src
+
+** Agenda files
+   #+begin_src emacs-lisp
+
+     (setq org-agenda-files
+	   '("~/Documents/org/tasks.org"
+	     "~/Documents/org/ideas.org"
+	     "~/Documents/org/journal.org"
+	     ))
+
+   #+end_src
+
+** Todos
+   #+begin_src emacs-lisp
+
+     (setq org-todo-keywords
+	   '((sequence "TODO(t!)" "NEXT(n!)" "|" "DONE(d!)")
+	     (sequence "WAITING(w@/!)" "SOMEDAY(s!)" "PROJ(p!)" "|" "DONE(d!)")
+	     (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")))
+
+   #+end_src
+
+** Tags 
+   #+begin_src emacs-lisp
+
+  (setq org-tag-alist
+        '((:startgroup)
+          ; Put mutually exclusive tags here
+          (:endgroup)
+          ("@errand" . ?e)
+          ("@home" . ?h)
+          ("@garage" . ?g)
+          ("@work" . ?w)
+          ("@family" . ?f)
+          ("@note" . ?n)
+          ("@fun" . ?F)
+          ("@urgent" . ?u)
+          ("@computing" . ?c)
+          ("@idea" . ?i)))
+   #+end_src
+
+** Agenda views
+   #+begin_src emacs-lisp
+
+     (setq org-agenda-custom-commands
+	   '(("d" "Dashboard"
+	      ((agenda "" ((org-deadline-warning-days 7)))
+	       (todo "NEXT"
+		     ((org-agenda-overriding-header "Next Tasks")))
+	       (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
+
+	     ("n" "Next Tasks"
+	      ((todo "NEXT"
+		     ((org-agenda-overriding-header "Next Tasks")))))
+
+	     ("W" "Work Tasks" tags-todo "+work-email")
+
+	     ;; Low-effort next actions
+	     ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+	      ((org-agenda-overriding-header "Low Effort Tasks")
+	       (org-agenda-max-todos 20)
+	       (org-agenda-files org-agenda-files)))
+
+	     ("w" "Workflow Status"
+	      ((todo "WAIT"
+		     ((org-agenda-overriding-header "Waiting on External")
+		      (org-agenda-files org-agenda-files)))
+	       (todo "REVIEW"
+		     ((org-agenda-overriding-header "In Review")
+		      (org-agenda-files org-agenda-files)))
+	       (todo "PLAN"
+		     ((org-agenda-overriding-header "In Planning")
+		      (org-agenda-todo-list-sublevels nil)
+		      (org-agenda-files org-agenda-files)))
+	       (todo "BACKLOG"
+		     ((org-agenda-overriding-header "Project Backlog")
+		      (org-agenda-todo-list-sublevels nil)
+		      (org-agenda-files org-agenda-files)))
+	       (todo "READY"
+		     ((org-agenda-overriding-header "Ready for Work")
+		      (org-agenda-files org-agenda-files)))
+	       (todo "ACTIVE"
+		     ((org-agenda-overriding-header "Active Projects")
+		      (org-agenda-files org-agenda-files)))
+	       (todo "COMPLETED"
+		     ((org-agenda-overriding-header "Completed Projects")
+		      (org-agenda-files org-agenda-files)))
+	       (todo "CANC"
+		     ((org-agenda-overriding-header "Cancelled Projects")
+		      (org-agenda-files org-agenda-files)))))))
+
+   #+end_src
+
+** Refiling
+   #+begin_src emacs-lisp
+
+     (setq org-refile-allow-creating-parent-nodes 'confirm)
+     (setq org-refile-use-outline-path 'file)
+     (setq org-outline-path-complete-in-steps nil)
+     (setq org-refile-targets
+	   '((org-agenda-files . (:maxlevel . 1))
+	     ("journal.org" . (:maxlevel . 3))
+	     ("archive.org" . (:maxlevel . 1))))
+     ;; save org buffers after refiling!
+     (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+   #+end_src
+
+** Capture templates
+
+  Key can be found here: https://orgmode.org/manual/Template-expansion.html#Template-expansion
+  Clocking and other properties here: https://orgmode.org/manual/Template-elements.html#Template-elements
+   #+begin_src emacs-lisp
+
+     (setq org-capture-templates
+	   '(("t" "Tasks / Projects / Appointments")
+	     ("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
+	      "* TODO  %^{Title}\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  %?\n  :END:\n  %a\n  %i" :empty-lines 1)
+	     ("ta" "Appointment" entry
+	      (file+olp+datetree "~/Documents/org/journal.org")
+	      "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
+	      :clock-in :clock-resume
+	      :empty-lines 1)
+
+	     ("j" "Journal Entries")
+	     ("jj" "Journal" entry
+	      (file+olp+datetree "~/Documents/org/journal.org")
+	      "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n"
+	      ;; :clock-in :clock-resume
+	      :empty-lines 1)
+
+	     ("b" "Book log")
+	     ("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
+	      ;; "| %^{Title} | %^{Author} | %^{Pages} | %^{Started} |  |  | %^{Notes} |" :kill-buffer t)
+	      "* %^{Title}\n:PROPERTIES:\n:Title: %\\1\n:Author: %^{Author}\n:Pages: ?\n:Started: %U\n:Finished: ?\n:Sessions: ?\n:Notes: %^{Notes} %?\n:END:"
+	      :kill-buffer t)
+	     ("m" "Metrics Capture")
+	     ("mw" "Weight" table-line (file+headline "~/Documents/org/metrics.org" "Weight")
+	      "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
+	     ("mg" "Guitar" table-line (file+headline "~/Documents/org/metrics.org" "Guitar")
+	      "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+	     ("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
+	      "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+	     ("mr" "Reading" table-line (file+headline "~/Documents/org/metrics.org" "Reading")
+	     "| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
+
+   #+end_src
+
+** Org babel
+
+** My functions
+   #+begin_src emacs-lisp
+
+     (use-package ob-rust)
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((emacs-lisp . t)
+	(python . t)
+	(rust . t)))
+
+     (require 'org-tempo)
+     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+     (add-to-list 'org-structure-template-alist '("py" . "src python"))
+     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+
+   #+end_src
+    
+    
+
+   #+begin_src emacs-lisp
+
+     (defun sp/org-insert-checkbox ()
+       "Convenience function to insert checkbox in org mode."
+       (interactive)
+       (let ((current-prefix-arg '(4)))
+	 (call-interactively 'org-toggle-checkbox)))
+
+     (defun sp/org-toggle-checkbox-half ()
+       "Convenience function to insert checkbox in org mode."
+       (interactive)
+       (let ((current-prefix-arg '(16)))
+	 (call-interactively 'org-toggle-checkbox)))
+
+     (defhydra sp/hydra-org-headings (:color pink
+					  :hint nil)
+       "
+	  _h_: promote    _j_: move down    _k_: move up    _l_: demote    _q_: quit" 
+       ("h" org-promote-subtree)
+       ("j" outline-move-subtree-down)
+       ("k" outline-move-subtree-up)
+       ("l" org-demote-subtree)
+       ("q" (message "Done") :exit t :color blue))
+   #+end_src

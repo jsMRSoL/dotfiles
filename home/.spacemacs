@@ -32,10 +32,10 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(csv
+   '(python
+     csv
      javascript
      html
-     python
      (rust :variables
            rust-format-on-save t)
      ;; ----------------------------------------------------------------

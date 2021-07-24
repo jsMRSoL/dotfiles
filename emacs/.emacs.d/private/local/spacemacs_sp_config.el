@@ -7,7 +7,7 @@
 ;;--------------------------------------------------------------------------
 ;; fuzzy find-file configuration
 ;;--------------------------------------------------------------------------
-  (load-file "/home/simon/.emacs.d/private/local/helm-fzf/helm-fzf.el")
+(load-file (concat user-emacs-directory "private/local/helm-fzf/helm-fzf.el"))
 ;;--------------------------------------------------------------------------
 ;; keybindings configuration
 ;;--------------------------------------------------------------------------
@@ -202,7 +202,7 @@
       (?o . "/home/simon/Downloads/")
       (?r . "/home/simon/Documents/org/")
       (?f . "/home/simon/.dotfiles/")
-      (?e . "/home/simon/.emacs.d/")
+      (?e . "$HOME/.spacemacs_dir/")
       (?c . "/home/simon/.config/")
       (?b . "/home/simon/.local/usr/bin/")
       (?j . "/home/simon/Projects")
@@ -220,7 +220,7 @@
 ;;--------------------------------------------------------------------------
 ;; trash-cli integration
 ;;--------------------------------------------------------------------------
-(load-file "/home/simon/.emacs.d/private/local/trash-settings.el")
+(load-file (concat user-emacs-directory "private/local/trash-settings.el"))
   (setq system-trash-exclude-matches '("#[^/]+#$" ".*~$" "\\.emacs\\.desktop.*"))
   (setq system-trash-exclude-paths '("/tmp"))
 ;;--------------------------------------------------------------------------

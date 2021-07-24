@@ -20,8 +20,10 @@ def get_file_count(id):
     new_folder = False
     stdin, stdout, stderr = client.exec_command(f'ls ~/vcol/{id}')
     if 'No such file or directory' in stderr.read().decode("utf8"):
-        stdin, stdout, stderr = client.exec_command(f'mkdir ~/vcol/{id}')
         new_folder = True
+        stdin, stdout, stderr = client.exec_command(
+            f'mkdir ~/vcol/{id}/thumbs -p')
+
         if stdout.channel.recv_exit_status() != 0:
             print(f'Folder {id} does not exist in ~/vcol & cannot be created')
             sys.exit(0)
@@ -39,6 +41,8 @@ def get_file_count(id):
     client.close()
 
     logging.debug(output)
+    if output == '':
+        output = 'dummy_000.jpg'
 
     try:
         if new_folder:
@@ -79,8 +83,9 @@ def push2server(id, num):
         print(f"Copying file {counter} of {no_files}...")
         print(f"....> {name}")
         scp_cmd = f'scp "{name}" simon@ant:~/vcol/{id}/{id}_{num:0>3}{ext}'
-        scp_output = subprocess.run(
-            scp_cmd, stdout=subprocess.DEVNULL, shell=True)
+        scp_output = subprocess.run(scp_cmd,
+                                    stdout=subprocess.DEVNULL,
+                                    shell=True)
         if scp_output.returncode == 0:
             print(f'File {counter} successfully copied!')
             copied_files.append(name)
@@ -100,9 +105,10 @@ def make_thumbs(id):
     # Check if folder exists
     path = '/home/simon/.local/usr/bin'
     p1 = f'cd ~/vcol/{id}'
+    p1a = '[[ -d thumbs ]] || mkdir thumbs'
     p2 = f'{path}/dirdiff.py . thumbs -thumb.jpg'
     p3 = f'xargs {path}/squarethumb.sh'
-    cmd = f'{p1}; {p2} | {p3}'
+    cmd = f'{p1}; {p1a}; {p2} | {p3}'
     stdin, stdout, stderr = client.exec_command(cmd)
     # output = stdout.read().decode("utf8")
     # err = stderr.read().decode("utf8")

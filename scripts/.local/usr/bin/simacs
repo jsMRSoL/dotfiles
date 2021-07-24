@@ -1,0 +1,6 @@
+#!/bin/bash
+if [[ $# -gt 0 ]]; then
+    emacs --with-profile simacs -- "$1" &
+else
+    emacs --with-profile simacs
+fi
