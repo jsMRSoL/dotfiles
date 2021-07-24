@@ -21,8 +21,9 @@ vim.o.termguicolors = true
 -- vim.o.t_Co = '256' -- Support 256 colors
 vim.o.guicursor = 'n-v-c:block-Normal,i-ci-ve:ver25-iCursor,r-cr:hor20-rCursor,o:hor50,sm:block-blinkwait175-blinkoff150-blinkon175'
 -- file settings
+vim.o.encoding = 'UTF-8'
 vim.o.fileformats = 'unix,dos,mac'
-vim.o.fileencoding = 'utf-8'
+vim.o.fileencoding = 'UTF-8'
 -- tabs, folds, linebreaks
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
