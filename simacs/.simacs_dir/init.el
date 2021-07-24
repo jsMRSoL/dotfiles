@@ -110,6 +110,8 @@
   (require 'smartparens-config))
 
 
+(use-package hydra)
+
 (defhydra hydra-parens (:color pink
 			      :hint nil)
 "
@@ -241,8 +243,6 @@ _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit
       :diminish which-key-mode
       :config
       (setq which-key-idle-delay 0.5))
-
-    (use-package hydra)
 
     (defhydra hydra-zoom (:color pink
 				 :hint nil)
