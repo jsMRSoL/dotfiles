@@ -17,9 +17,11 @@ def get_file_count(id):
     client.connect('ant', username='simon')
 
     # Check if folder exists
+    new_folder = False
     stdin, stdout, stderr = client.exec_command(f'ls ~/vcol/{id}')
     if 'No such file or directory' in stderr.read().decode("utf8"):
         stdin, stdout, stderr = client.exec_command(f'mkdir ~/vcol/{id}')
+        new_folder = True
         if stdout.channel.recv_exit_status() != 0:
             print(f'Folder {id} does not exist in ~/vcol & cannot be created')
             sys.exit(0)
@@ -39,9 +41,12 @@ def get_file_count(id):
     logging.debug(output)
 
     try:
-        num = output.split("_")[1]
-        num = num.split(".")[0]
-        return int(num)
+        if new_folder:
+            return 0
+        else:
+            num = output.split("_")[1]
+            num = num.split(".")[0]
+            return int(num)
     except IndexError as e:
         print("Filename was not in expected format.")
         print(f"Error: {e}")

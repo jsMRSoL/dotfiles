@@ -49,7 +49,7 @@ This function should only modify configuration layer settings."
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-complete-with-key-sequence-delay 0.1
                       auto-completion-minimum-prefix-length 1
-                      auto-completion-idle-delay 0.1
+                      auto-completion-idle-delay 0.0
                       auto-completion-private-snippets-directory "/home/simon/.emacs.d/private/snippets"
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-help-tooltip nil
@@ -62,9 +62,9 @@ This function should only modify configuration layer settings."
      LewisAndShort
      LSJ
      (lsp :variables
-          lsp-ui-doc-show-with-cursor nil
+          lsp-ui-doc-show-with-cursor t
           lsp-headerline-breadcrumb-enable nil
-          lsp-ui-sideline-enable nil
+          lsp-ui-sideline-enable t
           lsp-modeline-code-actions-enable t
           lsp-eldoc-enable-hover t
           lsp-modeline-diagnostics-enable nil
