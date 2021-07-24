@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: bash
+# key: <bash
+# --
+#+begin_src bash :results ${1:raw}
+  $0
+#+end_src
