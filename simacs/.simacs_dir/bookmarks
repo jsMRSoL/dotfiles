@@ -4,9 +4,9 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-refile-last-stored"
  (filename . "~/Documents/org/journal.org")
- (front-context-string . "**** DONE Set up")
- (rear-context-string . ":45]\n     :END:\n")
- (position . 12521))
+ (front-context-string . "**** DONE Add si")
+ (rear-context-string . "56]\n     :END:\n\n")
+ (position . 12756))
 ("org-capture-last-stored"
  (filename . "~/Documents/org/journal.org")
  (front-context-string . "**** 11:56 am - ")

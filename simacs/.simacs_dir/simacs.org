@@ -35,6 +35,7 @@
     (set-fringe-mode 10)))
 
     (menu-bar-mode -1)
+    ;;(electric-pair-mode 1)
     ;; how to have no bells?
     (setq visual-bell t)
     (setq ring-bell-function 'ignore)
@@ -76,6 +77,20 @@
 
   #+end_src
   
+* Link check
+  #+begin_src emacs-lisp
+
+    (defun sp/make-link-to-private-shared-folder ()
+      "Make a symlink in the emacs home directory to a folder
+	in dotfiles."
+      (let ((private (concat user-emacs-directory "private")))
+	(if (not (file-exists-p private))
+	  (make-symbolic-link "/home/simon/.dotfiles/emacs/.emacs.d/private/" private)
+	  (message "Link to private already exists..."))))
+
+    (sp/make-link-to-private-shared-folder)
+
+  #+end_src
 * Startup
   #+begin_src emacs-lisp
 
@@ -92,7 +107,7 @@
 
   #+end_src
 
-* Text editing: Evil etc.
+* Text editing: Evil
   #+begin_src emacs-lisp
     ;; (defun sp/evil-hook ()
     ;;   (dolist (mode '(dashboard-mode
@@ -105,7 +120,6 @@
       (setq evil-want-keybinding nil)
       (setq evil-want-C-u-scroll t)
       (setq evil-want-C-i-jump t)
-      (setq evil-undo-system 'undo-tree)
       ;; :hook (evil-mode . sp/evil-hook)
       :config
       (evil-mode 1)
@@ -135,6 +149,32 @@
       (require 'smartparens-config))
 
 
+    (defhydra hydra-parens (:color pink
+				  :hint nil)
+    "
+    ^Navigate sexp^         ^Change sexp^              
+    ^^^^^^^^--------------------------------------------------
+    _n_: next    _u_: up      _s_: slurp        _d_: kill      
+    _p_: prev    _v_: down    _S_: bkwd slurp   _D_: bkwd kill
+    _f_: fwd     _e_: end     _b_: barf         
+    _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit            
+    "
+
+    ("n" sp-next-sexp)
+    ("p" sp-previous-sexp)
+    ("f" sp-forward-sexp)
+    ("c" sp-backward-sexp)
+    ("e" sp-end-of-sexp)
+    ("E" eval-last-sexp)
+    ("u" sp-up-sexp)
+    ("v" sp-down-sexp)
+    ("d" sp-kill-sexp)
+    ("D" sp-backward-kill-sexp)
+    ("s" sp-forward-slurp-sexp)
+    ("S" sp-backward-slurp-sexp)
+    ("b" sp-forward-barf-sexp)
+    ("B" sp-backward-barf-sexp)
+    ("q" (message "Done") :exit t :color blue))
 
     (use-package avy)
 
@@ -144,20 +184,9 @@
 	"gcc" 'evilnc-comment-or-uncomment-lines
 	"gcp" 'evilnc-copy-and-comment-lines))
 
-    (use-package expand-region)
 
   #+end_src
   
-* Undotree
-  #+begin_src emacs-lisp
-
-    (use-package undo-tree
-      :custom
-      (setq undo-tree-visualizer-diff t)
-      (setq undo-tree-visualizer-timestamps t)
-      (global-undo-tree-mode 1))
-
-  #+end_src
 * Window manipulation
   #+begin_src emacs-lisp
 
@@ -180,17 +209,12 @@
       (let ((chosen-win (read-from-minibuffer
 			 "Enter window no.: "
 			 "")))
-	(if (equal chosen-win "")
-	    (message "No window entered. Cancelling...")
-	  ;; (message (format "Chosen window %s" chosen-win))
+      (if (equal chosen-win "")
+	  (message "No window entered. Cancelling...")
+	;; (message (format "Chosen window %s" chosen-win))
 	  (let ((current-prefix-arg (concat "-" chosen-win)))
 	    (call-interactively 'winum-select-window-by-number)
 	    ))))
-
-    (use-package winner
-      :after evil
-      :config
-      (winner-mode))
 
   #+end_src
 
@@ -234,7 +258,6 @@
 		("C-k" . ivy-previous-line)
 		("C-d" . ivy-reverse-i-search-kill))
 	:config
-        (setq ivy-use-selectable-prompt t)
 	(ivy-mode 1))
 
     (use-package ivy-rich
@@ -286,220 +309,159 @@
 
   #+end_src
   
-* Hydras
+* Keys: which-key, hydra and general
   #+begin_src emacs-lisp
 
-    (use-package hydra)
+	(use-package which-key
+	  :init (which-key-mode)
+	  :diminish which-key-mode
+	  :config
+	  (setq which-key-idle-delay 0.5))
 
-    (defhydra hydra-parens (:color pink
-				   :hint nil)
-      "
-    ^Navigate sexp^         ^Change sexp^              
-    ^^^^^^^^--------------------------------------------------
-    _n_: next    _u_: up      _s_: slurp        _d_: kill      
-    _p_: prev    _v_: down    _S_: bkwd slurp   _D_: bkwd kill
-    _f_: fwd     _e_: end     _b_: barf         
-    _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit            
-    "
+	(use-package hydra)
 
-      ("n" sp-next-sexp)
-      ("p" sp-previous-sexp)
-      ("f" sp-forward-sexp)
-      ("c" sp-backward-sexp)
-      ("e" sp-end-of-sexp)
-      ("E" eval-last-sexp)
-      ("u" sp-up-sexp)
-      ("v" sp-down-sexp)
-      ("d" sp-kill-sexp)
-      ("D" sp-backward-kill-sexp)
-      ("s" sp-forward-slurp-sexp)
-      ("S" sp-backward-slurp-sexp)
-      ("b" sp-forward-barf-sexp)
-      ("B" sp-backward-barf-sexp)
-      ("q" (message "Done") :exit t :color blue))
+	(defhydra hydra-zoom (:color pink
+				     :hint nil)
+	  "
+			   _j_: in      _k_: out      _q_: quit
+			  " 
 
-    (defhydra hydra-zoom nil
-      "zoom"
-      ("j" text-scale-increase "in")
-      ("k" text-scale-decrease "out")
-      ("q" (message "Done") :exit t :color blue))
+	  ("j" text-scale-increase)
+	  ("k" text-scale-decrease)
+	  ("q" (message "Done") :exit t :color blue))
 
-    (defhydra hydra-toggles nil
-      "toggles"
-      ("f" auto-fill-mode "fill")
-      ("t" toggle-truncate-line "truncate")
-      ("w" whitespace-mode "whitespace")
-      ("T" counsel-load-theme "theme")
-      ("q" nil "cancel"))
+	(defhydra hydra-toggles nil
+	  "toggles"
+	  ("f" auto-fill-mode "fill")
+	  ("t" toggle-truncate-line "truncate")
+	  ("q" nil "cancel"))
 
-    (defhydra sp/hydra-org-headings (:color pink
-					    :hint nil)
-      "
-	  _h_: promote    _j_: move down    _k_: move up    _l_: demote    _q_: quit" 
-      ("h" org-metaleft)
-      ("j" org-metadown)
-      ("k" org-metaup)
-      ("l" org-metaright)
-      ("q" (message "Done") :exit t :color blue))
+	(use-package general
+	  :config
+	  (general-evil-setup t)
 
-  #+end_src
+	  (general-create-definer sp/leader-keys
+	    :keymaps '(normal insert visual emacs dashboard)
+	    :prefix "SPC"
+	    :global-prefix "C-SPC"))
 
-* Keys: which-key and general
-  #+begin_src emacs-lisp
+	(defun sp/open-init ()
+	  "Open init.el for simacs."
+	  (interactive)
+	  (find-file "~/.simacs_dir/simacs.org"))
 
-    (use-package which-key
-      :init (which-key-mode)
-      :diminish which-key-mode
-      :config
-      (setq which-key-idle-delay 0.5))
+	(defun sp/open-journal ()
+	  "Open journal.org for simacs."
+	  (interactive)
+	  (find-file "~/Documents/org/journal.org"))
 
-    (use-package general
-      :config
-      (general-evil-setup t)
+	(defun sp/open-tasks ()
+	  "Open tasks.org for simacs."
+	  (interactive)
+	  (find-file "~/Documents/org/tasks.org"))
 
-      (general-create-definer sp/leader-keys
-	:keymaps '(normal insert visual emacs dashboard)
-	:prefix "SPC"
-	:global-prefix "C-SPC"))
-
-    (defun sp/open-init ()
-      "Open init.el for simacs."
-      (interactive)
-      (find-file "~/.simacs_dir/simacs.org"))
-
-    (defun sp/open-journal ()
-      "Open journal.org for simacs."
-      (interactive)
-      (find-file "~/Documents/org/journal.org"))
-
-    (defun sp/open-tasks ()
-      "Open tasks.org for simacs."
-      (interactive)
-      (find-file "~/Documents/org/tasks.org"))
-
-    (defun sp/open-with-tasks-and-capture ()
-      "Open tasks.org and org-capture for simacs.
+	(defun sp/open-with-tasks-and-capture ()
+	  "Open tasks.org and org-capture for simacs.
 
     This is mainly intended to be used from the command line as a startup convenience."
-      (interactive)
-      (find-file "~/Documents/org/tasks.org")
-      (org-capture))
+	  (interactive)
+	  (find-file "~/Documents/org/tasks.org")
+	  (org-capture))
 
-    (sp/leader-keys
-      "1" '(winum-select-window-1 :which-key "win 1")
-      "2" '(winum-select-window-2 :which-key "win 2")
-      "SPC" '(counsel-M-x :which-key "M-x")
-      ":" '(eval-expression :which-key "M-:")
-      "TAB" '(evil-buffer :which-key "last buffer")
-      "u" '(universal-argument :which-key "c-u")
-      "`" '(org-capture :which-key "org capture")
-      "a" '(:ignore t :which-key "apps")
-      "ad" '(dired-jump :which-key "dired-jump")
-      "at" '(vterm :which-key "terminal")
-      "au" '(undo-tree-visualize :which-key "undo-tree")
-      "am"  '(:ignore t :which-key "media")
-      "amp" '(emms-pause :which-key "play / pause")
-      "amf" '(emms-play-file :which-key "play file")
-      "ax" '(org-capture :which-key "org capture")
-      "b" '(:ignore t :which-key "buffers")
-      "bb" '(persp-counsel-switch-buffer :which-key "switch")
-      "bd" '(kill-buffer-and-window :which-key "delete")
-      "c" '(:ignore t :which-key "code")
-      "cc" '(comment-line :which-key "comment")
-      "f" '(:ignore t :which-key "files")
-      "fed" '(sp/open-init :which-key "edit init.el")
-      "ff" '(counsel-find-file :which-key "find file")
-      "fr" '(counsel-recentf :which-key "find recent")
-      "fs" '(save-buffer :which-key "save")
-      "ft" '(treemacs :which-key "treemacs")
-      "g" '(:ignore t :which-key "git")
-      "gs" '(magit-status :which-key "status")
-      "q" '(:ignore t :which-key "quit")
-      "qa" '(evil-quit-all :which-key "quit all")
-      "qq" '(evil-quit :which-key "quit")
-      "j" '(:ignore t :which-key "jump")
-      "jo" '(sp/dired-jump-dir :which-key "open common")
-      "jj" '(sp/open-journal :which-key "journal.org")
-      "jt" '(sp/open-tasks :which-key "tasks.org")
-      "k" '(:ignore t :which-key "lisp")
-      "kk" '(hydra-parens/body :which-key "hydra")
-      "ke" '(eval-last-sexp :which-key "evaluate")
-      "kw" '(:ignore t :which-key "wrap")
-      "kwr" '(sp-rewrap-sexp :which-key "rewrap")
-      "kw{" '(sp-wrap-curly :which-key "curly")
-      "kw(" '(sp-wrap-round :which-key "round")
-      "kw[" '(sp-wrap-square :which-key "square")
-      "kwu" '(sp-unwrap-sexp :which-key "unwrap next")
-      "kwU" '(sp-backward-unwrap-sexp :which-key "unwrap prev")
-      "l" '(:ignore t :which-key "layouts")
-      "la" '(persp-add-buffer :which-key "add buffer")
-      "lA" '(persp-set-buffer :which-key "add buf excl")
-      "lb" '(persp-ivy-switch-buffer :which-key "switch buf")
-      "lc" '(persp-kill :which-key "close layout")
-      "lk" '(persp-remove-buffer :which-key "remove buffer")
-      "ll" '(persp-switch-last :which-key "last layout")
-      "lr" '(persp-rename :which-key "rename layout")
-      "ls" '(persp-switch :which-key "switch layout")
-      "ln" '(persp-next :which-key "next layout")
-      "lp" '(persp-prev :which-key "prev layout")
-      "l C-s" '(persp-state-save :which-key "save layout")
-      "l C-l" '(persp-state-load :which-key "load layout")
-      "o" '(:ignore t :which-key "org")
-      "oa" '(org-agenda :which-key "agenda")
-      "ob" '(:ignore t :which-key "babel")
-      "obt" '(org-babel-tangle :which-key "tangle")
-      "oi" '(:ignore t :which-key "insert")
-      "oil" '(org-insert-link :which-key "link")
-      "oit" '(:ignore t :which-key "timestamp")
-      "oitt" '(org-time-stamp-inactive :which-key "inactive")
-      "oita" '(org-time-stamp :which-key "active")
-      "oj" '(counsel-org-goto :which-key "jump")
-      "oh" '(sp/hydra-org-headings/body :which-key "headings")
-      "oc" '(:ignore t :which-key "checkbox")
-      "occ" '(sp/org-insert-checkbox :which-key "insert")
-      "oct" '(org-toggle-checkbox :which-key "toggle")
-      "och" '(org-toggle-checkbox-half :which-key "toggle half")
-      "ot" '(org-todo :which-key "todo")
-      "or" '(org-refile :which-key "refile")
-      "on" '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
-      "oe" '(org-export-dispatch :which-key "export")
-      "p" '(projectile-command-map :which-key "projects")
-      "r" '(:ignore t :which-key "registers")
-      "rl" '(evil-show-registers :which-key "list")
-      "rp" '(insert-line-and-paste-clipboard :which-key "insert line paste")
-      "s" '(:ignore t :which-key "search")
-      "sp" '(swiper :which-key "swiper")
-      "ss" '(avy-goto-char-2 :which-key "char2")
-      "sl" '(avy-goto-line :which-key "line")
-      "t" '(:ignore t :which-key "tabs")
-      "tn" '(tab-bar-new-tab :which-key "new")
-      "tc" '(tab-bar-close-tab :which-key "close")
-      "tt" '(tab-bar-switch-to-tab :which-key "switch")
-      "v" '(:ignore t :which-key "region")
-      "vv" '(er/expand-region :which-key "expand")
-      "v(" '(er/mark-outside-pairs :which-key "outside pairs")
-      "v)" '(er/mark-inside-pairs :which-key "inside pairs")
-      "v\"" '(er/mark-outside-quotes :which-key "outside quotes")
-      "vq" '(er/mark-inside-quotes :which-key "inside quotes")
-      "vd" '(er/mark-defun :which-key "function")
-      "vc" '(er/mark-comment :which-key "comment")
-      "ve" '(er/mark-email :which-key "email")
-      "vu" '(er/mark-url :which-key "url")
-      "w" '(:ignore t :which-key "windows")
-      "wv" '(evil-window-vsplit :which-key "vsplit")
-      "ws" '(evil-window-split :which-key "split")
-      "wh" '(evil-window-left :which-key "go left")
-      "wj" '(evil-window-down :which-key "go down")
-      "wk" '(evil-window-up :which-key "go up")
-      "wl" '(evil-window-right :which-key "go right")
-      "wo" '(delete-other-windows :which-key "only")
-      "wd" '(sp/delete-chosen-window :which-key "delete")
-      "wu" '(winner-undo :which-key "winner undo")
-      "wU" '(winner-redo :which-key "winner redo")
-      "z" '(hydra-zoom/body :which-key "zoom")
-      "T" '(hydra-toggles/body :which-key "toggles"))
+	(sp/leader-keys
+	  "1" '(winum-select-window-1 :which-key "win 1")
+	  "2" '(winum-select-window-2 :which-key "win 2")
+	  "SPC" '(counsel-M-x :which-key "M-x")
+	  ":" '(eval-expression :which-key "M-:")
+	  "TAB" '(evil-buffer :which-key "last buffer")
+	  "u" '(universal-argument :which-key "c-u")
+	  "`" '(org-capture :which-key "org capture")
+	  "a" '(:ignore t :which-key "apps")
+	  "ad" '(dired-jump :which-key "dired-jump")
+	  "at" '(vterm :which-key "terminal")
+	  "au" '(undo-tree-visualize :which-key "undo-tree")
+	  "ax" '(org-capture :which-key "org capture")
+	  "b" '(:ignore t :which-key "buffers")
+	  "bb" '(persp-counsel-switch-buffer :which-key "switch")
+	  "bd" '(kill-buffer-and-window :which-key "delete")
+	  "c" '(:ignore t :which-key "code")
+	  "cc" '(comment-line :which-key "comment")
+	  "f" '(:ignore t :which-key "files")
+	  "fed" '(sp/open-init :which-key "edit init.el")
+	  "ff" '(counsel-find-file :which-key "find file")
+	  "fr" '(counsel-recentf :which-key "find recent")
+	  "fs" '(save-buffer :which-key "save")
+	  "ft" '(treemacs :which-key "treemacs")
+	  "g" '(:ignore t :which-key "git")
+	  "gs" '(magit-status :which-key "status")
+	  "q" '(:ignore t :which-key "quit")
+	  "qa" '(evil-quit-all :which-key "quit all")
+	  "qq" '(evil-quit :which-key "quit")
+	  "j" '(:ignore t :which-key "jump")
+	  "jo" '(sp/dired-jump-dir :which-key "open common")
+	  "jj" '(sp/open-journal :which-key "journal.org")
+	  "jt" '(sp/open-tasks :which-key "tasks.org")
+	  "k" '(:ignore t :which-key "lisp")
+	  "kk" '(hydra-parens/body :which-key "hydra")
+	  "ke" '(eval-last-sexp :which-key "evaluate")
+	  "kw" '(:ignore t :which-key "wrap")
+	  "kwr" '(sp-rewrap-sexp :which-key "rewrap")
+	  "kw{" '(sp-wrap-curly :which-key "curly")
+	  "kw(" '(sp-wrap-round :which-key "round")
+	  "kw[" '(sp-wrap-square :which-key "square")
+	  "kwu" '(sp-unwrap-sexp :which-key "unwrap next")
+	  "kwU" '(sp-backward-unwrap-sexp :which-key "unwrap prev")
+	  "l" '(:ignore t :which-key "layouts")
+	  "la" '(persp-add-buffer :which-key "add buffer")
+	  "lA" '(persp-set-buffer :which-key "add buf excl")
+	  "lb" '(persp-ivy-switch-buffer :which-key "switch buf")
+	  "lc" '(persp-kill :which-key "close layout")
+	  "lk" '(persp-remove-buffer :which-key "remove buffer")
+	  "ll" '(persp-switch-last :which-key "last layout")
+	  "lr" '(persp-rename :which-key "rename layout")
+	  "ls" '(persp-switch :which-key "switch layout")
+	  "ln" '(persp-next :which-key "next layout")
+	  "lp" '(persp-prev :which-key "prev layout")
+	  "l C-s" '(persp-state-save :which-key "save layout")
+	  "l C-l" '(persp-state-load :which-key "load layout")
+	  "o" '(:ignore t :which-key "org")
+	  "ob" '(:ignore t :which-key "babel")
+	  "obt" '(org-babel-tangle :which-key "tangle")
+	  "oi" '(:ignore t :which-key "insert")
+	  "oh" '(sp/hydra-org-headings/body :which-key "headings")
+	  "oc" '(:ignore t :which-key "checkbox")
+	  "occ" '(sp/org-insert-checkbox :which-key "insert")
+	  "oct" '(org-toggle-checkbox :which-key "toggle")
+	  "och" '(org-toggle-checkbox-half :which-key "toggle half")
+	  "ot" '(org-todo :which-key "todo")
+	  "or" '(org-refile :which-key "refile")
+	  "o!" '(org-time-stamp-inactive :which-key "timestamp")
+	  "o." '(org-time-stamp :which-key "timestamp")
+	  "p" '(projectile-command-map :which-key "projects")
+	  "r" '(:ignore t :which-key "registers")
+	  "rl" '(evil-show-registers :which-key "list")
+	  "rp" '(insert-line-and-paste-clipboard :which-key "insert line paste")
+	  "s" '(:ignore t :which-key "search")
+	  "sp" '(swiper :which-key "swiper")
+	  "ss" '(avy-goto-char-2 :which-key "char2")
+	  "sl" '(avy-goto-line :which-key "line")
+	  "t" '(:ignore t :which-key "tabs")
+	  "tn" '(tab-bar-new-tab :which-key "new")
+	  "tc" '(tab-bar-close-tab :which-key "close")
+	  "tt" '(tab-bar-switch-to-tab :which-key "switch")
+	  "w" '(:ignore t :which-key "windows")
+	  "wv" '(evil-window-vsplit :which-key "vsplit")
+	  "ws" '(evil-window-split :which-key "split")
+	  "wh" '(evil-window-left :which-key "go left")
+	  "wj" '(evil-window-down :which-key "go down")
+	  "wk" '(evil-window-up :which-key "go up")
+	  "wl" '(evil-window-right :which-key "go right")
+	  "wo" '(delete-other-windows :which-key "only")
+	  "wd" '(sp/delete-chosen-window :which-key "delete")
+	  "z" '(hydra-zoom/body :which-key "zoom")
+	  "T" '(hydra-toggles/body :which-key "toggles"))
 
-    (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+	(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
 
   #+end_src
   
@@ -549,39 +511,8 @@
   
 * Internal files
   #+begin_src emacs-lisp
-
     (setq backup-directory-alist
-	  `(("." . ,(concat user-emacs-directory "backup-files"))))
-
-    ;; Dump custom-set variable to a disposable file.
-    (setq custom-file (concat user-emacs-directory "custom-set-variables-data.el"))
-
-  #+end_src
-
-* Opening files in external programs
-  #+begin_src emacs-lisp
-
-    (use-package openwith
-      :config
-      (setq openwith-associations
-	    (list
-	      (list (openwith-make-extension-regexp
-		    '("mpg" "mpeg" "mp3" "mp4"
-                      "m4a"
-		      "avi" "wmv" "wav" "mov" "flv"
-		      "ogm" "ogg" "mkv"))
-		    "mpv"
-		    '(file))
-	      (list (openwith-make-extension-regexp
-		    '("xbm" "pbm" "pgm" "ppm" "pnm"
-		      "png" "gif" "bmp" "tif" "jpeg" "jpg"))
-		      "sxiv"
-		      '(file))
-	      (list (openwith-make-extension-regexp
-		    '("pdf"))
-		    "mupdf"
-		    '(file)))))
-
+          `(("." . ,(concat user-emacs-directory "backup-files"))))
   #+end_src
 * Shell
   #+begin_src emacs-lisp
@@ -591,19 +522,14 @@
 
   #+end_src
   
-* Magit
+* Git integration
   #+begin_src emacs-lisp
 
     (use-package magit
       :custom
-      (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-      (add-hook 'with-editor-mode-hook #'evil-insert-state))
+      (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
     (setq vc-follow-symlinks t)
-
-    (use-package git-gutter
-      :hook ((text-mode . git-gutter-mode)
-	     (prog-mode . git-gutter-mode)))
 
   #+end_src
 
@@ -611,20 +537,6 @@
   #+begin_src emacs-lisp
 
     (use-package flycheck)
-
-    (use-package rainbow-delimiters
-      :hook (prog-mode . rainbow-delimiters-mode))
-
-  #+end_src
-  
-* Ediff
-  #+begin_src emacs-lisp
-
-    (use-package ediff
-      :ensure nil
-      :config
-      (setq ediff-window-setup-function #'ediff-setup-windows-plain)
-      (setq ediff-split-window-function #'split-window-horizontally))
 
   #+end_src
 
@@ -706,29 +618,11 @@
    #+begin_src emacs-lisp
 
      (defun sp/setup-rust-lsp ()
-       (lsp-deferred)
-       (electric-pair-mode 1))
+       (lsp-deferred))
 
      (use-package rustic
        :hook
        (rustic-mode . sp/setup-rust-lsp))
-
-   #+end_src
-
-** Web
-   #+begin_src emacs-lisp
-
-     (use-package web-mode
-       :mode (("\\.html?\\'" . web-mode)
-	      ("\\.css\\'"   . web-mode)
-	      ("\\.jsx?\\'"  . web-mode)
-	      ("\\.tsx?\\'"  . web-mode)
-	      ("\\.json\\'"  . web-mode))
-       :config
-       (setq web-mode-markup-indent-offset 2) ; HTML
-       (setq web-mode-css-indent-offset 2)    ; CSS
-       (setq web-mode-code-indent-offset 2)   ; JS/JSX/TS/TSX
-       (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
    #+end_src
 
@@ -757,31 +651,16 @@
 
 * Org
 
-** Headings
-   #+begin_src emacs-lisp
-
-     (evil-define-key '(normal insert visual) org-mode-map (kbd "C-j") 'org-next-visible-heading)
-     (evil-define-key '(normal insert visual) org-mode-map (kbd "C-k") 'org-previous-visible-heading)
-
-     (evil-define-key '(normal insert visual) org-mode-map (kbd "M-h") 'org-metaleft)
-     (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
-     (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
-     (evil-define-key '(normal insert visual) org-mode-map (kbd "M-l") 'org-metaright)
-
-   #+end_src
-
 ** Cosmetics
-  #+begin_src emacs-lisp
+   #+begin_src emacs-lisp
+     (use-package org-bullets
+       :after org
+       :hook (org-mode . org-bullets-mode)
+       :custom
+       (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-    (use-package org-bullets
-      :after org
-      :hook (org-mode . org-bullets-mode)
-      :custom
-      (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-    (setq org-ellipsis " ▾")
-
-  #+end_src
+     (setq org-ellipsis " ▾")
+   #+end_src
 
 ** Logging
    #+begin_src emacs-lisp
@@ -940,6 +819,8 @@
    #+end_src
 
 ** Org babel
+
+** My functions
    #+begin_src emacs-lisp
 
      (use-package ob-rust)
@@ -957,7 +838,8 @@
 
    #+end_src
     
-** My functions
+    
+
    #+begin_src emacs-lisp
 
      (defun sp/org-insert-checkbox ()
@@ -972,21 +854,13 @@
        (let ((current-prefix-arg '(16)))
 	 (call-interactively 'org-toggle-checkbox)))
 
+     (defhydra sp/hydra-org-headings (:color pink
+					  :hint nil)
+       "
+	  _h_: promote    _j_: move down    _k_: move up    _l_: demote    _q_: quit" 
+       ("h" org-promote-subtree)
+       ("j" outline-move-subtree-down)
+       ("k" outline-move-subtree-up)
+       ("l" org-demote-subtree)
+       ("q" (message "Done") :exit t :color blue))
    #+end_src
-   
-* Music
-  #+begin_src emacs-lisp
-
-    (use-package mpv)
-
-    (use-package emms
-      :commands emms
-      :config
-      (require 'emms-setup)
-      (emms-standard)
-      (emms-default-players)
-      (emms-mode-line-disable)
-      (setq emms-source-file-default-directory "~/Music/"))
-
-  #+end_src
-
