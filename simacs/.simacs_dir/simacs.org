@@ -148,6 +148,7 @@
       :init
       (require 'smartparens-config))
 
+<<<<<<< HEAD
 
     (defhydra hydra-parens (:color pink
 				  :hint nil)
@@ -176,6 +177,8 @@
     ("B" sp-backward-barf-sexp)
     ("q" (message "Done") :exit t :color blue))
 
+=======
+>>>>>>> 7f6191944db57334d8615d12fb1343731cc6c06e
     (use-package avy)
 
     (use-package evil-nerd-commenter
