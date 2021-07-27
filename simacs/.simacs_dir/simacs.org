@@ -76,6 +76,20 @@
 
   #+end_src
   
+* Link check
+  #+begin_src emacs-lisp
+
+    (defun sp/make-link-to-private-shared-folder ()
+      "Make a symlink in the emacs home directory to a folder
+	in dotfiles."
+      (let ((private (concat user-emacs-directory "private")))
+	(if (not (file-exists-p private))
+	  (make-symbolic-link "/home/simon/.dotfiles/emacs/.emacs.d/private/" private)
+	  (message "Link to private already exists..."))))
+
+    (sp/make-link-to-private-shared-folder)
+
+  #+end_src
 * Startup
   #+begin_src emacs-lisp
 
@@ -133,8 +147,6 @@
     (use-package smartparens
       :init
       (require 'smartparens-config))
-
-
 
     (use-package avy)
 

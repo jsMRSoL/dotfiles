@@ -24,6 +24,7 @@
 (set-fringe-mode 10)))
 
 (menu-bar-mode -1)
+;;(electric-pair-mode 1)
 ;; how to have no bells?
 (setq visual-bell t)
 (setq ring-bell-function 'ignore)
@@ -58,6 +59,16 @@
 				       :width normal)))))
 (global-prettify-symbols-mode t)
 
+(defun sp/make-link-to-private-shared-folder ()
+  "Make a symlink in the emacs home directory to a folder
+    in dotfiles."
+  (let ((private (concat user-emacs-directory "private")))
+    (if (not (file-exists-p private))
+      (make-symbolic-link "/home/simon/.dotfiles/emacs/.emacs.d/private/" private)
+      (message "Link to private already exists..."))))
+
+(sp/make-link-to-private-shared-folder)
+
 (use-package dashboard
   :config
   (dashboard-setup-startup-hook)
@@ -80,7 +91,6 @@
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump t)
-  (setq evil-undo-system 'undo-tree)
   ;; :hook (evil-mode . sp/evil-hook)
   :config
   (evil-mode 1)
@@ -110,6 +120,32 @@
   (require 'smartparens-config))
 
 
+(defhydra hydra-parens (:color pink
+			      :hint nil)
+"
+^Navigate sexp^         ^Change sexp^              
+^^^^^^^^--------------------------------------------------
+_n_: next    _u_: up      _s_: slurp        _d_: kill      
+_p_: prev    _v_: down    _S_: bkwd slurp   _D_: bkwd kill
+_f_: fwd     _e_: end     _b_: barf         
+_c_: back    _E_: eval    _B_: bkwd barf    _q_: quit            
+"
+
+("n" sp-next-sexp)
+("p" sp-previous-sexp)
+("f" sp-forward-sexp)
+("c" sp-backward-sexp)
+("e" sp-end-of-sexp)
+("E" eval-last-sexp)
+("u" sp-up-sexp)
+("v" sp-down-sexp)
+("d" sp-kill-sexp)
+("D" sp-backward-kill-sexp)
+("s" sp-forward-slurp-sexp)
+("S" sp-backward-slurp-sexp)
+("b" sp-forward-barf-sexp)
+("B" sp-backward-barf-sexp)
+("q" (message "Done") :exit t :color blue))
 
 (use-package avy)
 
@@ -118,14 +154,6 @@
   (evil-define-key 'normal 'global
     "gcc" 'evilnc-comment-or-uncomment-lines
     "gcp" 'evilnc-copy-and-comment-lines))
-
-(use-package expand-region)
-
-(use-package undo-tree
-  :custom
-  (setq undo-tree-visualizer-diff t)
-  (setq undo-tree-visualizer-timestamps t)
-  (global-undo-tree-mode 1))
 
 (use-package winum
   :defer
@@ -146,17 +174,12 @@
   (let ((chosen-win (read-from-minibuffer
 		     "Enter window no.: "
 		     "")))
-    (if (equal chosen-win "")
-	(message "No window entered. Cancelling...")
-      ;; (message (format "Chosen window %s" chosen-win))
+  (if (equal chosen-win "")
+      (message "No window entered. Cancelling...")
+    ;; (message (format "Chosen window %s" chosen-win))
       (let ((current-prefix-arg (concat "-" chosen-win)))
 	(call-interactively 'winum-select-window-by-number)
 	))))
-
-(use-package winner
-  :after evil
-  :config
-  (winner-mode))
 
 (setq tab-bar-new-tab-choice "*scratch*"
       tab-bar-show nil)
@@ -185,7 +208,6 @@
 	    ("C-k" . ivy-previous-line)
 	    ("C-d" . ivy-reverse-i-search-kill))
     :config
-    (setq ivy-use-selectable-prompt t)
     (ivy-mode 1))
 
 (use-package ivy-rich
@@ -224,6 +246,7 @@
   (setq-default yas-snippet-dirs '("~/.dotfiles/emacs/.emacs.d/private/snippets"))
   (yas-global-mode 1))
 
+<<<<<<< HEAD
 (use-package hydra)
 
 (defhydra hydra-parens (:color pink
@@ -286,38 +309,58 @@ _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit
   ("p" smerge-prev "prev conflict")
   ("q" (message "Done") :exit t :color blue))
 
+=======
+>>>>>>> 548b824cbc9a301231ed7df4250fabf0a9761d59
 (use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 0.5))
+      :init (which-key-mode)
+      :diminish which-key-mode
+      :config
+      (setq which-key-idle-delay 0.5))
 
-(use-package general
-  :config
-  (general-evil-setup t)
+    (use-package hydra)
 
-  (general-create-definer sp/leader-keys
-    :keymaps '(normal insert visual emacs dashboard)
-    :prefix "SPC"
-    :global-prefix "C-SPC"))
+    (defhydra hydra-zoom (:color pink
+				 :hint nil)
+      "
+		       _j_: in      _k_: out      _q_: quit
+		      " 
 
-(defun sp/open-init ()
-  "Open init.el for simacs."
-  (interactive)
-  (find-file "~/.simacs_dir/simacs.org"))
+      ("j" text-scale-increase)
+      ("k" text-scale-decrease)
+      ("q" (message "Done") :exit t :color blue))
 
-(defun sp/open-journal ()
-  "Open journal.org for simacs."
-  (interactive)
-  (find-file "~/Documents/org/journal.org"))
+    (defhydra hydra-toggles nil
+      "toggles"
+      ("f" auto-fill-mode "fill")
+      ("t" toggle-truncate-line "truncate")
+      ("q" nil "cancel"))
 
-(defun sp/open-tasks ()
-  "Open tasks.org for simacs."
-  (interactive)
-  (find-file "~/Documents/org/tasks.org"))
+    (use-package general
+      :config
+      (general-evil-setup t)
 
-(defun sp/open-with-tasks-and-capture ()
-  "Open tasks.org and org-capture for simacs.
+      (general-create-definer sp/leader-keys
+	:keymaps '(normal insert visual emacs dashboard)
+	:prefix "SPC"
+	:global-prefix "C-SPC"))
+
+    (defun sp/open-init ()
+      "Open init.el for simacs."
+      (interactive)
+      (find-file "~/.simacs_dir/simacs.org"))
+
+    (defun sp/open-journal ()
+      "Open journal.org for simacs."
+      (interactive)
+      (find-file "~/Documents/org/journal.org"))
+
+    (defun sp/open-tasks ()
+      "Open tasks.org for simacs."
+      (interactive)
+      (find-file "~/Documents/org/tasks.org"))
+
+    (defun sp/open-with-tasks-and-capture ()
+      "Open tasks.org and org-capture for simacs.
 
 This is mainly intended to be used from the command line as a startup convenience."
   (interactive)
@@ -484,30 +527,6 @@ This is mainly intended to be used from the command line as a startup convenienc
 (setq backup-directory-alist
       `(("." . ,(concat user-emacs-directory "backup-files"))))
 
-;; Dump custom-set variable to a disposable file.
-(setq custom-file (concat user-emacs-directory "custom-set-variables-data.el"))
-
-(use-package openwith
-  :config
-  (setq openwith-associations
-	(list
-	  (list (openwith-make-extension-regexp
-		'("mpg" "mpeg" "mp3" "mp4"
-                  "m4a"
-		  "avi" "wmv" "wav" "mov" "flv"
-		  "ogm" "ogg" "mkv"))
-		"mpv"
-		'(file))
-	  (list (openwith-make-extension-regexp
-		'("xbm" "pbm" "pgm" "ppm" "pnm"
-		  "png" "gif" "bmp" "tif" "jpeg" "jpg"))
-		  "sxiv"
-		  '(file))
-	  (list (openwith-make-extension-regexp
-		'("pdf"))
-		"mupdf"
-		'(file)))))
-
 (use-package vterm
   :commands vterm)
 
@@ -519,20 +538,7 @@ This is mainly intended to be used from the command line as a startup convenienc
 
 (setq vc-follow-symlinks t)
 
-(use-package git-gutter
-  :hook ((text-mode . git-gutter-mode)
-	 (prog-mode . git-gutter-mode)))
-
 (use-package flycheck)
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-(use-package ediff
-  :ensure nil
-  :config
-  (setq ediff-window-setup-function #'ediff-setup-windows-plain)
-  (setq ediff-split-window-function #'split-window-horizontally))
 
 (use-package projectile
   :diminish projectile-mode
@@ -593,24 +599,11 @@ This is mainly intended to be used from the command line as a startup convenienc
   (require 'dap-python))
 
 (defun sp/setup-rust-lsp ()
-  (lsp-deferred)
-  (electric-pair-mode 1))
+  (lsp-deferred))
 
 (use-package rustic
   :hook
   (rustic-mode . sp/setup-rust-lsp))
-
-(use-package web-mode
-  :mode (("\\.html?\\'" . web-mode)
-	 ("\\.css\\'"   . web-mode)
-	 ("\\.jsx?\\'"  . web-mode)
-	 ("\\.tsx?\\'"  . web-mode)
-	 ("\\.json\\'"  . web-mode))
-  :config
-  (setq web-mode-markup-indent-offset 2) ; HTML
-  (setq web-mode-css-indent-offset 2)    ; CSS
-  (setq web-mode-code-indent-offset 2)   ; JS/JSX/TS/TSX
-  (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
 (use-package dap-mode
   ;; Uncomment the config below if you want all UI panes to be hidden by default!
@@ -629,14 +622,6 @@ This is mainly intended to be used from the command line as a startup convenienc
     :keymaps 'lsp-mode-map
     :prefix lsp-keymap-prefix
     "d" '(dap-hydra t :which-key "debugger")))
-
-(evil-define-key '(normal insert visual) org-mode-map (kbd "C-j") 'org-next-visible-heading)
-(evil-define-key '(normal insert visual) org-mode-map (kbd "C-k") 'org-previous-visible-heading)
-
-(evil-define-key '(normal insert visual) org-mode-map (kbd "M-h") 'org-metaleft)
-(evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
-(evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
-(evil-define-key '(normal insert visual) org-mode-map (kbd "M-l") 'org-metaright)
 
 (use-package org-bullets
   :after org
@@ -790,13 +775,12 @@ This is mainly intended to be used from the command line as a startup convenienc
   (let ((current-prefix-arg '(16)))
     (call-interactively 'org-toggle-checkbox)))
 
-(use-package mpv)
-
-(use-package emms
-  :commands emms
-  :config
-  (require 'emms-setup)
-  (emms-standard)
-  (emms-default-players)
-  (emms-mode-line-disable)
-  (setq emms-source-file-default-directory "~/Music/"))
+(defhydra sp/hydra-org-headings (:color pink
+				     :hint nil)
+  "
+     _h_: promote    _j_: move down    _k_: move up    _l_: demote    _q_: quit" 
+  ("h" org-promote-subtree)
+  ("j" outline-move-subtree-down)
+  ("k" outline-move-subtree-up)
+  ("l" org-demote-subtree)
+  ("q" (message "Done") :exit t :color blue))
