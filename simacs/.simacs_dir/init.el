@@ -277,6 +277,15 @@ _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit
   ("l" org-metaright)
   ("q" (message "Done") :exit t :color blue))
 
+(defhydra hydra-smerge nil
+  "smerge commands"
+  ("a" smerge-keep-all "keep all")
+  ("u" smerge-keep-upper "keep upper")
+  ("l" smerge-keep-lower "keep lower")
+  ("n" smerge-next "next conflict")
+  ("p" smerge-prev "prev conflict")
+  ("q" (message "Done") :exit t :color blue))
+
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
@@ -341,9 +350,11 @@ This is mainly intended to be used from the command line as a startup convenienc
   "ff" '(counsel-find-file :which-key "find file")
   "fr" '(counsel-recentf :which-key "find recent")
   "fs" '(save-buffer :which-key "save")
+  "fw" '(write-file :which-key "save as")
   "ft" '(treemacs :which-key "treemacs")
   "g" '(:ignore t :which-key "git")
   "gs" '(magit-status :which-key "status")
+  "gm" '(hydra-smerge/body :which-key "(s)merge")
   "q" '(:ignore t :which-key "quit")
   "qa" '(evil-quit-all :which-key "quit all")
   "qq" '(evil-quit :which-key "quit")
@@ -501,8 +512,9 @@ This is mainly intended to be used from the command line as a startup convenienc
   :commands vterm)
 
 (use-package magit
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  :commands (magit-status)
+  :config
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   (add-hook 'with-editor-mode-hook #'evil-insert-state))
 
 (setq vc-follow-symlinks t)
