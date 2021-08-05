@@ -37,6 +37,7 @@ alias yt='youtube-dl --external-downloader=aria2c'
 alias ytv='youtube-dl --config-location ~/.config/youtube-dl/ytv'
 alias ytvv='youtube-dl --config-location ~/.config/youtube-dl/ytvv'
 alias yta='youtube-dl --config-location ~/.config/youtube-dl/yta'
+alias ytma='youtube-dl --config-location ~/.config/youtube-dl/ytma'
 alias ytva='youtube-dl --config-location ~/.config/youtube-dl/ytva'
 ########################
 ## shortcut files ######

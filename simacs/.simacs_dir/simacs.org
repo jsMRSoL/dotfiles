@@ -160,6 +160,9 @@
 
     (use-package expand-region)
 
+    (use-package popup-kill-ring
+      :bind (("M-y" . popup-kill-ring)))
+
   #+end_src
   
 * Undotree
@@ -429,6 +432,9 @@
       "b" '(:ignore t :which-key "buffers")
       "bb" '(persp-counsel-switch-buffer :which-key "switch")
       "bd" '(kill-buffer-and-window :which-key "delete")
+      "bs" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :which-key "scratch")
+      "bh" '((lambda () (interactive) (switch-to-buffer "*dashboard*")) :which-key "dashboard")
+      "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "messages")
       "c" '(:ignore t :which-key "code")
       "cc" '(comment-line :which-key "comment")
       "f" '(:ignore t :which-key "files")
@@ -441,6 +447,7 @@
       "g" '(:ignore t :which-key "git")
       "gs" '(magit-status :which-key "status")
       "gm" '(hydra-smerge/body :which-key "(s)merge")
+      "h" '(:ignore t :which-key "help")
       "q" '(:ignore t :which-key "quit")
       "qa" '(evil-quit-all :which-key "quit all")
       "qq" '(evil-quit :which-key "quit")
@@ -451,7 +458,12 @@
       "jt" '(sp/open-tasks :which-key "tasks.org")
       "k" '(:ignore t :which-key "lisp")
       "kk" '(hydra-parens/body :which-key "hydra")
-      "ke" '(eval-last-sexp :which-key "evaluate")
+      "ke" '(sp-end-of-sexp :which-key "end")
+      "kE" '(eval-last-sexp :which-key "evaluate")
+      "ks" '(sp-forward-slurp-sexp :which-key "forward slurp")
+      "kS" '(sp-backward-slurp-sexp :which-key "backward slurp")
+      "kb" '(sp-forward-barf-sexp :which-key "forward barf")
+      "kB" '(sp-backward-barf-sexp :which-key "backward barf")
       "kw" '(:ignore t :which-key "wrap")
       "kwr" '(sp-rewrap-sexp :which-key "rewrap")
       "kw{" '(sp-wrap-curly :which-key "curly")
@@ -528,6 +540,7 @@
       "T" '(hydra-toggles/body :which-key "toggles"))
 
     (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+    (general-nmap "SPC h" (general-simulate-key "C-h"))
 
   #+end_src
   
@@ -767,7 +780,7 @@
        (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
    #+end_src
-
+   
 * DAP
   #+begin_src emacs-lisp
 
