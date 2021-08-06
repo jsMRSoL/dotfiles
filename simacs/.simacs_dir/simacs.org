@@ -236,30 +236,32 @@
   #+begin_src emacs-lisp
 
     (use-package ivy
-	:diminish
-	:bind (
-		:map ivy-minibuffer-map
-		("TAB" . ivy-alt-done)
-		("C-l" . ivy-alt-done)
-		("C-j" . ivy-next-line)
-		("C-k" . ivy-previous-line)
-		:map ivy-switch-buffer-map
-		("C-k" . ivy-previous-line)
-		("C-l" . ivy-done)
-		("C-d" . ivy-switch-buffer-kill)
-		:map ivy-reverse-i-search-map
-		("C-k" . ivy-previous-line)
-		("C-d" . ivy-reverse-i-search-kill))
-	:config
-        (setq ivy-use-selectable-prompt t)
-	(ivy-mode 1))
+      :diminish
+      :bind (
+	     :map ivy-minibuffer-map
+	     ("TAB" . ivy-alt-done)
+	     ("C-l" . ivy-alt-done)
+	     ("C-j" . ivy-next-line)
+	     ("C-k" . ivy-previous-line)
+	     :map ivy-switch-buffer-map
+	     ("C-k" . ivy-previous-line)
+	     ("C-l" . ivy-done)
+	     ("C-d" . ivy-switch-buffer-kill)
+	     :map ivy-reverse-i-search-map
+	     ("C-k" . ivy-previous-line)
+	     ("C-d" . ivy-reverse-i-search-kill))
+      :config
+      (setq ivy-use-selectable-prompt t)
+      (ivy-mode 1))
 
     (use-package ivy-rich
-	:init
-	(ivy-rich-mode 1))
+      :init
+      (ivy-rich-mode 1))
 
     (use-package counsel
-	:bind (("M-x" . counsel-M-x)))
+      :bind (("M-x" . counsel-M-x))
+      :config
+      (setq ivy-initial-inputs-alist nil))
 
   #+end_src
 
@@ -287,7 +289,8 @@
       :bind (
 	     :map company-active-map
 	     ("C-j" . #'company-select-next)
-	     ("C-k" . #'company-select-previous)) 
+	     ("C-k" . #'company-select-previous)
+	     ("<tab>" . #'yas-expand)) 
       :init
       (global-company-mode 1)
       :custom
@@ -437,6 +440,10 @@
       "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "messages")
       "c" '(:ignore t :which-key "code")
       "cc" '(comment-line :which-key "comment")
+      "e" '(:ignore t :which-key "eww")
+      "ee" '(eww :which-key "run eww")
+      "eb" '(eww-list-bookmarks :which-key "list bookmarks")
+      "eB" '(eww-add-bookmark :which-key "add bookmark")
       "f" '(:ignore t :which-key "files")
       "fed" '(sp/open-init :which-key "edit init.el")
       "ff" '(counsel-find-file :which-key "find file")
@@ -502,6 +509,7 @@
       "ot" '(org-todo :which-key "todo")
       "or" '(org-refile :which-key "refile")
       "on" '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
+      "oo" '(org-open-at-point :which-key "open/follow")
       "oe" '(org-export-dispatch :which-key "export")
       "p" '(projectile-command-map :which-key "projects")
       "r" '(:ignore t :which-key "registers")
@@ -536,6 +544,7 @@
       "wd" '(sp/delete-chosen-window :which-key "delete")
       "wu" '(winner-undo :which-key "winner undo")
       "wU" '(winner-redo :which-key "winner redo")
+      "wF" '(make-frame :which-key "new frame")
       "z" '(hydra-zoom/body :which-key "zoom")
       "T" '(hydra-toggles/body :which-key "toggles"))
 
