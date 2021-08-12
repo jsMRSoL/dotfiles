@@ -42,3 +42,7 @@ nvim/.config/nvim/plugin/packer_compiled.vim
 /simacs/.simacs_dir/emms/
 /simacs/.simacs_dir/private
 /simacs/.simacs_dir/url/
+/w3m/.config/w3m/cookie
+/w3m/.config/w3m/history
+/w3m/.config/w3m/mailcap
+/simacs/.simacs_dir/bookmarks
