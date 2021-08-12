@@ -37,3 +37,8 @@ nvim/.config/nvim/plugin/packer_compiled.vim
 /simacs/.simacs_dir/tramp
 /simacs/.simacs_dir/transient/
 /simacs/.simacs_dir/custom-set-variables-data.el
+/simacs/.simacs_dir/.cache/
+/simacs/.simacs_dir/.dap-breakpoints
+/simacs/.simacs_dir/emms/
+/simacs/.simacs_dir/private
+/simacs/.simacs_dir/url/

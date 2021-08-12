@@ -99,6 +99,7 @@
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
   (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
   (evil-set-initial-state 'dashboard-mode 'normal)
+  (evil-set-initial-state 'help-mode 'normal)
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'rustic-popup-mode 'emacs))
 
@@ -229,8 +230,10 @@
 
 (use-package yasnippet
   :init
-  (setq-default yas-snippet-dirs '("~/.dotfiles/emacs/.emacs.d/private/snippets"))
+  ;; (setq-default yas-snippet-dirs '("~/.dotfiles/emacs/.emacs.d/private/snippets"))
   (yas-global-mode 1))
+
+(use-package yasnippet-snippets)
 
 (use-package hydra)
 
@@ -341,7 +344,8 @@ This is mainly intended to be used from the command line as a startup convenienc
   "u" '(universal-argument :which-key "c-u")
   "`" '(org-capture :which-key "org capture")
   "a" '(:ignore t :which-key "apps")
-  "ad" '(dired-jump :which-key "dired-jump")
+  "ad" '(dired :which-key "dired")
+  "aj" '(dired-jump :which-key "dired-jump")
   "at" '(vterm :which-key "terminal")
   "au" '(undo-tree-visualize :which-key "undo-tree")
   "am"  '(:ignore t :which-key "media")
@@ -366,6 +370,7 @@ This is mainly intended to be used from the command line as a startup convenienc
   "q" '(:ignore t :which-key "quit")
   "qa" '(evil-quit-all :which-key "quit all")
   "qq" '(evil-quit :which-key "quit")
+  "qe" '(kill-emacs :which-key "kill emacs")
   "j" '(:ignore t :which-key "jump")
   "jo" '(sp/dired-jump-dir :which-key "open common")
   "jj" '(sp/open-journal :which-key "journal.org")
@@ -568,6 +573,8 @@ This is mainly intended to be used from the command line as a startup convenienc
 
 (use-package lsp-ivy)
 
+(add-hook 'prog-mode-hook #'electric-pair-mode)
+
 (use-package pyvenv
   :defer)
 
@@ -590,21 +597,26 @@ This is mainly intended to be used from the command line as a startup convenienc
    "= r" '(yapfify-region-or-buffer :which-key "format region")))
 
 (use-package python-mode
+  :defer
   :mode "\\.py\\'"
   :hook
   (python-mode . sp/setup-python-lsp)
   :custom
-  (python-shell-interpreter "python")
+  (python-shell-interpreter "ipython")
+  (python-shell-interpreter-args "-i --simple-prompt --no-banner")
+  (python-shell-completion-setup-code "from IPython.core.completerlib import module_completion")
+  (python-shell-completion-module-string-code "';'.join(module_completion('''%s'''))\n")
+  (python-shell-completion-string-code "';'.join(get_ipython().Completer.all_completions('''%s'''))\n")
   (dap-python-executable "python")
   (dap-python-debugger 'debugpy)
   :config
   (require 'dap-python))
 
 (defun sp/setup-rust-lsp ()
-  (lsp-deferred)
-  (electric-pair-mode 1))
+  (lsp-deferred))
 
 (use-package rustic
+  :defer
   :hook
   (rustic-mode . sp/setup-rust-lsp))
 
@@ -621,6 +633,7 @@ This is mainly intended to be used from the command line as a startup convenienc
   (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
 (use-package dap-mode
+  :defer
   ;; Uncomment the config below if you want all UI panes to be hidden by default!
   ;; :custom
   ;; (lsp-enable-dap-auto-configure nil)
@@ -634,9 +647,31 @@ This is mainly intended to be used from the command line as a startup convenienc
 
   ;; Bind `C-c l d` to `dap-hydra` for easy access
   (general-define-key
-    :keymaps 'lsp-mode-map
-    :prefix lsp-keymap-prefix
-    "d" '(dap-hydra t :which-key "debugger")))
+   :keymaps 'lsp-mode-map
+   :prefix lsp-keymap-prefix
+   "d" '(dap-hydra t :which-key "debugger"))
+  (require 'dap-lldb)
+  (require 'dap-gdb-lldb)
+  ;; installs .extension/vscode
+  (dap-gdb-lldb-setup)
+  (dap-register-debug-template
+   "Rust::LLDB Run Configuration"
+   (list :type "lldb"
+	 :request "launch"
+	 :name "LLDB::Run"
+	 :gdbpath "rust-lldb"
+	 :target nil
+	 :cwd nil))
+
+  (dap-register-debug-template
+   "Rust::GDB Run Configuration"
+   (list :type "gdb"
+	 :request "launch"
+	 :name "GDB::Run"
+	 :gdbpath "rust-gdb"
+	 :environment-variables '(("KEY" . "VALUE"))
+	 :target nil
+	 :cwd nil)))
 
 (evil-define-key '(normal insert visual) org-mode-map (kbd "C-j") 'org-next-visible-heading)
 (evil-define-key '(normal insert visual) org-mode-map (kbd "C-k") 'org-previous-visible-heading)
@@ -745,18 +780,11 @@ This is mainly intended to be used from the command line as a startup convenienc
       '(("t" "Tasks / Projects / Appointments")
 	("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
 	 "* TODO  %^{Title}\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  %?\n  :END:\n  %a\n  %i" :empty-lines 1)
-	("ta" "Appointment" entry
-	 (file+olp+datetree "~/Documents/org/journal.org")
-	 "* %<%I:%M %p> - %a :meetings:\n\n%?\n\n"
-	 :clock-in :clock-resume
-	 :empty-lines 1)
-
+	("ta" "Appointment" entry (file+olp "~/Documents/org/tasks.org" "Appointments")
+	 "* TODO  %^{Title} %?\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  \n  :END:\n  %a\n  %i" :empty-lines 1)
 	("j" "Journal Entries")
-	("jj" "Journal" entry
-	 (file+olp+datetree "~/Documents/org/journal.org")
-	 "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n"
-	 ;; :clock-in :clock-resume
-	 :empty-lines 1)
+	("jj" "Journal" entry (file+olp+datetree "~/Documents/org/journal.org")
+	 "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n" :empty-lines 1)
 
 	("b" "Book log")
 	("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
@@ -771,7 +799,7 @@ This is mainly intended to be used from the command line as a startup convenienc
 	("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
 	 "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
 	("mr" "Reading" table-line (file+headline "~/Documents/org/metrics.org" "Reading")
-	"| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
+	 "| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
 
 (use-package ob-rust)
 (org-babel-do-load-languages
