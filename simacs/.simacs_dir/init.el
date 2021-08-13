@@ -130,6 +130,9 @@
 
 (use-package expand-region)
 
+(use-package popup-kill-ring
+  :bind (("M-y" . popup-kill-ring)))
+
 (use-package undo-tree
   :custom
   (setq undo-tree-visualizer-diff t)
@@ -179,30 +182,32 @@
       [?O escape ?m ?A ?\" ?* ?P ?0 ?\' ?A])
 
 (use-package ivy
-    :diminish
-    :bind (
-	    :map ivy-minibuffer-map
-	    ("TAB" . ivy-alt-done)
-	    ("C-l" . ivy-alt-done)
-	    ("C-j" . ivy-next-line)
-	    ("C-k" . ivy-previous-line)
-	    :map ivy-switch-buffer-map
-	    ("C-k" . ivy-previous-line)
-	    ("C-l" . ivy-done)
-	    ("C-d" . ivy-switch-buffer-kill)
-	    :map ivy-reverse-i-search-map
-	    ("C-k" . ivy-previous-line)
-	    ("C-d" . ivy-reverse-i-search-kill))
-    :config
-    (setq ivy-use-selectable-prompt t)
-    (ivy-mode 1))
+  :diminish
+  :bind (
+	 :map ivy-minibuffer-map
+	 ("TAB" . ivy-alt-done)
+	 ("C-l" . ivy-alt-done)
+	 ("C-j" . ivy-next-line)
+	 ("C-k" . ivy-previous-line)
+	 :map ivy-switch-buffer-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-l" . ivy-done)
+	 ("C-d" . ivy-switch-buffer-kill)
+	 :map ivy-reverse-i-search-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (setq ivy-use-selectable-prompt t)
+  (ivy-mode 1))
 
 (use-package ivy-rich
-    :init
-    (ivy-rich-mode 1))
+  :init
+  (ivy-rich-mode 1))
 
 (use-package counsel
-    :bind (("M-x" . counsel-M-x)))
+  :bind (("M-x" . counsel-M-x))
+  :config
+  (setq ivy-initial-inputs-alist nil))
 
 (use-package helpful
   :custom
@@ -219,7 +224,8 @@
   :bind (
 	 :map company-active-map
 	 ("C-j" . #'company-select-next)
-	 ("C-k" . #'company-select-previous)) 
+	 ("C-k" . #'company-select-previous)
+	 ("<tab>" . #'yas-expand)) 
   :init
   (global-company-mode 1)
   :custom
@@ -235,7 +241,8 @@
 
 (use-package yasnippet-snippets)
 
-(use-package hydra)
+(use-package hydra
+  :defer)
 
 (defhydra hydra-parens (:color pink
 			       :hint nil)
@@ -355,8 +362,15 @@ This is mainly intended to be used from the command line as a startup convenienc
   "b" '(:ignore t :which-key "buffers")
   "bb" '(persp-counsel-switch-buffer :which-key "switch")
   "bd" '(kill-buffer-and-window :which-key "delete")
+  "bs" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :which-key "scratch")
+  "bh" '((lambda () (interactive) (switch-to-buffer "*dashboard*")) :which-key "dashboard")
+  "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "messages")
   "c" '(:ignore t :which-key "code")
   "cc" '(comment-line :which-key "comment")
+  "e" '(:ignore t :which-key "eww")
+  "ee" '(eww :which-key "run eww")
+  "eb" '(eww-list-bookmarks :which-key "list bookmarks")
+  "eB" '(eww-add-bookmark :which-key "add bookmark")
   "f" '(:ignore t :which-key "files")
   "fed" '(sp/open-init :which-key "edit init.el")
   "ff" '(counsel-find-file :which-key "find file")
@@ -367,6 +381,7 @@ This is mainly intended to be used from the command line as a startup convenienc
   "g" '(:ignore t :which-key "git")
   "gs" '(magit-status :which-key "status")
   "gm" '(hydra-smerge/body :which-key "(s)merge")
+  "h" '(:ignore t :which-key "help")
   "q" '(:ignore t :which-key "quit")
   "qa" '(evil-quit-all :which-key "quit all")
   "qq" '(evil-quit :which-key "quit")
@@ -377,7 +392,12 @@ This is mainly intended to be used from the command line as a startup convenienc
   "jt" '(sp/open-tasks :which-key "tasks.org")
   "k" '(:ignore t :which-key "lisp")
   "kk" '(hydra-parens/body :which-key "hydra")
-  "ke" '(eval-last-sexp :which-key "evaluate")
+  "ke" '(sp-end-of-sexp :which-key "end")
+  "kE" '(eval-last-sexp :which-key "evaluate")
+  "ks" '(sp-forward-slurp-sexp :which-key "forward slurp")
+  "kS" '(sp-backward-slurp-sexp :which-key "backward slurp")
+  "kb" '(sp-forward-barf-sexp :which-key "forward barf")
+  "kB" '(sp-backward-barf-sexp :which-key "backward barf")
   "kw" '(:ignore t :which-key "wrap")
   "kwr" '(sp-rewrap-sexp :which-key "rewrap")
   "kw{" '(sp-wrap-curly :which-key "curly")
@@ -416,6 +436,7 @@ This is mainly intended to be used from the command line as a startup convenienc
   "ot" '(org-todo :which-key "todo")
   "or" '(org-refile :which-key "refile")
   "on" '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
+  "oo" '(org-open-at-point :which-key "open/follow")
   "oe" '(org-export-dispatch :which-key "export")
   "p" '(projectile-command-map :which-key "projects")
   "r" '(:ignore t :which-key "registers")
@@ -450,10 +471,12 @@ This is mainly intended to be used from the command line as a startup convenienc
   "wd" '(sp/delete-chosen-window :which-key "delete")
   "wu" '(winner-undo :which-key "winner undo")
   "wU" '(winner-redo :which-key "winner redo")
+  "wF" '(make-frame :which-key "new frame")
   "z" '(hydra-zoom/body :which-key "zoom")
   "T" '(hydra-toggles/body :which-key "toggles"))
 
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+(general-nmap "SPC h" (general-simulate-key "C-h"))
 
 (use-package dired
     :ensure nil
@@ -813,6 +836,9 @@ This is mainly intended to be used from the command line as a startup convenienc
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+
+(require 'org-src)
+(add-to-list 'org-src-lang-modes '("rust" . "rustic"))
 
 (defun sp/org-insert-checkbox ()
   "Convenience function to insert checkbox in org mode."
