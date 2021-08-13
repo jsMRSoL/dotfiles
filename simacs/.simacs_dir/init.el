@@ -138,6 +138,10 @@
   :config
   (evil-multiedit-default-keybinds))
 
+(use-package evil-mc
+  :init
+  (global-evil-mc-mode))
+
 (use-package undo-tree
   :custom
   (setq undo-tree-visualizer-diff t)
@@ -493,6 +497,30 @@ This is mainly intended to be used from the command line as a startup convenienc
 
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
 (general-nmap "SPC h" (general-simulate-key "C-h"))
+
+;; Multiple cursors
+(general-def 'normal
+  "M-n" 'evil-mc-make-and-goto-next-cursor
+  "M-p" 'evil-mc-make-and-goto-prev-cursor
+  "C-n" 'evil-mc-make-and-goto-next-match
+  "C-t" 'evil-mc-skip-and-goto-next-match
+  "C-p" 'evil-mc-make-and-goto-prev-match
+  "grm" 'evil-mc-make-all-cursors
+  "gru" 'evil-mc-undo-last-added-cursor
+  "grq" 'evil-mc-undo-all-cursors
+  "grs" 'evil-mc-pause-cursors
+  "grr" 'evil-mc-resume-cursors
+  "grf" 'evil-mc-make-and-goto-first-cursor
+  "grl" 'evil-mc-make-and-goto-last-cursor
+  "grh" 'evil-mc-make-cursor-here
+  "grj" 'evil-mc-make-cursor-move-next-line
+  "grk" 'evil-mc-make-cursor-move-prev-line
+  "grN" 'evil-mc-skip-and-goto-next-cursor
+  "grP" 'evil-mc-skip-and-goto-prev-cursor
+  "grn" 'evil-mc-skip-and-goto-next-match
+  "grp" 'evil-mc-skip-and-goto-prev-match
+  "grI" 'evil-mc-make-cursor-in-visual-selection-beg
+  "grA" 'evil-mc-make-cursor-in-visual-selection-end)
 
 (use-package dired
     :ensure nil
