@@ -31,6 +31,7 @@
 (column-number-mode)
 (global-display-line-numbers-mode t)
 (global-hl-line-mode t)
+(setq fill-column 78)
 ;; disable line numbers for these modes:
 (dolist (mode '(org-mode-hook
 		term-mode-hook
@@ -132,6 +133,10 @@
 
 (use-package popup-kill-ring
   :bind (("M-y" . popup-kill-ring)))
+
+(use-package evil-multiedit
+  :config
+  (evil-multiedit-default-keybinds))
 
 (use-package undo-tree
   :custom
@@ -356,9 +361,17 @@ This is mainly intended to be used from the command line as a startup convenienc
   "at" '(vterm :which-key "terminal")
   "au" '(undo-tree-visualize :which-key "undo-tree")
   "am"  '(:ignore t :which-key "media")
+  "amm" '(emms :which-key "open emms")
   "amp" '(emms-pause :which-key "play / pause")
   "amf" '(emms-play-file :which-key "play file")
+  "ama" '(emms-add-file :which-key "add file")
+  "amA" '(emms-add-directory :which-key "add directory")
+  "amt" '(emms-tag-editor-edit :which-key "edit tags")
   "ax" '(org-capture :which-key "org capture")
+  "ae" '(:ignore t :which-key "eww")
+  "aee" '(eww :which-key "run eww")
+  "aeb" '(eww-list-bookmarks :which-key "list bookmarks")
+  "aeB" '(eww-add-bookmark :which-key "add bookmark")
   "b" '(:ignore t :which-key "buffers")
   "bb" '(persp-counsel-switch-buffer :which-key "switch")
   "bd" '(kill-buffer-and-window :which-key "delete")
@@ -367,10 +380,6 @@ This is mainly intended to be used from the command line as a startup convenienc
   "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "messages")
   "c" '(:ignore t :which-key "code")
   "cc" '(comment-line :which-key "comment")
-  "e" '(:ignore t :which-key "eww")
-  "ee" '(eww :which-key "run eww")
-  "eb" '(eww-list-bookmarks :which-key "list bookmarks")
-  "eB" '(eww-add-bookmark :which-key "add bookmark")
   "f" '(:ignore t :which-key "files")
   "fed" '(sp/open-init :which-key "edit init.el")
   "ff" '(counsel-find-file :which-key "find file")
@@ -472,7 +481,14 @@ This is mainly intended to be used from the command line as a startup convenienc
   "wu" '(winner-undo :which-key "winner undo")
   "wU" '(winner-redo :which-key "winner redo")
   "wF" '(make-frame :which-key "new frame")
-  "z" '(hydra-zoom/body :which-key "zoom")
+  "x" '(:ignore t :which-key "text")
+  "xt" '(:ignore t :which-key "transpose")
+  "xtc" '(transpose-chars :which-key "chars")
+  "xtw" '(transpose-words :which-key "words")
+  "xtl" '(transpose-lines :which-key "lines")
+  "xts" '(transpose-sexps :which-key "sexps")
+  "xtr" '(transpose-regions :which-key "regions")
+  "xz" '(hydra-zoom/body :which-key "zoom")
   "T" '(hydra-toggles/body :which-key "toggles"))
 
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
@@ -862,3 +878,5 @@ This is mainly intended to be used from the command line as a startup convenienc
   (emms-default-players)
   (emms-mode-line-disable)
   (setq emms-source-file-default-directory "~/Music/"))
+
+;; (setq emms-tag-editor-tagfile-functions '(id3v2 tracktag))
