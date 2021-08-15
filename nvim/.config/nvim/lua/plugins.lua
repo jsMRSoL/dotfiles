@@ -25,6 +25,7 @@ return require('packer').startup(function()
   use 'hrsh7th/vim-vsnip-integ'
   -- treesitter
   use 'nvim-treesitter/nvim-treesitter'
+  use 'nvim-treesitter/playground'
   -- dap
   use 'mfussenegger/nvim-dap'
   -- snippets
