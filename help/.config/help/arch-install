@@ -66,16 +66,23 @@ cat <<EOT >>/etc/fstab
 # Binds for data partition
 /mnt/data/Documents	/home/simon/Documents	none	defaults,bind 0	0
 /mnt/data/Downloads	/home/simon/Downloads	none	defaults,bind 0	0
-/mnt/data/Music		/home/simon/Music	none	defaults,bind 0	0
+/mnt/data/Music		/home/simon/Music	    none	defaults,bind 0	0
 /mnt/data/Pictures	/home/simon/Pictures	none	defaults,bind 0	0
+/mnt/data/Projects	/home/simon/Projects	none	defaults,bind 0	0
+/mnt/data/Repos	    /home/simon/Repos	    none	defaults,bind 0	0
 /mnt/data/Templates	/home/simon/Templates	none	defaults,bind 0	0
-/mnt/data/Videos	/home/simon/Videos	none	defaults,bind 0	0
+/mnt/data/Videos	/home/simon/Videos	    none	defaults,bind 0	0
 EOT
 report "Added binds for home directory" "Couldn't add binds for home directory"
 ######################################################
 # Install various packages
 ######################################################
-packages="lightdm iwd dhcpcd openssh fzf ranger alsa-utils mpd mpc ncmpcpp w3m xorg xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt docx2txt cups sxiv mpv sxhkd python-pip ttf-ubuntu-font-family ttf-dejavu ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock pass git stow rsync gtk2"
+packages="lightdm iwd dhcpcd openssh fzf ranger alsa-utils mpd mpc ncmpcpp w3m
+xorg xorg-xserver xorg-xsettool libx11 libxft libxrandr libxext imagemagick rtv
+surfraw mupdf tmux catdoc atool highlight mediainfo perl-image-exiftool odt2txt
+docx2txt cups sxiv mpv sxhkd python-pip ttf-ubuntu-font-family ttf-dejavu
+ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock pass git stow
+rsync gtk2 trash-cli lazygit"
 for package in $packages; do
     pacman -Ss $package
     [ $? -eq 0 ] && pacman -S --noconfirm $package && echo "Installed package $package" >>$LOG || echo "Couldn't find package $package" >>$LOG
@@ -165,8 +172,8 @@ makepkg -si
 ######################################################
 paru_packages="lightdm-slick-greeter urlview task-spooler python-xlsx2csv ttf-ms-fonts ttf-vista-fonts"
 for paru_package in $paru_packages; do
-    paru -S --answerclean=None --answerdiff=None --answeredit=None
-    --answerupgrade=None $paru_package
+    # paru -S --answerclean=None --answerdiff=None --answeredit=None --answerupgrade=None $paru_package
+    paru -S --noconfirm $paru_package
 done
 
 ######################################################
