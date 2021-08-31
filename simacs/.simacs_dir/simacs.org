@@ -742,6 +742,13 @@
 
   #+end_src
 
+* Treesitter
+  #+begin_src emacs-lisp
+    (use-package tree-sitter)
+
+    (use-package tree-sitter-langs)
+  #+end_src
+
 * LSP
   #+begin_src emacs-lisp
 
