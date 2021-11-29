@@ -55,11 +55,12 @@ function! GetLatinVocabLines(line1, line2) range
     let my_lookup_text = substitute(my_lookup_text, ';', '.', 'g')
     let my_lookup_text = substitute(my_lookup_text, '!', '.', 'g')
     call setpos('.', [0, a:line2, 1, 0])
-    execute 'read !~/.vim/pythonx/fetchLatinList.py ' . shellescape(my_lookup_text)
+    execute 'read !fetchLatinList.py ' . shellescape(my_lookup_text)
     call setpos('.', [0, a:line1, 1, 0])
 endfunction
 "}}}
     command! -narg=0 -range GLL call GetLatinVocabLines(<line1>, <line2>)
+    map <F11> :GLL<CR>
     "{{{ CLClookup
 function! CLClookup(line1, line2) range
     " Wrapper for clc-lookup.py
@@ -73,6 +74,7 @@ function! CLClookup(line1, line2) range
 endfunction
 "}}}
     command! -narg=0 -range CLU call CLClookup(<line1>, <line2>)
+    map <F12> :CLU<CR>
     "{{{ BackupLookup
 function! BackupLookup()
     " For when CLC fails!
@@ -100,7 +102,7 @@ function! GreekLookup(line1, line2) range
             call add(newlines, answer[0])
             continue
         endif
-        let enum_answer = map(copy(answer), 'v:key . ". " . v:val') 
+        let enum_answer = map(copy(answer), 'v:key . ". " . v:val')
         call insert(enum_answer, 'Choose a definition for ' . line. ': ')
         call append('0', enum_answer)
         redraw
@@ -177,7 +179,7 @@ function! LookupAndLabelOld()
         " echo 'positions list: '
         " echo positions
         if defcount == 0 && len(headwords) > 1 || defcount > 1
-            let enum_answer = map(copy(headwords), 'v:key . ". " . v:val') 
+            let enum_answer = map(copy(headwords), 'v:key . ". " . v:val')
             call insert(enum_answer, 'Choose a headword for ' . cleanwd . ': ')
             50vsplit _Headwords_
             call append('0', enum_answer)
@@ -234,7 +236,7 @@ function! GetHeadword(form, dictfile)
         return
     endif
     "Start lookup
-    let headwords = systemlist('hermes2.sh ' 
+    let headwords = systemlist('hermes2.sh '
         \ . a:dictfile . ' ' . shellescape(a:form))
     " echo "Headwords: "
     " echo headwords
@@ -243,7 +245,7 @@ function! GetHeadword(form, dictfile)
     elseif len(headwords) == 1
         let headword = headwords[0]
     else
-        let enum_answer = map(copy(headwords), 'v:key . ". " . v:val') 
+        let enum_answer = map(copy(headwords), 'v:key . ". " . v:val')
         call insert(enum_answer, 'Choose a headword for ' . a:form . ': ')
         50vsplit _Headwords_
         call append('0', enum_answer)
@@ -288,7 +290,7 @@ function! GetDefinition(word, dictfile, outputformatter)
     elseif len(definitions) == 1
         let definition = definitions[0]
     else
-        let enum_answer = map(copy(definitions), 'v:key . ". " . v:val') 
+        let enum_answer = map(copy(definitions), 'v:key . ". " . v:val')
         call insert(enum_answer, 'Choose a definition for ' . a:form . ': ')
         50vsplit _Definitions_
         call append('0', enum_answer)
@@ -351,7 +353,7 @@ function! LookupAndLabel()
             " echo "Headword is: " . headword
             " get definition
             let definition = GetDefinition(headword,
-                \ '/home/simon/.config/vim/bundle/vim-amores2/amores2vocab.txt', 
+                \ '/home/simon/.config/vim/bundle/vim-amores2/amores2vocab.txt',
                 \ 'deffinder.sh')
             let definition = substitute(definition, '^I ', '', '')
             " echo "Definition is: " . definition
@@ -397,7 +399,7 @@ function! BirdifyVocab()
             " echo "Headword is: " . headword
             " get definition
             let definition = GetDefinition(headword,
-                \ '/home/simon/.config/vim/bundle/vim-amores2/amores2vocab-shrt.txt', 
+                \ '/home/simon/.config/vim/bundle/vim-amores2/amores2vocab-shrt.txt',
                 \ 'entryfinder.sh')
             " echo "Definition is: " . definition
         else

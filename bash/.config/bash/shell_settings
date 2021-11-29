@@ -59,6 +59,9 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  ## This loads nvm bash_completion
 ## racer
 export RUST_SRC_PATH=/home/simon/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
+## database URLs
+export LSJ_PG_DATABASE_URL=postgres://simon:postgres@192.168.1.103/greeklexicon
+export LATIN_PG_DATABASE_URL=postgres://simon:postgres@localhost/test-latin
 ## To make python3 virtual environments work
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 ################################################################################

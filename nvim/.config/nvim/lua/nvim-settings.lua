@@ -25,7 +25,8 @@ vim.o.encoding = 'UTF-8'
 vim.o.fileformats = 'unix,dos,mac'
 vim.o.fileencoding = 'UTF-8'
 -- tabs, folds, linebreaks
-vim.wo.foldmethod = 'expr'
+-- vim.wo.foldmethod = 'expr'
+vim.wo.foldmethod = 'manual'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.cmd('set ts=4')
 vim.cmd('set sw=4')

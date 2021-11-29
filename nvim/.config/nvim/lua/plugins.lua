@@ -20,7 +20,13 @@ return require('packer').startup(function()
   -- linting and fixing
   use 'dense-analysis/ale'
   -- autocomplete
-  use 'hrsh7th/nvim-compe'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/nvim-cmp'
+
+  -- For vsnip users.
+  use 'hrsh7th/cmp-vsnip'
+  -- use 'hrsh7th/nvim-compe'
   use 'hrsh7th/vim-vsnip'
   use 'hrsh7th/vim-vsnip-integ'
   -- treesitter
