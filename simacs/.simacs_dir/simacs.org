@@ -936,6 +936,7 @@
 	   '("~/Documents/org/tasks.org"
 	     "~/Documents/org/ideas.org"
 	     "~/Documents/org/journal.org"
+	     "~/Documents/org/calendar.org"
 	     ))
 
    #+end_src
@@ -1124,3 +1125,11 @@
     ;; (setq emms-tag-editor-tagfile-functions '(id3v2 tracktag))
   #+end_src
 
+* LSJ2 mode
+  #+begin_src emacs-lisp
+    ;; (use-package lsj2-mode
+    ;;   :ensure nil
+    ;;   :load-path "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
+     (load-file "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
+
+  #+end_src

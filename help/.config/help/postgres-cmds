@@ -1,0 +1,167 @@
+psql	# start psql
+\l	# list databases
+\c <db>	# connect to database <db>
+\dt	# list tables in current db
+\du	# list users and permissions in current db
+\?	# list commands
+\q	# quit psql
+
+psql -d <db>	# start psql with database <db>
+
+############
+# SQL
+############
+
+SELECT first_name || ' ' || last_name FROM customer; # || is the concatenation operator.
+
+# To assign an alias to a column, it is optional to use AS.
+# The following do the same thing:
+SELECT first_name, last_name AS surname FROM customer;
+SELECT first_name, last_name surname FROM customer;
+
+# surround multi-word aliases with double quotes:
+SELECT first_name, last_name AS "full name" FROM customer;
+
+# Ordering
+ORDER BY col_name [ASC | DESC] [NULLS FIRST | NULLS LAST]
+SELECT first_name, last_name FROM customer ORDER BY first_name ASC;
+
+# Create a column by passing a column to a function, e.g. LENGTH()
+# This creates this column, aliases it as 'len' and then uses the aliases in the ORDER BY clause
+SELECT first_name, LENGTH(first_name) len FROM customer ORDER BY len DESC;
+
+# PostgreSQL DISTINCT multiple columns
+
+The following statement demonstrates how to use the DISTINCT clause on multiple columns:
+The query returns the unique combination of bcolor and fcolor from the distinct_demo table. 
+
+SELECT
+	DISTINCT bcolor,
+	fcolor
+FROM
+	distinct_demo
+ORDER BY
+	bcolor,
+	fcolor;
+
+# PostgreSQL DISTINCT ON example
+
+The following statement sorts the result set by the  bcolor and  fcolor, and then for each group of duplicates, it keeps the first row in the returned result set.
+
+SELECT
+	DISTINCT ON (bcolor) bcolor,
+	fcolor
+FROM
+	distinct_demo 
+ORDER BY
+	bcolor,
+	fcolor;
+
+# Using WHERE clause with the AND operator example
+
+The following example finds customers whose first name and last name are Jamie and rice by using the AND logical operator to combine two Boolean expressions:
+
+SELECT
+	last_name,
+	first_name
+FROM
+	customer
+WHERE
+	first_name = 'Jamie' AND 
+        last_name = 'Rice';
+	
+# Comparison operators
+To form the condition in the WHERE clause, you use comparison and logical operators:
+Operator	Description
+=	Equal
+>	Greater than
+<	Less than
+>=	Greater than or equal
+<=	Less than or equal
+<> or !=	Not equal
+AND	Logical operator AND
+OR	Logical operator OR
+IN	Return true if a value matches any value in a list
+BETWEEN	Return true if a value is between a range of values
+LIKE	Return true if a value matches a pattern. % is a wildcard equivalent to .*.
+IS NULL	Return true if a value is NULL
+NOT	Negate the result of other operators
+
+Examples
+SELECT first_name, last_name FROM customer WHERE first_name IN ('Ann','Anne','Annie');
+SELECT first_name, last_name FROM customer WHERE first_name LIKE 'Ann%'
+
+# Using PostgreSQL LIMIT to constrain the number of returned rows example
+SELECT film_id, title, release_year FROM film ORDER BY film_id LIMIT 5;
+
+# Using PostgreSQL LIMIT with OFFSET example
+# The following ignores the first three rows and returns the next 4.
+SELECT film_id, title, release_year FROM film ORDER BY film_id LIMIT 4 OFFSET 3;
+
+# Using PostgreSQL LIMIT OFFSSET to get top / bottom N rows
+
+Typically, you often use the LIMIT clause to select rows with the highest or lowest values from a table.
+
+For example, to get the top 10 most expensive films in terms of rental, you sort films by the rental rate in descending order and use the LIMIT clause to get the first 10 films. The following query illustrates the idea:
+
+SELECT film_id, title, rental_rate FROM film ORDER BY rental_rate DESC LIMIT 10;
+
+# FETCH is a more widely-used version of LIMIT
+SELECT film_id, title FROM film ORDER BY title OFFSET 5 ROWS FETCH FIRST 5 ROW ONLY; 
+
+# SUBQUERIES
+value IN (SELECT column_name FROM table_name);
+
+The query inside the parentheses is called a subquery, which is a query nested inside another query. Note that you will learn more about the subquery in the subsequent tutorial
+
+A subquery is a query nested inside another query such as SELECT, INSERT, DELETE and UPDATE. In this tutorial, we are focusing on the SELECT statement only.
+
+To construct a subquery, we put the second query in brackets and use it in the WHERE clause as an expression:
+
+SELECT
+	film_id,
+	title,
+	rental_rate
+FROM
+	film
+WHERE
+	rental_rate > (
+		SELECT
+			AVG (rental_rate)
+		FROM
+			film
+	);
+
+Example 2:
+SELECT
+	film_id,
+	title
+FROM
+	film
+WHERE
+	film_id IN (
+		SELECT
+			inventory.film_id
+		FROM
+			rental
+		INNER JOIN inventory ON inventory.inventory_id = rental.inventory_id
+		WHERE
+			return_date BETWEEN '2005-05-29'
+		AND '2005-05-30'
+	);
+
+Example 3:
+SELECT
+	first_name,
+	last_name
+FROM
+	customer
+WHERE
+	EXISTS (
+		SELECT
+			1
+		FROM
+			payment
+		WHERE
+			payment.customer_id = customer.customer_id
+	);

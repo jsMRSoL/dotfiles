@@ -45,7 +45,7 @@ super + shift + b
 
 # launch gui programs
 super + x ; b
-    firefox >/dev/null 2>&1
+    firefox -private >/dev/null 2>&1
 
 super + x ; g
     gimp
@@ -96,4 +96,3 @@ super + r ; p
 
 super + r ; v
     st -e ranger ~/Videos
-
