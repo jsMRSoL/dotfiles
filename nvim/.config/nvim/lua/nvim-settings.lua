@@ -5,8 +5,8 @@ vim.o.mouse = 'a'
 vim.o.hidden = true
 -- ui
 vim.o.showmode = false
-vim.wo.number = true
-vim.wo.relativenumber = true
+vim.o.number = true
+vim.o.relativenumber = true
 vim.o.scrolloff = 3
 -- vim.o.lazyredraw = true
 -- editing
@@ -15,7 +15,7 @@ vim.o.virtualedit = 'block'
 vim.o.splitbelow = true
 vim.o.splitright = true
 -- colours
-vim.cmd('colorscheme ' .. 'jellybeans')
+vim.cmd('colorscheme jellybeans')
 vim.o.termguicolors = true
 -- cursor
 -- vim.o.t_Co = '256' -- Support 256 colors
@@ -27,10 +27,10 @@ vim.o.fileencoding = 'UTF-8'
 -- tabs, folds, linebreaks
 vim.wo.foldmethod = 'expr'
 vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.cmd('set ts=4')
-vim.cmd('set sw=4')
-vim.o.fillchars = 'vert:│,fold:·'
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
 vim.o.expandtab = true
+vim.o.fillchars = 'vert:│,fold:·'
 vim.o.linebreak = true
 vim.wo.cursorline = true
 vim.o.backspace = 'indent,eol,start'

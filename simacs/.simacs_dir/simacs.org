@@ -744,9 +744,9 @@
 
 * Treesitter
   #+begin_src emacs-lisp
-    (use-package tree-sitter)
+    ;; (use-package tree-sitter)
 
-    (use-package tree-sitter-langs)
+    ;; (use-package tree-sitter-langs)
   #+end_src
 
 * LSP

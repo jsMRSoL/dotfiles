@@ -623,6 +623,10 @@ This is mainly intended to be used from the command line as a startup convenienc
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
 
+;; (use-package tree-sitter)
+
+;; (use-package tree-sitter-langs)
+
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :init 
