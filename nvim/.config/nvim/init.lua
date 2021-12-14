@@ -22,6 +22,7 @@ require('nvim-vsnip')
 require('nvim-gitsigns')
 require('nvim-tree-sitter')
 require('nvim-lspkind')
+require('nvim-tree-config')
 -- vimscript plugins
 -- vim.cmd('source ~/.config/nvim/vimscript/which-key.vim')
 vim.cmd('source ~/.config/nvim/vimscript/ale-settings.vim')
