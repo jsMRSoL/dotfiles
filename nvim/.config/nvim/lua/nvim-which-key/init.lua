@@ -10,7 +10,7 @@ vim.cmd([[autocmd FileType which_key set laststatus=0 noruler | autocmd BufLeave
 local wk = require('whichkey_setup')
 
 local keymap = {
-  [' '] = {'<Esc>:', ':'},
+  ['\\ '] = {'<Esc>:', ':'},
   ['<CR>'] = {'@@', 'repeat macro'},
   ["'"] = {'<Cmd>FloatermToggle<CR>', 'toggle term'},
   a = {
@@ -107,6 +107,12 @@ local keymap = {
     k = {'<Cmd>call EasyMotion#overwin#line()<CR>' , 'line-k'},
     w = {'<Cmd>call EasyMotion#overwin#w()<CR>' , 'word-w'},
     s = {'<Cmd>call EasyMotion#OverwinF(2)<CR>' , 'word-s2'},
+    o = {
+      name = 'open',
+      r = {'<Cmd>FloatermNew ranger /home/simon/Documents/org/<CR>', 'o[r]g'},
+      f = {'<Cmd>e /home/simon/.dotfiles/<CR>', 'dot[f]iles'},
+      c = {'<Cmd>e /home/simon/.config/<CR>', '[c]onfig'},
+    }
   },
 
   l = {

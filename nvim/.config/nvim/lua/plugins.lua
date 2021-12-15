@@ -65,7 +65,11 @@ return require('packer').startup(function()
   }
   -- ui
   use 'glepnir/dashboard-nvim'
-  use 'glepnir/galaxyline.nvim'
+  -- use 'glepnir/galaxyline.nvim'
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+  }
   use 'rbgrouleff/bclose.vim'
   use {
     'lewis6991/gitsigns.nvim',
