@@ -768,6 +768,7 @@ This is mainly intended to be used from the command line as a startup convenienc
       '("~/Documents/org/tasks.org"
 	"~/Documents/org/ideas.org"
 	"~/Documents/org/journal.org"
+	"~/Documents/org/calendar.org"
 	))
 
 (setq org-todo-keywords
@@ -912,3 +913,8 @@ This is mainly intended to be used from the command line as a startup convenienc
   (setq emms-source-file-default-directory "~/Music/"))
 
 ;; (setq emms-tag-editor-tagfile-functions '(id3v2 tracktag))
+
+;; (use-package lsj2-mode
+;;   :ensure nil
+;;   :load-path "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
+ (load-file "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
