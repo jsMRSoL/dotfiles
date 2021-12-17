@@ -10,7 +10,8 @@ vim.cmd([[autocmd FileType which_key set laststatus=0 noruler | autocmd BufLeave
 local wk = require('whichkey_setup')
 
 local keymap = {
-  ['\\ '] = {'<Esc>:', ':'},
+  [';'] = {'<Esc>:', ':'},
+  ['\\'] = {'<Esc>:%s/', ':'},
   ['<CR>'] = {'@@', 'repeat macro'},
   ["'"] = {'<Cmd>FloatermToggle<CR>', 'toggle term'},
   a = {
@@ -69,7 +70,7 @@ local keymap = {
     t = {
       name = '+tabs',
       t = {'<Cmd>tabedit<CR>' , 'tabedit'},
-      e = {'<Cmd>tabedit <C-R>=expand("%:p:h") . "/"<CR>' , 'fd file'},
+      e = {'<Cmd>tabedit <C-R>=expand("%:p:h")<CR>/<CR>' , 'fd file'},
     },
     T = {'<Cmd>NvimTreeToggle<CR>' , 'tree'},
   },
@@ -109,9 +110,10 @@ local keymap = {
     s = {'<Cmd>call EasyMotion#OverwinF(2)<CR>' , 'word-s2'},
     o = {
       name = 'open',
-      r = {'<Cmd>FloatermNew ranger /home/simon/Documents/org/<CR>', 'o[r]g'},
-      f = {'<Cmd>e /home/simon/.dotfiles/<CR>', 'dot[f]iles'},
-      c = {'<Cmd>e /home/simon/.config/<CR>', '[c]onfig'},
+      r = {'<Cmd>FloatermNew ranger --cmd "cd /home/simon/Documents/org/"<CR>', 'o[r]g'},
+      f = {'<Cmd>FloatermNew ranger /home/simon/.dotfiles/<CR>', 'dot[f]iles'},
+      c = {'<Cmd>FloatermNew ranger /home/simon/.config/<CR>', '[c]onfig'},
+      b = {'<Cmd>FloatermNew ranger /home/simon/.local/usr/bin/<CR>', '[b]in'},
     }
   },
 
@@ -122,7 +124,7 @@ local keymap = {
 
   p = {
     name = '+projects',
-    t = {'<Cmd>NvimTreeToggle <C-R>=expand("%:p:h") . "/" <CR>' , 'NERDTree'},
+    t = {'<Cmd>NvimTreeToggle<CR>' , 'NERDTree'},
   },
 
   q = {
