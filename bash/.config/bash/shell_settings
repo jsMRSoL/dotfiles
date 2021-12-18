@@ -18,9 +18,11 @@ if [ -d "$HOME/.luarocks/bin" ] ; then
     PATH="$HOME/.luarocks/bin:$PATH"
 fi
 ## surfraw. To remove use surfraw-update-path -remove
-    PATH=$PATH:/usr/lib/surfraw
+    PATH="$PATH:/usr/lib/surfraw"
 ## doom emacs
-    PATH=$PATH:$HOME/.emacs.d/bin
+    PATH="$PATH:$HOME/.emacs.d/bin"
+## npm
+    PATH="$PATH:$HOME/.npm"
 export PATH
 ################################################################################
 ## End PATH
