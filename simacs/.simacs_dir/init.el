@@ -917,4 +917,4 @@ This is mainly intended to be used from the command line as a startup convenienc
 ;; (use-package lsj2-mode
 ;;   :ensure nil
 ;;   :load-path "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
- (load-file "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
+ ;; (load-file "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
