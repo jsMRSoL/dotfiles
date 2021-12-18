@@ -18,6 +18,7 @@ lvim.colorscheme = "onedarker"
 -- -- add your own keymapping
 -- lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.insert_mode["fd"] = "<esc>"
+lvim.keys.normal_mode["s"] = ":HopChar2<cr>"
 -- -- unmap a default keymapping
 -- -- lvim.keys.normal_mode["<C-Up>"] = false
 -- -- edit a default keymapping
@@ -76,6 +77,9 @@ lvim.builtin.which_key.mappings["f"] = {
   T = {'<Cmd>NvimTreeToggle<CR>' , 'tree'},
 }
 
+lvim.builtin.which_key.mappings["bc"] = {
+  '<Cmd>BufferClose!<cr>', 'Close'
+}
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.dashboard.active = true
@@ -179,7 +183,14 @@ lvim.builtin.treesitter.highlight.enabled = true
 --       cmd = "TroubleToggle",
 --     },
 -- }
-
+lvim.plugins = {
+  {'phaazon/hop.nvim',
+  branch = 'v1', -- optional but strongly recommended
+  config = function()
+    -- you can configure Hop the way you like here; see :h hop-config
+    require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+  end}
+}
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- lvim.autocommands.custom_groups = {
 --   { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
