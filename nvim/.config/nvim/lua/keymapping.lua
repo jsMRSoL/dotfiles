@@ -19,6 +19,7 @@ local mappings = {
 	{ 'v', '>', '>gv', {noremap = true, silent = true} },
 	{ 'v', 'J', ':m \'>+1<CR>gv=gv', {noremap = true, silent = true} },
 	{ 'v', 'K', ':m \'<-2<CR>gv=gv', {noremap = true, silent = true} },
+	{ 'n', 's', ':HopChar2<CR>', {noremap = true, silent = true} },
 }
 
 for _, mapping in pairs(mappings) do
@@ -26,7 +27,6 @@ for _, mapping in pairs(mappings) do
 end
 
 -- Don't know how to do these <Plug> mappings...
-vim.cmd('nmap s <Plug>(easymotion-overwin-f2)')
 vim.cmd('cnoreabbrev vh vert help')
 vim.cmd('cnoreabbrev th tab help')
 vim.cmd('cnoreabbrev W! w!')

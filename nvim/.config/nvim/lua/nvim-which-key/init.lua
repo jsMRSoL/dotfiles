@@ -104,16 +104,17 @@ local keymap = {
 
   j = {
     name = '+jumps',
-    j = {'<Cmd>call EasyMotion#JK(0,0)<CR>' , 'line-j'},
-    k = {'<Cmd>call EasyMotion#overwin#line()<CR>' , 'line-k'},
-    w = {'<Cmd>call EasyMotion#overwin#w()<CR>' , 'word-w'},
-    s = {'<Cmd>call EasyMotion#OverwinF(2)<CR>' , 'word-s2'},
+    c = {'<Cmd>HopChar1<CR>', 'char'},
+    l = {'<Cmd>HopLine<CR>', 'line'},
+    w = {'<Cmd>HopWord<CR>', 'word'},
+    s = {'<Cmd>HopPattern<CR>', 'search'},
     o = {
       name = 'open',
       r = {'<Cmd>FloatermNew ranger --cmd "cd /home/simon/Documents/org/"<CR>', 'o[r]g'},
-      f = {'<Cmd>FloatermNew ranger /home/simon/.dotfiles/<CR>', 'dot[f]iles'},
-      c = {'<Cmd>FloatermNew ranger /home/simon/.config/<CR>', '[c]onfig'},
-      b = {'<Cmd>FloatermNew ranger /home/simon/.local/usr/bin/<CR>', '[b]in'},
+      f = {'<Cmd>FloatermNew ranger --cmd "cd /home/simon/.dotfiles/"<CR>', 'dot[f]iles'},
+      c = {'<Cmd>FloatermNew ranger --cmd "cd /home/simon/.config/"<CR>', '[c]onfig'},
+      n = {'<Cmd>FloatermNew ranger --cmd "cd /home/simon/.config/nvim/"<CR>', '[n]vim'},
+      b = {'<Cmd>FloatermNew ranger --cmd "cd /home/simon/.local/usr/bin/"<CR>', '[b]in'},
     }
   },
 
@@ -125,6 +126,16 @@ local keymap = {
   p = {
     name = '+projects',
     t = {'<Cmd>NvimTreeToggle<CR>' , 'NERDTree'},
+  },
+
+  P = {
+    name = "Packer",
+    c = { "<cmd>PackerCompile<cr>", "Compile" },
+    i = { "<cmd>PackerInstall<cr>", "Install" },
+    r = { "<cmd>lua require('lvim.plugin-loader').recompile()<cr>", "Re-compile" },
+    s = { "<cmd>PackerSync<cr>", "Sync" },
+    S = { "<cmd>PackerStatus<cr>", "Status" },
+    u = { "<cmd>PackerUpdate<cr>", "Update" },
   },
 
   q = {

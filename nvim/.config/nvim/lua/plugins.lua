@@ -15,7 +15,8 @@ return require('packer').startup(function()
   -- lsp config
   use 'neovim/nvim-lspconfig'
   use 'nvim-lua/lsp_extensions.nvim'
-  use 'kabouzeid/nvim-lspinstall'
+  use 'williamboman/nvim-lsp-installer'
+  -- use 'kabouzeid/nvim-lspinstall'
   use 'onsails/lspkind-nvim'
   -- linting and fixing
   use 'dense-analysis/ale'
@@ -56,7 +57,11 @@ return require('packer').startup(function()
   use 'terrortylor/nvim-comment'
   use 'tpope/vim-surround'
   -- navigation
-  use 'easymotion/vim-easymotion'
+  -- use 'easymotion/vim-easymotion'
+  use {
+    'phaazon/hop.nvim',
+    branch = 'v1', -- optional but strongly recommended
+  }
   -- keys
   -- use 'liuchengxu/vim-which-key'
   use {
@@ -84,5 +89,6 @@ return require('packer').startup(function()
     config = function()
             require('orgmode').setup{}
     end
-    }
+  }
+  use 'simrat39/rust-tools.nvim'
 end)
