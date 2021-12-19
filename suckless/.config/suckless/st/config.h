@@ -7,7 +7,7 @@
  */
 /* static char *font = "Hack-Regular:pixelsize=16:antialias=true:autohint=true"; */
 /* static char *font = "Source Code Pro:pixelsize=16"; */
-static char *font = "Source Code Pro:pixelsize=16:antialias=true:autohint=true";
+static char *font = "Source Code Pro:pixelsize=24:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*

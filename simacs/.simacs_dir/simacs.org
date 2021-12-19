@@ -62,7 +62,7 @@
       :init (doom-modeline-mode 1))
 
     (use-package doom-themes
-      :init (load-theme 'doom-dracula t)
+      :init (load-theme 'doom-homage-black t)
       :custom
       (setq doom-themes-enable bold t
 	    doom-themes-enable-italic t)
@@ -71,7 +71,7 @@
     (custom-set-faces '(default ((t
 				  (:family "Source Code Pro"
 					   :foundry "ADBO" :slant normal
-					   :weight normal :height 120
+					   :weight normal :height 180
 					   :width normal)))))
     (global-prettify-symbols-mode t)
 

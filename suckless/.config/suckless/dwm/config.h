@@ -6,9 +6,11 @@ static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 /* static const char *fonts[]          = { "Hack-Regular:pixelsize=16" }; */
-static const char *fonts[]          = { "Source Code Pro:pixelsize=15" };
+/* static const char *fonts[]          = { "Source Code Pro:pixelsize=15" }; */
+static const char *fonts[]          = { "Source Code Pro:pixelsize=22" };
 /* static const char dmenufont[]       = "Hack-Regular:pixelsize=16"; */
-static const char dmenufont[]       = "Source Code Pro:pixelsize=15";
+/* static const char dmenufont[]       = "Source Code Pro:pixelsize=15"; */
+static const char dmenufont[]       = "Source Code Pro:pixelsize=22";
 
 static const char norm_fg[] = "#bbbbbb";
 static const char norm_bg[] = "#000000";
@@ -148,4 +150,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-

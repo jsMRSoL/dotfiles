@@ -10,15 +10,22 @@ super + shift + Delete
 super + shift + s
     slock
 
+# brightness
+XF86MonBrightnessDown
+    backlight_control -10
+
+XF86MonBrightnessUp
+    backlight_control +10
+
 # volume
 XF86AudioRaiseVolume
-    volup
+    pa-volup
 
 XF86AudioLowerVolume
-    voldown
+    pa-voldown
 
 XF86AudioMute
-    volmute
+    pa-mute
 
 XF86AudioPlay
     mpc toggle

@@ -79,4 +79,10 @@ return require('packer').startup(function()
   }
   -- undo
   use 'mbbill/undotree'
+  -- org
+  use {'nvim-orgmode/orgmode',
+    config = function()
+            require('orgmode').setup{}
+    end
+    }
 end)
