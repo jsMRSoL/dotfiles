@@ -20,13 +20,10 @@ return require("packer").startup(function()
   use("williamboman/nvim-lsp-installer")
   -- use 'kabouzeid/nvim-lspinstall'
   use("onsails/lspkind-nvim")
-  -- linting and fixing
-  use("dense-analysis/ale")
   -- autocomplete
   use("hrsh7th/cmp-nvim-lsp")
   use("hrsh7th/cmp-buffer")
   use("hrsh7th/nvim-cmp")
-
   -- For vsnip users.
   use("hrsh7th/cmp-vsnip")
   -- use 'hrsh7th/nvim-compe'
@@ -59,7 +56,6 @@ return require("packer").startup(function()
   use("terrortylor/nvim-comment")
   use("tpope/vim-surround")
   -- navigation
-  -- use 'easymotion/vim-easymotion'
   use({
     "phaazon/hop.nvim",
     branch = "v1", -- optional but strongly recommended
@@ -94,6 +90,7 @@ return require("packer").startup(function()
     end,
   })
   use("simrat39/rust-tools.nvim")
+  -- linting/formatting
   use({
     "jose-elias-alvarez/null-ls.nvim",
     requires = {

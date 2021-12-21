@@ -63,7 +63,7 @@ local keymap = {
       R = {'<Cmd>luafile $HOME/.config/nvim/init.lua<CR>' , 'reload init'},
     },
     p = {"<Cmd>lua require('nvim-telescope').search_projects()<CR>", 'find project'},
-    n = {'<Cmd>new<CR>' , 'new'},
+    n = {'<Cmd>enew<CR>' , 'new'},
     o = {'<Cmd>source %<CR>' , 'source %'},
     l = {'<Cmd>luafile %<CR>' , 'luafile %'},
     r = {'<Cmd>Telescope oldfiles<CR>' , 'recent'},

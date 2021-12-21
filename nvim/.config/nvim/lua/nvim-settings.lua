@@ -1,52 +1,56 @@
--- basics
-vim.cmd('syntax on')
-vim.o.mouse = 'a'
+-- mouse
+vim.opt.mouse = 'a'
 -- buffers
-vim.o.hidden = true
+vim.opt.hidden = true
 -- ui
-vim.o.showmode = false
-vim.o.number = true
-vim.o.relativenumber = true
-vim.o.scrolloff = 3
--- vim.o.lazyredraw = true
+vim.opt.showmode = false
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.signcolumn = 'yes'
+vim.opt.scrolloff = 3
+vim.opt.sidescrolloff = 8
+-- vim.opt.lazyredraw = true
 -- editing
-vim.o.virtualedit = 'block'
+vim.opt.virtualedit = 'block'
+vim.cmd("set iskeyword+=-")
 -- splits
-vim.o.splitbelow = true
-vim.o.splitright = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 -- colours
 vim.cmd('colorscheme jellybeans')
-vim.o.termguicolors = true
+vim.opt.termguicolors = true
 -- cursor
--- vim.o.t_Co = '256' -- Support 256 colors
-vim.o.guicursor = 'n-v-c:block-Normal,i-ci-ve:ver25-iCursor,r-cr:hor20-rCursor,o:hor50,sm:block-blinkwait175-blinkoff150-blinkon175'
+-- vim.opt.t_Co = '256' -- Support 256 colors
+vim.opt.guicursor = 'n-v-c:block-Normal,i-ci-ve:ver25-iCursor,r-cr:hor20-rCursor,o:hor50,sm:block-blinkwait175-blinkoff150-blinkon175'
 -- file settings
-vim.o.encoding = 'UTF-8'
-vim.o.fileformats = 'unix,dos,mac'
-vim.o.fileencoding = 'UTF-8'
+vim.opt.encoding = 'UTF-8'
+vim.opt.fileformats = 'unix,dos,mac'
+vim.opt.fileencoding = 'UTF-8'
 -- tabs, folds, linebreaks
 -- vim.wo.foldmethod = 'expr'
-vim.wo.foldmethod = 'manual'
-vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-vim.o.expandtab = true
-vim.o.fillchars = 'vert:│,fold:·'
-vim.o.linebreak = true
-vim.wo.cursorline = true
+vim.opt.foldmethod = 'manual'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.fillchars = 'vert:│,fold:·'
+vim.opt.linebreak = true
+vim.opt.cursorline = true
 vim.opt.textwidth = 80
 vim.opt.colorcolumn = '80'
-vim.o.backspace = 'indent,eol,start'
-vim.o.wrap = true
-vim.o.textwidth = 80
+vim.opt.backspace = 'indent,eol,start'
+vim.opt.wrap = true
+-- vim files
+vim.opt.undofile = true
+vim.opt.swapfile = false
 -- clipboard
-vim.o.clipboard = 'unnamedplus'
+vim.opt.clipboard = 'unnamedplus'
 -- searching
-vim.o.incsearch = true
-vim.o.ignorecase = true
-vim.o.smartcase = true
-vim.o.inccommand = 'split'
--- vim.o.hlsearch = true
+vim.opt.incsearch = true
+-- vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.inccommand = 'split'
+-- vim.opt.hlsearch = true
 vim.cmd([[augroup vimrc-incsearch-highlight |
           autocmd! |
           autocmd CmdlineEnter /,\? :set hlsearch |
