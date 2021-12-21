@@ -47,3 +47,4 @@ nvim/.config/nvim/plugin/packer_compiled.vim
 /simacs/.simacs_dir/bookmarks
 
 lvim/.config/lvim/plugin/packer_compiled.lua
+nvim/.config/nvim/plugin/packer_compiled.lua
