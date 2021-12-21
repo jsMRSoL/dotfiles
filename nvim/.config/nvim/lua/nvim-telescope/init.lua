@@ -111,4 +111,12 @@ M.search_home = function()
     follow = false,
   })
 end
+M.search_projects = function()
+  require("telescope.builtin").find_files({
+    prompt_title = "<= ~/Projects =>",
+    cwd = "~/Projects",
+    hidden = false,
+    follow = false,
+  })
+end
 return M

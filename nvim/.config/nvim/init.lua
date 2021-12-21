@@ -24,15 +24,6 @@ require('nvim-gitsigns')
 require('nvim-tree-sitter')
 require('nvim-lspkind')
 require('nvim-tree-config')
-
--- vimscript plugins
--- vim.cmd('source ~/.config/nvim/vimscript/which-key.vim')
-vim.cmd('source ~/.config/nvim/vimscript/ale-settings.vim')
 -- lsp
---
 require('nvim-lsp-installer-settings')
--- require('lsp')
--- require('lsp.lua-ls')
--- require('lsp.bash-ls')
--- require('lsp.python-ls')
--- require('lsp.rust-ls')
+require('nvim-null-ls-settings')

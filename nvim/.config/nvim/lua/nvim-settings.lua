@@ -53,13 +53,12 @@ vim.cmd([[augroup vimrc-incsearch-highlight |
           autocmd CmdlineLeave /,\? :set nohlsearch |
         augroup END]])
 -- terminal
---    autocmd BufEnter * if &buftype == 'terminal' |
 vim.cmd([[
     autocmd TermEnter * |
         setlocal nonumber |
         setlocal norelativenumber
 ]])
--- lua files
-vim.cmd([[au FileType lua setlocal ts=2 sw=2]])
+-- lua/sh files
+vim.cmd([[au FileType lua,sh setlocal ts=2 sw=2]])
 -- python files
-vim.cmd([[au FileType python setlocal foldmethod=indent]])
+vim.cmd([[au FileType python setlocal ts=4 sw=4]])
