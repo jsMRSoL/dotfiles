@@ -30,6 +30,8 @@ local keymap = {
     b = {'<Cmd>Telescope buffers<CR>' , 'switch'},
     d = {'<Cmd>Bclose<CR>' , 'delete'},
     h = {'<Cmd>Dashboard<CR>' , 'home'},
+    n = {'<Cmd>:bnext<CR>' , 'next'},
+    p = {'<Cmd>:bprev<CR>' , 'prev'},
   },
 
   -- d reserved for +dap
@@ -55,7 +57,7 @@ local keymap = {
     name = '+files',
     b = {'<Cmd>FloatermNew ranger<CR>' , 'browse'},
     f = {"<Cmd>lua require('nvim-telescope').search_home()<CR>" , 'find'},
-    g = {"<Cmd>lua require('nvim-telescope').git_files()<CR>" , 'find git'},
+    g = {"<Cmd>Telescope git_files<CR>" , 'find git'},
     -- f = {'<Cmd>Telescope find_files<CR>' , 'find'},
     e = {
       name = '+edit init',

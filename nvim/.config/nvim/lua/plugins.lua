@@ -14,11 +14,13 @@ end
 return require("packer").startup(function()
   -- Packer can manage itself
   use("wbthomason/packer.nvim")
+  -- Necessary for so many good things
+  use("nvim-lua/popup.nvim")
+  use("nvim-lua/plenary.nvim")
   -- lsp config
   use("neovim/nvim-lspconfig")
   use("nvim-lua/lsp_extensions.nvim")
   use("williamboman/nvim-lsp-installer")
-  -- use 'kabouzeid/nvim-lspinstall'
   use("onsails/lspkind-nvim")
   -- autocomplete
   use("hrsh7th/cmp-nvim-lsp")
@@ -26,7 +28,6 @@ return require("packer").startup(function()
   use("hrsh7th/nvim-cmp")
   -- For vsnip users.
   use("hrsh7th/cmp-vsnip")
-  -- use 'hrsh7th/nvim-compe'
   use("hrsh7th/vim-vsnip")
   use("hrsh7th/vim-vsnip-integ")
   -- treesitter
@@ -38,8 +39,6 @@ return require("packer").startup(function()
   -- use 'rust-lang/vscode-rust'
   use("rafamadriz/friendly-snippets")
   -- telescope
-  use("nvim-lua/popup.nvim")
-  use("nvim-lua/plenary.nvim")
   use("nvim-telescope/telescope.nvim")
   use("nvim-telescope/telescope-fzy-native.nvim")
   use("nvim-telescope/telescope-media-files.nvim")
@@ -54,7 +53,26 @@ return require("packer").startup(function()
   use("andymass/vim-matchup")
   use("windwp/nvim-autopairs")
   use("terrortylor/nvim-comment")
-  use("tpope/vim-surround")
+  -- use("tpope/vim-surround")
+  use({
+    "blackCauldron7/surround.nvim",
+    config = function()
+      require("surround").setup({
+        context_offset = 100,
+        load_autogroups = false,
+        mappings_style = "sandwich",
+        map_insert_mode = false,
+        quotes = { "'", '"' },
+        brackets = { "(", "{", "[" },
+        space_on_closing_char = false,
+        pairs = {
+          nestable = { { "(", ")" }, { "[", "]" }, { "{", "}" } },
+          linear = { { "'", "'" }, { "`", "`" }, { '"', '"' } },
+        },
+        prefix = "S",
+      })
+    end,
+  })
   -- navigation
   use({
     "phaazon/hop.nvim",

@@ -39,6 +39,9 @@ local mappings = {
   { 'n', '<space>lq', '<cmd>set_loclist()<CR>', opts },
   { "n", "<space>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts },
   { "v", "<space>lf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts },
+  -- "overpasting"
+  { "v", "p", '"_dp', opts },
+  { "v", "P", "p", opts },
 }
 
 for _, mapping in pairs(mappings) do
