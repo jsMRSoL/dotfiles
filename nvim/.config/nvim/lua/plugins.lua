@@ -22,6 +22,18 @@ return require("packer").startup(function()
   use("nvim-lua/lsp_extensions.nvim")
   use("williamboman/nvim-lsp-installer")
   use("onsails/lspkind-nvim")
+  -- Lua
+  use({
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup({
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      })
+    end,
+  })
   -- autocomplete
   use("hrsh7th/cmp-nvim-lsp")
   use("hrsh7th/cmp-buffer")

@@ -33,10 +33,11 @@ local mappings = {
   { 'n', '<space>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts },
   { 'n', '<space>lc', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts },
   { 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts },
+  { 'n', 'gR', '<cmd>Trouble lsp_references<CR>', opts },
   { 'n', '<space>ll', '<cmd>lua vim.diagnostic.open_float()<CR>', opts },
   { 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts },
   { 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts },
-  { 'n', '<space>lq', '<cmd>set_loclist()<CR>', opts },
+  { 'n', '<space>lq', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts },
   { "n", "<space>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts },
   { "v", "<space>lf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts },
   -- "overpasting"
