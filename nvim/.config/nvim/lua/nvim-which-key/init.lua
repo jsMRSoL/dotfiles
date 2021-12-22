@@ -35,7 +35,7 @@ local keymap = {
     name = "+buffers",
     b = { "<Cmd>Telescope buffers<CR>", "switch" },
     d = { "<Cmd>Bclose<CR>", "delete" },
-    h = { "<Cmd>Dashboard<CR>", "home" },
+    h = { "<Cmd>Alpha<CR>", "home" },
     n = { "<Cmd>:bnext<CR>", "next" },
     p = { "<Cmd>:bprev<CR>", "prev" },
   },

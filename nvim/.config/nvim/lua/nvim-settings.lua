@@ -17,7 +17,6 @@ vim.cmd("set iskeyword+=-")
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 -- colours
-vim.cmd('colorscheme jellybeans')
 vim.opt.termguicolors = true
 -- cursor
 -- vim.opt.t_Co = '256' -- Support 256 colors

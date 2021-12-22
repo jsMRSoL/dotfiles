@@ -97,8 +97,13 @@ return require("packer").startup(function()
     requires = { "liuchengxu/vim-which-key" },
   })
   -- ui
-  use("glepnir/dashboard-nvim")
-  -- use 'glepnir/galaxyline.nvim'
+  use({
+    "goolord/alpha-nvim",
+    requires = { "kyazdani42/nvim-web-devicons" },
+    config = function()
+      require("alpha").setup(require("alpha.themes.startify").opts)
+    end,
+  })
   use({
     "nvim-lualine/lualine.nvim",
     requires = { "kyazdani42/nvim-web-devicons", opt = true },
