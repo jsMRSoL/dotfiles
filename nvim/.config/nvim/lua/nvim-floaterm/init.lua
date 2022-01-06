@@ -5,3 +5,4 @@ vim.g.floaterm_height = 0.99
 vim.g.floaterm_wintitle = 0
 vim.g.floaterm_autoclose = 1
 vim.g.floaterm_opener = 'edit'
+vim.cmd("hi FloatermBorder guibg=black guifg=cyan")
