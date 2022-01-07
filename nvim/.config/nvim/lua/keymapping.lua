@@ -43,6 +43,10 @@ local mappings = {
   -- "overpasting"
   { "v", "p", '"_dp', opts },
   { "v", "P", "p", opts },
+  -- terminal
+	{ 'i', '<C-t>', '<C-o><Cmd>FloatermToggle<CR>', opts },
+	{ 'n', '<C-t>', '<Cmd>FloatermToggle<CR>', opts },
+	{ 't', '<C-t>', '<Cmd>FloatermToggle<CR>', opts },
 }
 
 for _, mapping in pairs(mappings) do
