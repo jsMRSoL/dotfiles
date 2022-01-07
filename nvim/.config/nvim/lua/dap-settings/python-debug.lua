@@ -30,5 +30,3 @@ dap.configurations.python = {
     end;
   },
 }
-
-require('dap-settings.keymap')

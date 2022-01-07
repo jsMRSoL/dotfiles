@@ -49,6 +49,7 @@ return require("packer").startup(function()
   use("nvim-treesitter/playground")
   -- dap
   use("mfussenegger/nvim-dap")
+  use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
   -- snippets
   -- use 'rust-lang/vscode-rust'
   use("rafamadriz/friendly-snippets")
