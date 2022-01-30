@@ -299,6 +299,17 @@ local keymap = {
     x = { "<C-w>x", "exchange" },
   },
 
+  x = {
+    name = "+text",
+    n = { "<Cmd>NumberLines<CR>", "numbered list"},
+  },
+
+  y = {
+    name = "+yank cb",
+    y = { '"+yy', "yank lines"},
+    b = { '"+yG', "yank buffer"},
+  },
+
   z = {
     name = "+folds",
     a = { "zA", "toggle all" },

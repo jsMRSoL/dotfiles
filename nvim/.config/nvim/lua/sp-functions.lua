@@ -46,6 +46,17 @@ function sp_funcs.eval_line()
   vim.cmd("lua " .. line)
 end
 
+function sp_funcs.number_lines(line1, line2)
+  local count = 1 + line2 - line1
+  local lines = vim.api.nvim_buf_get_lines(0, line1 - 1, line2, nil)
+  local total = count
+  local newlines = {}
+  for i = 1, total, 1 do
+    newlines[i] = i.."./ "..lines[i]
+  end
+  vim.api.nvim_buf_set_lines(0, line1 - 1, line2, nil, newlines)
+end
+
 function sp_funcs.shorten_dictionary_entries()
   -- shorten domina, dominae f. to domina 1f.
   vim.cmd([[silent %s/\(\w\{-}\),\s\1e\s\(f\.\)/\1 1\2/e]])

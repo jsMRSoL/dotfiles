@@ -68,3 +68,5 @@ vim.cmd('cnoreabbrev Q q')
 vim.cmd('cnoreabbrev Qall qall')
 -- dap commands
 vim.cmd [[ command! -complete=file -nargs=* DebugRust lua require('dap-settings.rust-debug').start_rust_debugger({<f-args>}) ]]
+-- my commands
+vim.cmd [[command! -range NumberLines lua require('sp-functions').number_lines(<line1>, <line2>)]]
