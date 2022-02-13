@@ -48,3 +48,6 @@ nvim/.config/nvim/plugin/packer_compiled.vim
 
 lvim/.config/lvim/plugin/packer_compiled.lua
 nvim/.config/nvim/plugin/packer_compiled.lua
+/simacs/.simacs_dir/#recentf#
+/simacs/.simacs_dir/history
+/simacs/.simacs_dir/recentf~
