@@ -178,7 +178,6 @@ class gif(Command):
     """
 
     def execute(self):
-        from ranger.container.file import File
         from os import access
 
         filename = self.fm.thisfile.basename
@@ -193,3 +192,18 @@ class gif(Command):
 
         return None
 
+
+class tablify(Command):
+    """:tablify
+
+    Converts a tab-separated csv to a tabulated text file using tabulate."""
+
+    def execute(self):
+        filename = self.fm.thisfile.basename
+        ext = os.path.splitext(filename)[1]
+        new_name = filename.replace(ext, "-table.txt")
+
+        command = f'tabulate -1 -s, -f simple -o {new_name} {filename}'
+        self.fm.execute_command(command)
+
+        return None
