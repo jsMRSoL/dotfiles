@@ -1,6 +1,7 @@
 -- symbols for autocomplete
 require('lspkind').init({
-    with_text = false,
+    -- with_text = false,
+    mode = 'symbol_text',
     symbol_map = {
       Text = '  ',
       Method = '  ',
