@@ -13,3 +13,9 @@ R = function(name)
   RELOAD(name)
   return require(name)
 end
+
+Set_local_opts = function(opts)
+  for k, v in pairs(opts) do
+    vim.opt_local[k] = v
+  end
+end
