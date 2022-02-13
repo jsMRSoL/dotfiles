@@ -97,7 +97,8 @@ local keymap = {
   f = {
     name = "+files",
     b = { "<Cmd>FloatermNew ranger<CR>", "browse" },
-    f = { "<Cmd>lua require('nvim-telescope').search_home()<CR>", "find" },
+    f = { "<Cmd>Telescope find_files<CR>", "find" },
+    h = { "<Cmd>lua require('nvim-telescope').search_home()<CR>", "find home" },
     g = { "<Cmd>Telescope git_files<CR>", "find git" },
     -- f = {'<Cmd>Telescope find_files<CR>' , 'find'},
     e = {
@@ -278,6 +279,7 @@ local keymap = {
     d = { "<Cmd>lcd %:p:h<CR>", "cwd" },
     n = { "<Cmd>set number!<CR>", "line nr" },
     r = { "<Cmd>set relativenumber!<CR>", "rel nr" },
+    w = { "<Cmd>set wrap!<CR>", "wrap" },
     u = { "<Cmd>UndotreeToggle<CR>", "Undotree" },
   },
 
@@ -307,7 +309,7 @@ local keymap = {
   y = {
     name = "+yank cb",
     y = { '"+yy', "yank lines"},
-    b = { '"+yG', "yank buffer"},
+    b = { 'gg"+yG', "yank buffer"},
   },
 
   z = {
