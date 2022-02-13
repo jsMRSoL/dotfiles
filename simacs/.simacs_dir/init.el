@@ -190,33 +190,55 @@
 (fset 'insert-line-and-paste-clipboard
       [?O escape ?m ?A ?\" ?* ?P ?0 ?\' ?A])
 
-(use-package ivy
-  :diminish
-  :bind (
-	 :map ivy-minibuffer-map
-	 ("TAB" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (setq ivy-use-selectable-prompt t)
-  (ivy-mode 1))
+(use-package vertico
+  :init (vertico-mode))
 
-(use-package ivy-rich
+(use-package orderless
   :init
-  (ivy-rich-mode 1))
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless)))
+;; 	completion-category-defaults nil
+;; 	completion-category-overrides '((file (styles partial-completion)))))
 
-(use-package counsel
-  :bind (("M-x" . counsel-M-x))
-  :config
-  (setq ivy-initial-inputs-alist nil))
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+(setq enable-recursive-minibuffers t)
+
+(use-package marginalia
+  :init
+  (marginalia-mode))
+;; (use-package ivy
+;;   :diminish
+;;   :bind (
+;; 	 :map ivy-minibuffer-map
+;; 	 ("TAB" . ivy-alt-done)
+;; 	 ("C-l" . ivy-alt-done)
+;; 	 ("C-j" . ivy-next-line)
+;; 	 ("C-k" . ivy-previous-line)
+;; 	 :map ivy-switch-buffer-map
+;; 	 ("C-k" . ivy-previous-line)
+;; 	 ("C-l" . ivy-done)
+;; 	 ("C-d" . ivy-switch-buffer-kill)
+;; 	 :map ivy-reverse-i-search-map
+;; 	 ("C-k" . ivy-previous-line)
+;; 	 ("C-d" . ivy-reverse-i-search-kill))
+;;   :config
+;;   (setq ivy-use-selectable-prompt t)
+;;   (ivy-mode 1))
+
+;; (use-package ivy-rich
+;;   :init
+;;   (ivy-rich-mode 1))
+
+;; (use-package counsel
+;;   :bind (("M-x" . counsel-M-x))
+;;   :config
+;;   (setq ivy-initial-inputs-alist nil))
 
 (use-package helpful
   :custom
@@ -241,9 +263,11 @@
   (company-transformers '(company-sort-prefer-same-case-prefix)))
 
 (use-package company-box
+  :defer
   :hook (company-mode . company-box-mode))
 
 (use-package yasnippet
+  :defer
   :init
   ;; (setq-default yas-snippet-dirs '("~/.dotfiles/emacs/.emacs.d/private/snippets"))
   (yas-global-mode 1))
@@ -708,8 +732,8 @@ This is mainly intended to be used from the command line as a startup convenienc
   ;; Uncomment the config below if you want all UI panes to be hidden by default!
   ;; :custom
   ;; (lsp-enable-dap-auto-configure nil)
-  ;; :config
-  ;; (dap-ui-mode 1)
+  :config
+  (dap-ui-mode 1)
 
   :config
   ;; Set up Node debugging
