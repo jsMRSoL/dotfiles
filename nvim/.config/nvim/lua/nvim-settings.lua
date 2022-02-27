@@ -9,6 +9,7 @@ vim.opt.relativenumber = true
 vim.opt.signcolumn = 'yes'
 vim.opt.scrolloff = 3
 vim.opt.sidescrolloff = 8
+vim.opt.timeoutlen = 500
 -- vim.opt.lazyredraw = true
 -- editing
 vim.opt.virtualedit = 'block'
@@ -35,8 +36,8 @@ vim.opt.expandtab = true
 vim.opt.fillchars = 'vert:│,fold:·'
 vim.opt.linebreak = true
 vim.opt.cursorline = true
-vim.opt.textwidth = 80
-vim.opt.colorcolumn = '80'
+-- vim.opt.textwidth = 80
+-- vim.opt.colorcolumn = '80'
 vim.opt.backspace = 'indent,eol,start'
 vim.opt.wrap = true
 -- vim files
@@ -50,18 +51,3 @@ vim.opt.incsearch = true
 vim.opt.smartcase = true
 vim.opt.inccommand = 'split'
 -- vim.opt.hlsearch = true
-vim.cmd([[augroup vimrc-incsearch-highlight |
-          autocmd! |
-          autocmd CmdlineEnter /,\? :set hlsearch |
-          autocmd CmdlineLeave /,\? :set nohlsearch |
-        augroup END]])
--- terminal
-vim.cmd([[
-    autocmd TermEnter * |
-        setlocal nonumber |
-        setlocal norelativenumber
-]])
--- lua/sh files
-vim.cmd([[au FileType lua,sh setlocal ts=2 sw=2]])
--- python files
-vim.cmd([[au FileType python setlocal ts=4 sw=4]])
