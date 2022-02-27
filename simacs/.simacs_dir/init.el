@@ -1,3 +1,5 @@
+;; ;;; init.el -*- lexical-binding: t; -*-
+
 (require 'package)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -41,6 +43,9 @@
 (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
@@ -117,6 +122,12 @@
   :config
   (evil-collection-init))
 
+(use-package evil-numbers
+  :after evil
+  :init
+    (global-set-key (kbd "C-c C-=") 'evil-numbers/inc-at-pt)
+    (global-set-key (kbd "C-c C--") 'evil-numbers/dec-at-pt))
+
 (use-package smartparens
   :init
   (require 'smartparens-config))
@@ -191,27 +202,45 @@
       [?O escape ?m ?A ?\" ?* ?P ?0 ?\' ?A])
 
 (use-package vertico
-  :init (vertico-mode))
+  :config
+  (setq vertico-cycle t)
+  :init 
+  (vertico-mode 1))
 
 (use-package orderless
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless)))
-;; 	completion-category-defaults nil
-;; 	completion-category-overrides '((file (styles partial-completion)))))
+  ;; 	    orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless)
+	completion-category-defaults nil
+	completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
+  :ensure nil
   :init
-  (savehist-mode))
+  (savehist-mode 1)
+  (save-place-mode 1))
 
 (setq enable-recursive-minibuffers t)
 
 (use-package marginalia
+  :config
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init
-  (marginalia-mode))
+  (marginalia-mode 1))
+
+;; (use-package embark
+;;   :bind
+;;   (("C-9" . embark-act))
+;;   :config
+
+;;   ;; Hide the mode line of the Embark live/completions buffers
+;;   (add-to-list 'display-buffer-alist
+;; 		   '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+;; 		     nil
+;; 		     (window-parameters (mode-line-format . none)))))
 ;; (use-package ivy
 ;;   :diminish
 ;;   :bind (
@@ -241,19 +270,15 @@
 ;;   (setq ivy-initial-inputs-alist nil))
 
 (use-package helpful
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
   :bind
-  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-function] . helpful-callable)
   ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-variable] . helpful-variable)
   ([remap describe-key] . helpful-key))
 
 (use-package company
-  :defer
-  :bind (
-	 :map company-active-map
+;;   :defer
+  :bind (:map company-active-map
 	 ("C-j" . #'company-select-next)
 	 ("C-k" . #'company-select-previous)
 	 ("<tab>" . #'yas-expand)) 
@@ -272,7 +297,7 @@
   ;; (setq-default yas-snippet-dirs '("~/.dotfiles/emacs/.emacs.d/private/snippets"))
   (yas-global-mode 1))
 
-(use-package yasnippet-snippets)
+;; (use-package yasnippet-snippets)
 
 (use-package hydra
   :defer)
@@ -315,17 +340,19 @@ _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit
   ("f" auto-fill-mode "fill")
   ("t" toggle-truncate-line "truncate")
   ("w" whitespace-mode "whitespace")
-  ("T" counsel-load-theme "theme")
+  ("T" consult-theme "theme")
   ("q" nil "cancel"))
 
 (defhydra sp/hydra-org-headings (:color pink
 					:hint nil)
   "
-      _h_: promote    _j_: move down    _k_: move up    _l_: demote    _q_: quit" 
+      _h_: promote  _j_: move down  _k_: move up  _l_: demote  _t_: toggle  _i_: insert at point  _q_: quit" 
   ("h" org-metaleft)
   ("j" org-metadown)
   ("k" org-metaup)
   ("l" org-metaright)
+  ("t" org-toggle-heading)
+  ("i" org-insert-heading)
   ("q" (message "Done") :exit t :color blue))
 
 (defhydra hydra-smerge nil
@@ -378,7 +405,7 @@ This is mainly intended to be used from the command line as a startup convenienc
 (sp/leader-keys
   "1" '(winum-select-window-1 :which-key "win 1")
   "2" '(winum-select-window-2 :which-key "win 2")
-  "SPC" '(counsel-M-x :which-key "M-x")
+  "SPC" '(:ignore t :which-key "M-x")
   ":" '(eval-expression :which-key "M-:")
   "TAB" '(evil-buffer :which-key "last buffer")
   "u" '(universal-argument :which-key "c-u")
@@ -401,7 +428,7 @@ This is mainly intended to be used from the command line as a startup convenienc
   "aeb" '(eww-list-bookmarks :which-key "list bookmarks")
   "aeB" '(eww-add-bookmark :which-key "add bookmark")
   "b" '(:ignore t :which-key "buffers")
-  "bb" '(persp-counsel-switch-buffer :which-key "switch")
+  "bb" '(consult-buffer :which-key "switch")
   "bd" '(kill-buffer-and-window :which-key "delete")
   "bs" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :which-key "scratch")
   "bh" '((lambda () (interactive) (switch-to-buffer "*dashboard*")) :which-key "dashboard")
@@ -410,8 +437,8 @@ This is mainly intended to be used from the command line as a startup convenienc
   "cc" '(comment-line :which-key "comment")
   "f" '(:ignore t :which-key "files")
   "fed" '(sp/open-init :which-key "edit init.el")
-  "ff" '(counsel-find-file :which-key "find file")
-  "fr" '(counsel-recentf :which-key "find recent")
+  "ff" '(find-file :which-key "find file")
+  "fr" '(consult-recent-file :which-key "find recent")
   "fs" '(save-buffer :which-key "save")
   "fw" '(write-file :which-key "save as")
   "ft" '(treemacs :which-key "treemacs")
@@ -464,7 +491,7 @@ This is mainly intended to be used from the command line as a startup convenienc
   "oit" '(:ignore t :which-key "timestamp")
   "oitt" '(org-time-stamp-inactive :which-key "inactive")
   "oita" '(org-time-stamp :which-key "active")
-  "oj" '(counsel-org-goto :which-key "jump")
+  "oj" '(consult-outline :which-key "jump")
   "oh" '(sp/hydra-org-headings/body :which-key "headings")
   "oc" '(:ignore t :which-key "checkbox")
   "occ" '(sp/org-insert-checkbox :which-key "insert")
@@ -480,7 +507,9 @@ This is mainly intended to be used from the command line as a startup convenienc
   "rl" '(evil-show-registers :which-key "list")
   "rp" '(insert-line-and-paste-clipboard :which-key "insert line paste")
   "s" '(:ignore t :which-key "search")
-  "sp" '(swiper :which-key "swiper")
+  "sr" '(consult-ripgrep :which-key "ripgrep")
+  "sg" '(consult-grep :which-key "grep")
+  "sp" '(consult-line :which-key "swiper")
   "ss" '(avy-goto-char-2 :which-key "char2")
   "sl" '(avy-goto-line :which-key "line")
   "t" '(:ignore t :which-key "tabs")
@@ -521,6 +550,7 @@ This is mainly intended to be used from the command line as a startup convenienc
 
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
 (general-nmap "SPC h" (general-simulate-key "C-h"))
+(general-nmap "SPC SPC" (general-simulate-key "M-x"))
 
 ;; Multiple cursors
 (general-def 'normal
@@ -641,11 +671,11 @@ This is mainly intended to be used from the command line as a startup convenienc
 (use-package projectile
   :diminish projectile-mode
   :config
-  (projectile-mode +1)
-  :custom ((projectile-completion-system 'ivy)))
+  (projectile-mode +1))
+  ;; :custom ((projectile-completion-system 'ivy)))
 
-(use-package counsel-projectile
-  :config (counsel-projectile-mode))
+;; (use-package counsel-projectile
+;;   :config (counsel-projectile-mode))
 
 ;; (use-package tree-sitter)
 
@@ -666,7 +696,7 @@ This is mainly intended to be used from the command line as a startup convenienc
 (use-package lsp-treemacs
   :after lsp)
 
-(use-package lsp-ivy)
+;; (use-package lsp-ivy)
 
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 
@@ -767,6 +797,8 @@ This is mainly intended to be used from the command line as a startup convenienc
 	 :environment-variables '(("KEY" . "VALUE"))
 	 :target nil
 	 :cwd nil)))
+
+(add-hook 'org-mode-hook #'auto-fill-mode)
 
 (evil-define-key '(normal insert visual) org-mode-map (kbd "C-j") 'org-next-visible-heading)
 (evil-define-key '(normal insert visual) org-mode-map (kbd "C-k") 'org-previous-visible-heading)
@@ -909,6 +941,7 @@ This is mainly intended to be used from the command line as a startup convenienc
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+(add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
 
 (require 'org-src)
 (add-to-list 'org-src-lang-modes '("rust" . "rustic"))
@@ -942,3 +975,6 @@ This is mainly intended to be used from the command line as a startup convenienc
 ;;   :ensure nil
 ;;   :load-path "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
  ;; (load-file "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
+
+;; Make GC pauses faster by decreasing the threshold.
+(setq gc-cons-threshold (* 2 1000 1000))
