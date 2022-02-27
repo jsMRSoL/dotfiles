@@ -51,3 +51,6 @@ nvim/.config/nvim/plugin/packer_compiled.lua
 /simacs/.simacs_dir/#recentf#
 /simacs/.simacs_dir/history
 /simacs/.simacs_dir/recentf~
+/nvim/.config/nvim/lua/nvim-which-key-old/
+/simacs/.simacs_dir/#bookmarks#
+/simacs/.simacs_dir/places
