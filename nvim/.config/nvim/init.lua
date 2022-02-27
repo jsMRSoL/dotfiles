@@ -10,7 +10,7 @@ require('plugins')
 require('nvim-dashboard')
 -- Basic settings
 require('keymapping')
-require('nvim-which-key')
+require('nvim-whichkey')
 require('nvim-comment')
 require('nvim-telescope')
 require('nvim-floaterm')

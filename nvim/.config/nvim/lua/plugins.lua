@@ -70,7 +70,7 @@ return require("packer").startup(function()
   use("terrortylor/nvim-comment")
   -- use("tpope/vim-surround")
   use({
-    "blackCauldron7/surround.nvim",
+    "ur4ltz/surround.nvim",
     config = function()
       require("surround").setup({
         context_offset = 100,
@@ -95,10 +95,11 @@ return require("packer").startup(function()
   })
   -- keys
   -- use 'liuchengxu/vim-which-key'
-  use({
-    "AckslD/nvim-whichkey-setup.lua",
-    requires = { "liuchengxu/vim-which-key" },
-  })
+  -- use({
+  --   "AckslD/nvim-whichkey-setup.lua",
+  --   requires = { "liuchengxu/vim-which-key" },
+  -- })
+  use("folke/which-key.nvim")
   -- ui
   use({
     "goolord/alpha-nvim",
