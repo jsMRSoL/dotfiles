@@ -7,8 +7,8 @@
 local opts = {
   number = true,
   relativenumber = true,
-  shiftwidth = 4,
-  tabstop = 4,
+  shiftwidth = 2,
+  tabstop = 2,
   textwidth = 120,
   colorcolumn = '80',
   wrap = false,
