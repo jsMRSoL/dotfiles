@@ -66,3 +66,11 @@ vim.cmd('cnoreabbrev WQ wq')
 vim.cmd('cnoreabbrev W w')
 vim.cmd('cnoreabbrev Q q')
 vim.cmd('cnoreabbrev Qall qall')
+
+-- Mappings with plugins
+vim.cmd([[
+    imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+    smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+    imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+    smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+]])
