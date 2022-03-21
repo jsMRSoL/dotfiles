@@ -321,6 +321,7 @@ local normal_mappings = {
       f = { "<Cmd>lua require('sp-functions').flush_lines()<CR>", "flush lines (regexp)" },
       k = { "<Cmd>lua require('sp-functions').keep_lines()<CR>", "keep lines (regexp)" },
       e = { "<Cmd>lua require('sp-functions').flush_empty_lines()<CR>", "flush empty lines" },
+      p = { "<Cmd>lua require('sp-functions').popup_diacritic_words()<CR>", "pick diacritics" },
     },
 
     y = {
