@@ -96,7 +96,7 @@ alias process_results='~/Racing/process_results.sh'
 #alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
 alias vim='nvim'
 alias wwwd='w3m www.duckduckgo.com'
-alias r='ranger'
+alias r='ranger-cd'
 alias start-mpd='mpd ~/.config/mpd/mpd.conf'
 alias servefiles='python -m http.server'
 alias pb='playlist-browser'
@@ -118,92 +118,4 @@ alias cfg-ba='vim ~/.bash_aliases'
 alias cfg-brc='vim ~/.bashrc'
 ################################################################################
 ## End aliases
-################################################################################
-################################################################################
-## custom functions
-################################################################################
-function tagger() {
-	lltag --clear --yes "$1" && \
-	lltag -a "$2" --yes "$1" && \
-	lltag -t "$3" --yes "$1"
-}
-
-function vff() {
-    [ -z "$1" ] && echo "\$1 must be a directory" ; return
-	vim "$(find "$1" | fzf -e --select-1)"
-
-}
-
-function vf() { find . | fzf | xargs bash -c '</dev/tty $EDITOR "$@"' ignoreme ;}
-
-function cheat() {
-	vim "$(find /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1)"
-}
-
-function cfg() {
-	vim "$(find /home/simon/.config | fzf -e --query="$1" --select-1)"
-}
-
-function snipper() {
-	options="-i ${1} -ss ${2} -t ${3} -c:a copy -c:v copy ${4}";
-	ffmpeg "$options"
-}
-
-function bak() {
-    for file in "$@"; do
-        cp "$file" "$file.bak"
-    done
-}
-
-function m() {
-    if tmux has-session -t music; then
-        tmux attach -t music
-        exit
-    fi
-
-    tmux new-session -d -s music -n playlist
-    tmux set status off
-    tmux set-window-option -t music:playlist window-style 'bg=#1d1f21'
-    tmux send-keys -t music:playlist "ncmpcpp -c ~/.config/ncmpcpp/config" Enter
-    tmux split-window -t music:playlist -h
-    tmux send-keys -t music:playlist.right "ncmpcpp" Enter
-    tmux send-keys -t music:playlist.right "8" Enter
-    tmux split-window -t music:playlist.right -v
-    tmux send-keys -t music:playlist.bottom-right "ncmpcpp" Enter
-    tmux send-keys -t music:playlist.bottom-right "2" Enter
-    tmux resize-pane -t music:playlist.left -R 10
-    tmux attach -t music:playlist.left
-}
-
-function how_in() {
-    where="$1"; shift
-    IFS=+ curl "https://cht.sh/$where/$*"
-}
-
-function contains() { [[ "$1" =~ (^|[[:space:]])"$2"($|[[:space:]]) ]] ;}
-
-function vu() {
-    export FIFO_UEBERZUG="/tmp/vifm-ueberzug-${PPID}"
-    cleanup() {
-        rm "$FIFO_UEBERZUG" 2>/dev/null
-        pkill -P $$ 2>/dev/null
-    }
-    rm "$FIFO_UEBERZUG" 2>/dev/null
-    mkfifo "$FIFO_UEBERZUG"
-    trap cleanup EXIT
-    tail --follow "$FIFO_UEBERZUG" | ueberzug layer --silent --parser bash &
-    vifm "$@"
-    cleanup
-}
-
-function escr() {
-    FILE=$( whereis "$1" | cut -d' ' -f2 )
-    if [ "$(stat -c %U "$FILE")" == "$USER" ]; then
-        vim "$FILE"
-    else
-        sudo vim "$FILE"
-    fi
-}
-################################################################################
-## END custom functions
 ################################################################################
