@@ -54,3 +54,4 @@ nvim/.config/nvim/plugin/packer_compiled.lua
 /nvim/.config/nvim/lua/nvim-which-key-old/
 /simacs/.simacs_dir/#bookmarks#
 /simacs/.simacs_dir/places
+/simacs/.simacs_dir/.bookmarks.~undo-tree~

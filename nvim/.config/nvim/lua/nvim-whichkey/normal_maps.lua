@@ -259,6 +259,7 @@ local normal_mappings = {
       C = { "<Cmd>Telescope colorscheme<CR>", "colours" },
       M = { "<Cmd>Telescope man_pages<CR>", "man" },
       c = { "<Cmd>nohls<CR>", "clear" },
+      d = { "<Cmd>Telescope diagnostics<CR>", "diagnostics" },
       f = {
         "<Cmd>lua require('nvim-telescope').search_dotfiles()<CR>",
         "dotfiles",
