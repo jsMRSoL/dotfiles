@@ -118,7 +118,7 @@
 			      )))
 
   #+end_src
-
+  
 * Text editing: Evil etc.
   #+begin_src emacs-lisp
     ;; (defun sp/evil-hook ()
@@ -614,7 +614,7 @@
       "l" '(:ignore t :which-key "layouts")
       "la" '(persp-add-buffer :which-key "add buffer")
       "lA" '(persp-set-buffer :which-key "add buf excl")
-      "lb" '(persp-ivy-switch-buffer :which-key "switch buf")
+      "lb" '(persp-switch-to-buffer :which-key "switch buf")
       "lc" '(persp-kill :which-key "close layout")
       "lk" '(persp-remove-buffer :which-key "remove buffer")
       "ll" '(persp-switch-last :which-key "last layout")
@@ -956,17 +956,28 @@
 ** Web
    #+begin_src emacs-lisp
 
-     (use-package web-mode
+     ;; (use-package web-mode
+     ;;   :mode (("\\.html?\\'" . web-mode)
+     ;; 	 ("\\.css\\'"   . web-mode)
+     ;; 	 ("\\.jsx?\\'"  . web-mode)
+     ;; 	 ("\\.tsx?\\'"  . web-mode)
+     ;; 	 ("\\.json\\'"  . web-mode))
+     ;;   :config
+     ;;   (setq web-mode-markup-indent-offset 2) ; HTML
+     ;;   (setq web-mode-css-indent-offset 2)    ; CSS
+     ;;   (setq web-mode-code-indent-offset 2)   ; JS/JSX/TS/TSX
+     ;;   (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
+
+     (use-package vue-mode
+       :mode (("\\.vue\\'" . vue-mode)))
+
+     (use-package js2-mode
        :mode (("\\.html?\\'" . web-mode)
 	      ("\\.css\\'"   . web-mode)
 	      ("\\.jsx?\\'"  . web-mode)
 	      ("\\.tsx?\\'"  . web-mode)
-	      ("\\.json\\'"  . web-mode))
-       :config
-       (setq web-mode-markup-indent-offset 2) ; HTML
-       (setq web-mode-css-indent-offset 2)    ; CSS
-       (setq web-mode-code-indent-offset 2)   ; JS/JSX/TS/TSX
-       (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
+	      ("\\.json\\'"  . web-mode)))
+
 
    #+end_src
    
@@ -1017,14 +1028,14 @@
   #+end_src
   
 * Org
-#+begin_src emacs-lisp
-  (add-hook 'org-mode-hook #'auto-fill-mode)
-  (setq org-hide-emphasis-markers t)
-  (setq electric-pair-inhibit-predicate
-	(lambda (c)
-	  (if (and (equal major-mode 'org-mode) (char-equal c ?\<)) t (electric-pair-default-inhibit c))))
-#+end_src
-
+  #+begin_src emacs-lisp
+    (add-hook 'org-mode-hook #'auto-fill-mode)
+    (add-hook 'org-mode-hook (lambda ()
+			       (setq-local electric-pair-inhibit-predicate
+					   `(lambda (c)
+					      (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
+  #+end_src
+  
 ** Headings
    #+begin_src emacs-lisp
 
@@ -1205,12 +1216,10 @@
 #+begin_src emacs-lisp
 
   (use-package ob-rust)
-  (use-package ob-go)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)
-     (shell . t)
      (go . t)
      (rust . t)))
 
@@ -1220,13 +1229,14 @@
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
   (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
+  (add-to-list 'org-structure-template-alist '("vue" . "src vue"))
   (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
 
   (require 'org-src)
-  (add-to-list 'org-src-lang-modes '("rust" . "rustic"))
+  (add-to-list 'org-src-lang-modes '("rust" . "rustic")
+	       '("vue" . "vue"))
 
-  ;; disable code execution warnings
-  (setq org-confirm-babel-evaluate nil)
 #+end_src
     
 ** My functions
