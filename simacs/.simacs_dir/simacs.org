@@ -77,6 +77,14 @@
 					   :foundry "ADBO" :slant normal
 					   :weight normal :height 180
 					   :width normal)))))
+    ;; (let ((sp/font-height (if (string= "derek" (system-name)) 130, 180)))
+    ;;   `(custom-set-faces '(default ((t
+    ;; 				 (:family "Source Code Pro"
+    ;; 					  :foundry "ADBO" :slant normal
+    ;; 					  :weight normal :height sp/font-height
+    ;; 					  :width normal))))))
+
+    (when (string= "derek" (system-name)) (set-frame-font "Source Code Pro-13"))
     (global-prettify-symbols-mode t)
 
   #+end_src
