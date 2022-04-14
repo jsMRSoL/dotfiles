@@ -29,7 +29,7 @@ fi
 ## doom emacs
     PATH="$PATH:$HOME/.emacs.d/bin"
 ## npm
-    PATH="$PATH:$HOME/.npm"
+    PATH="$PATH:$HOME/.npm/bin"
 export PATH
 ################################################################################
 ## End PATH
