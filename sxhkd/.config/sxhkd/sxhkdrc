@@ -19,13 +19,13 @@ XF86MonBrightnessUp
 
 # volume
 XF86AudioRaiseVolume
-    pa-volup
+    volup
 
 XF86AudioLowerVolume
-    pa-voldown
+    voldown
 
 XF86AudioMute
-    pa-mute
+    volmute
 
 XF86AudioPlay
     mpc toggle
