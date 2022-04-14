@@ -95,22 +95,6 @@
     (sp/make-link-to-private-shared-folder)
 
   #+end_src
-* Startup
-  #+begin_src emacs-lisp
-
-    (use-package dashboard
-      :config
-      (dashboard-setup-startup-hook)
-      (setq dashboard-center-content t)
-      (setq dashboard-items '((recents . 10)
-			      (bookmarks . 5)
-			      (projects . 5)
-			      ;; (agenda . 5)	;
-			      ;; (registers . 5)
-			      )))
-
-  #+end_src
-
 * Text editing: Evil etc.
   #+begin_src emacs-lisp
     ;; (defun sp/evil-hook ()
@@ -182,21 +166,23 @@
       :config
       (evil-multiedit-default-keybinds))
 
-    (use-package evil-mc
-      :init
-      (global-evil-mc-mode))
+    ;; (use-package evil-mc
+    ;;   :init
+    ;;   (global-evil-mc-mode))
 
   #+end_src
 * Undotree
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 
-    (use-package undo-tree
-      :custom
-      (setq undo-tree-visualizer-diff t)
-      (setq undo-tree-visualizer-timestamps t)
-      (global-undo-tree-mode 1))
+  (use-package undo-tree
+    :init
+    (setq undo-tree-visualizer-diff nil)
+    (setq undo-tree-visualizer-timestamps t)
+    (setq undo-tree-history-directory-alist
+	  `(("." . ,(concat user-emacs-directory "backup-files")))) 
+    (global-undo-tree-mode 1))
 
-  #+end_src
+#+end_src
 * Window manipulation
   #+begin_src emacs-lisp
 
@@ -211,20 +197,6 @@
       ("M-4" . winum-select-window-4)
       ("M-5" . winum-select-window-5)
       ("M-6" . winum-select-window-6))
-
-
-    (defun sp/delete-chosen-window()
-      "Enter a window no to delete."
-      (interactive)
-      (let ((chosen-win (read-from-minibuffer
-			 "Enter window no.: "
-			 "")))
-	(if (equal chosen-win "")
-	    (message "No window entered. Cancelling...")
-	  ;; (message (format "Chosen window %s" chosen-win))
-	  (let ((current-prefix-arg (concat "-" chosen-win)))
-	    (call-interactively 'winum-select-window-by-number)
-	    ))))
 
     (use-package winner
       :after evil
@@ -334,8 +306,9 @@
     (use-package savehist
       :ensure nil
       :init
-      (savehist-mode 1)
-      (save-place-mode 1))
+      (savehist-mode 1))
+
+    (recentf-mode 1)
 
     (setq enable-recursive-minibuffers t)
 
@@ -572,6 +545,7 @@
       "f" '(:ignore t :which-key "files")
       "fed" '(sp/open-init :which-key "edit init.el")
       "ff" '(find-file :which-key "find file")
+      "fj" '(find-file-other-tab :which-key "find file new tab")
       "fr" '(consult-recent-file :which-key "find recent")
       "fs" '(save-buffer :which-key "save")
       "fw" '(write-file :which-key "save as")
@@ -668,7 +642,7 @@
       "wk" '(evil-window-up :which-key "go up")
       "wl" '(evil-window-right :which-key "go right")
       "wo" '(delete-other-windows :which-key "only")
-      "wd" '(sp/delete-chosen-window :which-key "delete")
+      "wd" '(ace-delete-window :which-key "delete")
       "wu" '(winner-undo :which-key "winner undo")
       "wU" '(winner-redo :which-key "winner redo")
       "wF" '(make-frame :which-key "new frame")
@@ -687,30 +661,31 @@
     (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
     (general-nmap "SPC h" (general-simulate-key "C-h"))
     (general-nmap "SPC SPC" (general-simulate-key "M-x"))
+    (general-vmap "SPC SPC" (general-simulate-key "M-x"))
 
-    ;; Multiple cursors
-    (general-def 'normal
-      "M-n" 'evil-mc-make-and-goto-next-cursor
-      "M-p" 'evil-mc-make-and-goto-prev-cursor
-      "C-n" 'evil-mc-make-and-goto-next-match
-      "C-t" 'evil-mc-skip-and-goto-next-match
-      "C-p" 'evil-mc-make-and-goto-prev-match
-      "grm" 'evil-mc-make-all-cursors
-      "gru" 'evil-mc-undo-last-added-cursor
-      "grq" 'evil-mc-undo-all-cursors
-      "grs" 'evil-mc-pause-cursors
-      "grr" 'evil-mc-resume-cursors
-      "grf" 'evil-mc-make-and-goto-first-cursor
-      "grl" 'evil-mc-make-and-goto-last-cursor
-      "grh" 'evil-mc-make-cursor-here
-      "grj" 'evil-mc-make-cursor-move-next-line
-      "grk" 'evil-mc-make-cursor-move-prev-line
-      "grN" 'evil-mc-skip-and-goto-next-cursor
-      "grP" 'evil-mc-skip-and-goto-prev-cursor
-      "grn" 'evil-mc-skip-and-goto-next-match
-      "grp" 'evil-mc-skip-and-goto-prev-match
-      "grI" 'evil-mc-make-cursor-in-visual-selection-beg
-      "grA" 'evil-mc-make-cursor-in-visual-selection-end)
+    ;; ;; Multiple cursors
+    ;; (general-def 'normal
+    ;;   "M-n" 'evil-mc-make-and-goto-next-cursor
+    ;;   "M-p" 'evil-mc-make-and-goto-prev-cursor
+    ;;   "C-n" 'evil-mc-make-and-goto-next-match
+    ;;   "C-t" 'evil-mc-skip-and-goto-next-match
+    ;;   "C-p" 'evil-mc-make-and-goto-prev-match
+    ;;   "grm" 'evil-mc-make-all-cursors
+    ;;   "gru" 'evil-mc-undo-last-added-cursor
+    ;;   "grq" 'evil-mc-undo-all-cursors
+    ;;   "grs" 'evil-mc-pause-cursors
+    ;;   "grr" 'evil-mc-resume-cursors
+    ;;   "grf" 'evil-mc-make-and-goto-first-cursor
+    ;;   "grl" 'evil-mc-make-and-goto-last-cursor
+    ;;   "grh" 'evil-mc-make-cursor-here
+    ;;   "grj" 'evil-mc-make-cursor-move-next-line
+    ;;   "grk" 'evil-mc-make-cursor-move-prev-line
+    ;;   "grN" 'evil-mc-skip-and-goto-next-cursor
+    ;;   "grP" 'evil-mc-skip-and-goto-prev-cursor
+    ;;   "grn" 'evil-mc-skip-and-goto-next-match
+    ;;   "grp" 'evil-mc-skip-and-goto-prev-match
+    ;;   "grI" 'evil-mc-make-cursor-in-visual-selection-beg
+    ;;   "grA" 'evil-mc-make-cursor-in-visual-selection-end)
 
   #+end_src
   
@@ -772,26 +747,26 @@
 * Opening files in external programs
   #+begin_src emacs-lisp
 
-    (use-package openwith
-      :config
-      (setq openwith-associations
-	    (list
-	      (list (openwith-make-extension-regexp
-		    '("mpg" "mpeg" "mp3" "mp4"
-                      "m4a"
-		      "avi" "wmv" "wav" "mov" "flv"
-		      "ogm" "ogg" "mkv"))
-		    "mpv"
-		    '(file))
-	      (list (openwith-make-extension-regexp
-		    '("xbm" "pbm" "pgm" "ppm" "pnm"
-		      "png" "gif" "bmp" "tif" "jpeg" "jpg"))
-		      "sxiv"
-		      '(file))
-	      (list (openwith-make-extension-regexp
-		    '("pdf"))
-		    "mupdf"
-		    '(file)))))
+    ;; (use-package openwith
+    ;;   :config
+    ;;   (setq openwith-associations
+    ;; 	(list
+    ;; 	  (list (openwith-make-extension-regexp
+    ;; 		'("mpg" "mpeg" "mp3" "mp4"
+    ;;                   "m4a"
+    ;; 		  "avi" "wmv" "wav" "mov" "flv"
+    ;; 		  "ogm" "ogg" "mkv"))
+    ;; 		"mpv"
+    ;; 		'(file))
+    ;; 	  (list (openwith-make-extension-regexp
+    ;; 		'("xbm" "pbm" "pgm" "ppm" "pnm"
+    ;; 		  "png" "gif" "bmp" "tif" "jpeg" "jpg"))
+    ;; 		  "sxiv"
+    ;; 		  '(file))
+    ;; 	  (list (openwith-make-extension-regexp
+    ;; 		'("pdf"))
+    ;; 		"mupdf"
+    ;; 		'(file)))))
 
   #+end_src
 * Shell
@@ -847,10 +822,6 @@
       :diminish projectile-mode
       :config
       (projectile-mode +1))
-      ;; :custom ((projectile-completion-system 'ivy)))
-
-    ;; (use-package counsel-projectile
-    ;;   :config (counsel-projectile-mode))
 
   #+end_src
 
@@ -886,7 +857,6 @@
   #+end_src
   
 * Language-specific settings
-
 ** Python
    #+begin_src emacs-lisp
      (use-package pyvenv
@@ -1238,23 +1208,24 @@
 
    #+end_src
    
-* Music
-  #+begin_src emacs-lisp
+* Start screen
+#+begin_src emacs-lisp
 
-    (use-package mpv)
+      (defun sp/open-with-tasks-and-agenda ()
+	"Open tasks.org and org-capture for simacs.
 
-    (use-package emms
-      :commands emms
-      :config
-      (require 'emms-setup)
-      (emms-standard)
-      (emms-default-players)
-      (emms-mode-line-disable)
-      (setq emms-source-file-default-directory "~/Music/"))
+      This is mainly intended to be used from the command line as a startup convenience."
+	(interactive)
+	(tab-new)
+	(org-agenda-list)
+	(ace-delete-window)
+	(let ((screen-width (window-width)))
+        (evil-window-vsplit)
+	(find-file "~/Documents/org/tasks.org")
+	(evil-window-set-width (- screen-width 50))))
 
-    ;; (setq emms-tag-editor-tagfile-functions '(id3v2 tracktag))
-  #+end_src
-
+      (sp/open-with-tasks-and-agenda)
+#+end_src
 * LSJ2 mode
   #+begin_src emacs-lisp
     ;; (use-package lsj2-mode

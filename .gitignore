@@ -55,3 +55,4 @@ nvim/.config/nvim/plugin/packer_compiled.lua
 /simacs/.simacs_dir/#bookmarks#
 /simacs/.simacs_dir/places
 /simacs/.simacs_dir/.bookmarks.~undo-tree~
+/simacs/.simacs_dir/layouts/
