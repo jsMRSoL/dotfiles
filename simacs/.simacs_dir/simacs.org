@@ -880,6 +880,10 @@
 
    #+end_src
    
+** Go
+#+begin_src emacs-lisp
+(use-package go-mode)
+#+end_src
 ** Web
    #+begin_src emacs-lisp
 
@@ -1125,26 +1129,32 @@
   #+end_src
 
 ** Org babel
-   #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 
-     (use-package ob-rust)
-     (org-babel-do-load-languages
-      'org-babel-load-languages
-      '((emacs-lisp . t)
-	(python . t)
-	(rust . t)))
+  (use-package ob-rust)
+  (use-package ob-go)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (python . t)
+     (shell . t)
+     (go . t)
+     (rust . t)))
 
-     (require 'org-tempo)
-     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-     (add-to-list 'org-structure-template-alist '("py" . "src python"))
-     (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
-     (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
+  (require 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+  (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
 
-     (require 'org-src)
-     (add-to-list 'org-src-lang-modes '("rust" . "rustic"))
+  (require 'org-src)
+  (add-to-list 'org-src-lang-modes '("rust" . "rustic"))
 
-   #+end_src
+  ;; disable code execution warnings
+  (setq org-confirm-babel-evaluate nil)
+#+end_src
     
 ** My functions
    #+begin_src emacs-lisp
