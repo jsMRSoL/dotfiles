@@ -948,9 +948,13 @@
   #+end_src
   
 * Org
-  #+begin_src emacs-lisp
-    (add-hook 'org-mode-hook #'auto-fill-mode)
-  #+end_src
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook #'auto-fill-mode)
+  (setq org-hide-emphasis-markers t)
+  (setq electric-pair-inhibit-predicate
+	(lambda (c)
+	  (if (and (equal major-mode 'org-mode) (char-equal c ?\<)) t (electric-pair-default-inhibit c))))
+#+end_src
 
 ** Headings
    #+begin_src emacs-lisp
