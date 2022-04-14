@@ -254,6 +254,65 @@
 	  [?O escape ?m ?A ?\" ?* ?P ?0 ?\' ?A])
 
   #+end_src
+* Text functions
+#+begin_src emacs-lisp
+  (defvar sp-common-pairs
+    '((?\" . ("\"" . "\""))
+      (?\' . ("'" . "'"))
+      (?\` . ("`" . "`"))
+      (?\< . ("<" . ">"))
+      (?\( . ("(" . ")"))
+      (?\{ . ("{" . "}"))
+      (?\[ . ("[" . "]"))
+      (?\/ . ("/" . "/"))
+      (?\* . ("*" . "*"))
+      "An alist of common pairs to facilitate word wrapping."))
+
+  (defun sp/wrap-word (char)
+    "Wrap the word under cursor.
+    Word here is any A to Z, a to z, and low line _"
+    (interactive "cPick wrapping character: [\"] ['] [`] [<] [(] [{] [[]")
+    (let (
+	  p1
+	  p2
+	  wrapping
+	  word
+	  pair
+	  first
+	  last
+	  (case-fold-search t))
+	(setq pair (alist-get char sp-common-pairs))
+	(setq first (car pair))
+	(setq last (cdr pair))
+	(if (use-region-p) (setq p1 (region-beginning)
+				   p2 (region-end))
+		  (setq p1 (search-backward-regexp "\\b")
+			p2 (search-forward-regexp "\\w\\b")))
+        (message "Point 1: %s, Point 2: %s" p1 p2)
+	(setq word (buffer-substring-no-properties p1 p2))
+	(kill-region p1 p2)
+	(insert (concat first word last))))
+
+  (defun sp/change-wrapping(c1 c2)
+    "Change one pair of wrapping characters for another.
+  E.g. Swap double-quotes for single-quotes and vice versa."
+    (interactive "cSwap wrapping character: [\"] ['] [`] [<] [(] [{] [[] \ncWith: [\"] ['] [`] [<] [(] [{] [[]")
+    (let* ((pair (alist-get c1 sp-common-pairs))
+	   (first (car pair))
+	   (last (cdr pair))
+	   (new-pair (alist-get c2 sp-common-pairs))
+	   (new-first (car new-pair))
+	   (new-last (cdr new-pair))
+	   (p1 (re-search-backward first))
+	   (p2 (- (re-search-forward last nil nil (if (string= first last) 2 1)) 1)))
+      (delete-region p1 (+ 1 p1))
+      (goto-char p1)
+      (insert new-first)
+      ;; (message "%s" p2)
+      (goto-char p2)
+      (delete-region p2 (+ 1 p2))
+      (insert new-last)))
+#+end_src
 * Menu: Minibuffer
   #+begin_src emacs-lisp
     (use-package vertico
@@ -614,6 +673,8 @@
       "wU" '(winner-redo :which-key "winner redo")
       "wF" '(make-frame :which-key "new frame")
       "x" '(:ignore t :which-key "text")
+      "xc" '(sp/change-wrapping :which-key "change-wrapping")
+      "xw" '(sp/wrap-word :which-key "wrap")
       "xt" '(:ignore t :which-key "transpose")
       "xtc" '(transpose-chars :which-key "chars")
       "xtw" '(transpose-words :which-key "words")
