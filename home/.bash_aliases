@@ -10,7 +10,3 @@ BASHFILES="/home/simon/.dotfiles/bash/.config/bash"
 
 # api keys
 [ -f "$HOME/.api_keys" ] && source "$HOME/.api_keys"
-
-# python virtual environment functionality
-PY_VE_WRAPPER="$HOME/.local/bin/virtualenvwrapper.sh"
-[ -f "$PY_VE_WRAPPER" ] && source "$PY_VE_WRAPPER"
