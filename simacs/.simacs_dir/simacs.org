@@ -479,221 +479,222 @@
 * Keys: which-key and general
   #+begin_src emacs-lisp
 
-    (use-package which-key
-      :init (which-key-mode)
-      :diminish which-key-mode
-      :config
-      (setq which-key-idle-delay 0.5))
+	(use-package which-key
+	  :init (which-key-mode)
+	  :diminish which-key-mode
+	  :config
+	  (setq which-key-idle-delay 0.5))
 
-    (use-package general
-      :config
-      (general-evil-setup t)
+	(use-package general
+	  :config
+	  (general-evil-setup t)
 
-      (general-create-definer sp/leader-keys
-	:keymaps '(normal insert visual emacs dashboard)
-	:prefix "SPC"
-	:global-prefix "C-SPC"))
+	  (general-create-definer sp/leader-keys
+	    :keymaps '(normal insert visual emacs dashboard)
+	    :prefix "SPC"
+	    :global-prefix "C-SPC"))
 
-    (defun sp/open-init ()
-      "Open init.el for simacs."
-      (interactive)
-      (find-file "~/.simacs_dir/simacs.org"))
+	(defun sp/open-init ()
+	  "Open init.el for simacs."
+	  (interactive)
+	  (find-file "~/.simacs_dir/simacs.org"))
 
-    (defun sp/open-journal ()
-      "Open journal.org for simacs."
-      (interactive)
-      (find-file "~/Documents/org/journal.org"))
+	(defun sp/open-journal ()
+	  "Open journal.org for simacs."
+	  (interactive)
+	  (find-file "~/Documents/org/journal.org")
+	  (evil-goto-line))
 
-    (defun sp/open-tasks ()
-      "Open tasks.org for simacs."
-      (interactive)
-      (find-file "~/Documents/org/tasks.org"))
+	(defun sp/open-tasks ()
+	  "Open tasks.org for simacs."
+	  (interactive)
+	  (find-file "~/Documents/org/tasks.org"))
 
-    (defun sp/open-with-tasks-and-capture ()
-      "Open tasks.org and org-capture for simacs.
+	(defun sp/open-with-tasks-and-capture ()
+	  "Open tasks.org and org-capture for simacs.
 
-    This is mainly intended to be used from the command line as a startup convenience."
-      (interactive)
-      (find-file "~/Documents/org/tasks.org")
-      (org-capture))
+	This is mainly intended to be used from the command line as a startup convenience."
+	  (interactive)
+	  (find-file "~/Documents/org/tasks.org")
+	  (org-capture))
 
-    (sp/leader-keys
-      "1" '(winum-select-window-1 :which-key "win 1")
-      "2" '(winum-select-window-2 :which-key "win 2")
-      "SPC" '(:ignore t :which-key "M-x")
-      ":" '(eval-expression :which-key "M-:")
-      "TAB" '(evil-buffer :which-key "last buffer")
-      "u" '(universal-argument :which-key "c-u")
-      "`" '(org-capture :which-key "org capture")
-      "a" '(:ignore t :which-key "apps")
-      "ad" '(dired :which-key "dired")
-      "aj" '(dired-jump :which-key "dired-jump")
-      "at" '(vterm :which-key "terminal")
-      "au" '(undo-tree-visualize :which-key "undo-tree")
-      "am"  '(:ignore t :which-key "media")
-      "amm" '(emms :which-key "open emms")
-      "amp" '(emms-pause :which-key "play / pause")
-      "amf" '(emms-play-file :which-key "play file")
-      "ama" '(emms-add-file :which-key "add file")
-      "amA" '(emms-add-directory :which-key "add directory")
-      "amt" '(emms-tag-editor-edit :which-key "edit tags")
-      "ax" '(org-capture :which-key "org capture")
-      "ae" '(:ignore t :which-key "eww")
-      "aee" '(eww :which-key "run eww")
-      "aeb" '(eww-list-bookmarks :which-key "list bookmarks")
-      "aeB" '(eww-add-bookmark :which-key "add bookmark")
-      "b" '(:ignore t :which-key "buffers")
-      "bb" '(consult-buffer :which-key "switch")
-      "bd" '(kill-buffer-and-window :which-key "delete")
-      "bs" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :which-key "scratch")
-      "bh" '((lambda () (interactive) (switch-to-buffer "*dashboard*")) :which-key "dashboard")
-      "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "messages")
-      "c" '(:ignore t :which-key "code")
-      "cc" '(comment-line :which-key "comment")
-      "f" '(:ignore t :which-key "files")
-      "fed" '(sp/open-init :which-key "edit init.el")
-      "ff" '(find-file :which-key "find file")
-      "fj" '(find-file-other-tab :which-key "find file new tab")
-      "fr" '(consult-recent-file :which-key "find recent")
-      "fs" '(save-buffer :which-key "save")
-      "fw" '(write-file :which-key "save as")
-      "ft" '(treemacs :which-key "treemacs")
-      "g" '(:ignore t :which-key "git")
-      "gs" '(magit-status :which-key "status")
-      "gm" '(hydra-smerge/body :which-key "(s)merge")
-      "h" '(:ignore t :which-key "help")
-      "q" '(:ignore t :which-key "quit")
-      "qa" '(evil-quit-all :which-key "quit all")
-      "qq" '(evil-quit :which-key "quit")
-      "qe" '(kill-emacs :which-key "kill emacs")
-      "j" '(:ignore t :which-key "jump")
-      "jo" '(sp/dired-jump-dir :which-key "open common")
-      "jj" '(sp/open-journal :which-key "journal.org")
-      "jt" '(sp/open-tasks :which-key "tasks.org")
-      "k" '(:ignore t :which-key "lisp")
-      "kk" '(hydra-parens/body :which-key "hydra")
-      "ke" '(sp-end-of-sexp :which-key "end")
-      "kE" '(eval-last-sexp :which-key "evaluate")
-      "ks" '(sp-forward-slurp-sexp :which-key "forward slurp")
-      "kS" '(sp-backward-slurp-sexp :which-key "backward slurp")
-      "kb" '(sp-forward-barf-sexp :which-key "forward barf")
-      "kB" '(sp-backward-barf-sexp :which-key "backward barf")
-      "kw" '(:ignore t :which-key "wrap")
-      "kwr" '(sp-rewrap-sexp :which-key "rewrap")
-      "kw{" '(sp-wrap-curly :which-key "curly")
-      "kw(" '(sp-wrap-round :which-key "round")
-      "kw[" '(sp-wrap-square :which-key "square")
-      "kwu" '(sp-unwrap-sexp :which-key "unwrap next")
-      "kwU" '(sp-backward-unwrap-sexp :which-key "unwrap prev")
-      "l" '(:ignore t :which-key "layouts")
-      "la" '(persp-add-buffer :which-key "add buffer")
-      "lA" '(persp-set-buffer :which-key "add buf excl")
-      "lb" '(persp-ivy-switch-buffer :which-key "switch buf")
-      "lc" '(persp-kill :which-key "close layout")
-      "lk" '(persp-remove-buffer :which-key "remove buffer")
-      "ll" '(persp-switch-last :which-key "last layout")
-      "lr" '(persp-rename :which-key "rename layout")
-      "ls" '(persp-switch :which-key "switch layout")
-      "ln" '(persp-next :which-key "next layout")
-      "lp" '(persp-prev :which-key "prev layout")
-      "l C-s" '(persp-state-save :which-key "save layout")
-      "l C-l" '(persp-state-load :which-key "load layout")
-      "o" '(:ignore t :which-key "org")
-      "oa" '(org-agenda :which-key "agenda")
-      "ob" '(:ignore t :which-key "babel")
-      "obt" '(org-babel-tangle :which-key "tangle")
-      "oi" '(:ignore t :which-key "insert")
-      "oil" '(org-insert-link :which-key "link")
-      "oit" '(:ignore t :which-key "timestamp")
-      "oitt" '(org-time-stamp-inactive :which-key "inactive")
-      "oita" '(org-time-stamp :which-key "active")
-      "oj" '(consult-outline :which-key "jump")
-      "oh" '(sp/hydra-org-headings/body :which-key "headings")
-      "oc" '(:ignore t :which-key "checkbox")
-      "occ" '(sp/org-insert-checkbox :which-key "insert")
-      "oct" '(org-toggle-checkbox :which-key "toggle")
-      "och" '(org-toggle-checkbox-half :which-key "toggle half")
-      "ot" '(org-todo :which-key "todo")
-      "or" '(org-refile :which-key "refile")
-      "on" '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
-      "oo" '(org-open-at-point :which-key "open/follow")
-      "oe" '(org-export-dispatch :which-key "export")
-      "p" '(projectile-command-map :which-key "projects")
-      "r" '(:ignore t :which-key "registers")
-      "rl" '(evil-show-registers :which-key "list")
-      "rp" '(insert-line-and-paste-clipboard :which-key "insert line paste")
-      "s" '(:ignore t :which-key "search")
-      "sr" '(consult-ripgrep :which-key "ripgrep")
-      "sg" '(consult-grep :which-key "grep")
-      "sp" '(consult-line :which-key "swiper")
-      "ss" '(avy-goto-char-2 :which-key "char2")
-      "sl" '(avy-goto-line :which-key "line")
-      "t" '(:ignore t :which-key "tabs")
-      "tn" '(tab-bar-new-tab :which-key "new")
-      "tc" '(tab-bar-close-tab :which-key "close")
-      "tt" '(tab-bar-switch-to-tab :which-key "switch")
-      "v" '(:ignore t :which-key "region")
-      "vv" '(er/expand-region :which-key "expand")
-      "v(" '(er/mark-outside-pairs :which-key "outside pairs")
-      "v)" '(er/mark-inside-pairs :which-key "inside pairs")
-      "v\"" '(er/mark-outside-quotes :which-key "outside quotes")
-      "vq" '(er/mark-inside-quotes :which-key "inside quotes")
-      "vd" '(er/mark-defun :which-key "function")
-      "vc" '(er/mark-comment :which-key "comment")
-      "ve" '(er/mark-email :which-key "email")
-      "vu" '(er/mark-url :which-key "url")
-      "w" '(:ignore t :which-key "windows")
-      "wv" '(evil-window-vsplit :which-key "vsplit")
-      "ws" '(evil-window-split :which-key "split")
-      "wh" '(evil-window-left :which-key "go left")
-      "wj" '(evil-window-down :which-key "go down")
-      "wk" '(evil-window-up :which-key "go up")
-      "wl" '(evil-window-right :which-key "go right")
-      "wo" '(delete-other-windows :which-key "only")
-      "wd" '(ace-delete-window :which-key "delete")
-      "wu" '(winner-undo :which-key "winner undo")
-      "wU" '(winner-redo :which-key "winner redo")
-      "wF" '(make-frame :which-key "new frame")
-      "x" '(:ignore t :which-key "text")
-      "xc" '(sp/change-wrapping :which-key "change-wrapping")
-      "xw" '(sp/wrap-word :which-key "wrap")
-      "xt" '(:ignore t :which-key "transpose")
-      "xtc" '(transpose-chars :which-key "chars")
-      "xtw" '(transpose-words :which-key "words")
-      "xtl" '(transpose-lines :which-key "lines")
-      "xts" '(transpose-sexps :which-key "sexps")
-      "xtr" '(transpose-regions :which-key "regions")
-      "xz" '(hydra-zoom/body :which-key "zoom")
-      "T" '(hydra-toggles/body :which-key "toggles"))
+	(sp/leader-keys
+	  "1" '(winum-select-window-1 :which-key "win 1")
+	  "2" '(winum-select-window-2 :which-key "win 2")
+	  "SPC" '(:ignore t :which-key "M-x")
+	  ":" '(eval-expression :which-key "M-:")
+	  "TAB" '(evil-buffer :which-key "last buffer")
+	  "u" '(universal-argument :which-key "c-u")
+	  "`" '(org-capture :which-key "org capture")
+	  "a" '(:ignore t :which-key "apps")
+	  "ad" '(dired :which-key "dired")
+	  "aj" '(dired-jump :which-key "dired-jump")
+	  "at" '(vterm :which-key "terminal")
+	  "au" '(undo-tree-visualize :which-key "undo-tree")
+	  "am"  '(:ignore t :which-key "media")
+	  "amm" '(emms :which-key "open emms")
+	  "amp" '(emms-pause :which-key "play / pause")
+	  "amf" '(emms-play-file :which-key "play file")
+	  "ama" '(emms-add-file :which-key "add file")
+	  "amA" '(emms-add-directory :which-key "add directory")
+	  "amt" '(emms-tag-editor-edit :which-key "edit tags")
+	  "ax" '(org-capture :which-key "org capture")
+	  "ae" '(:ignore t :which-key "eww")
+	  "aee" '(eww :which-key "run eww")
+	  "aeb" '(eww-list-bookmarks :which-key "list bookmarks")
+	  "aeB" '(eww-add-bookmark :which-key "add bookmark")
+	  "b" '(:ignore t :which-key "buffers")
+	  "bb" '(consult-buffer :which-key "switch")
+	  "bd" '(kill-buffer-and-window :which-key "delete")
+	  "bs" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :which-key "scratch")
+	  "bh" '((lambda () (interactive) (switch-to-buffer "*dashboard*")) :which-key "dashboard")
+	  "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "messages")
+	  "c" '(:ignore t :which-key "code")
+	  "cc" '(comment-line :which-key "comment")
+	  "f" '(:ignore t :which-key "files")
+	  "fed" '(sp/open-init :which-key "edit init.el")
+	  "ff" '(find-file :which-key "find file")
+	  "fj" '(find-file-other-tab :which-key "find file new tab")
+	  "fr" '(consult-recent-file :which-key "find recent")
+	  "fs" '(save-buffer :which-key "save")
+	  "fw" '(write-file :which-key "save as")
+	  "ft" '(treemacs :which-key "treemacs")
+	  "g" '(:ignore t :which-key "git")
+	  "gs" '(magit-status :which-key "status")
+	  "gm" '(hydra-smerge/body :which-key "(s)merge")
+	  "h" '(:ignore t :which-key "help")
+	  "q" '(:ignore t :which-key "quit")
+	  "qa" '(evil-quit-all :which-key "quit all")
+	  "qq" '(evil-quit :which-key "quit")
+	  "qe" '(kill-emacs :which-key "kill emacs")
+	  "j" '(:ignore t :which-key "jump")
+	  "jo" '(sp/dired-jump-dir :which-key "open common")
+	  "jj" '(sp/open-journal :which-key "journal.org")
+	  "jt" '(sp/open-tasks :which-key "tasks.org")
+	  "k" '(:ignore t :which-key "lisp")
+	  "kk" '(hydra-parens/body :which-key "hydra")
+	  "ke" '(sp-end-of-sexp :which-key "end")
+	  "kE" '(eval-last-sexp :which-key "evaluate")
+	  "ks" '(sp-forward-slurp-sexp :which-key "forward slurp")
+	  "kS" '(sp-backward-slurp-sexp :which-key "backward slurp")
+	  "kb" '(sp-forward-barf-sexp :which-key "forward barf")
+	  "kB" '(sp-backward-barf-sexp :which-key "backward barf")
+	  "kw" '(:ignore t :which-key "wrap")
+	  "kwr" '(sp-rewrap-sexp :which-key "rewrap")
+	  "kw{" '(sp-wrap-curly :which-key "curly")
+	  "kw(" '(sp-wrap-round :which-key "round")
+	  "kw[" '(sp-wrap-square :which-key "square")
+	  "kwu" '(sp-unwrap-sexp :which-key "unwrap next")
+	  "kwU" '(sp-backward-unwrap-sexp :which-key "unwrap prev")
+	  "l" '(:ignore t :which-key "layouts")
+	  "la" '(persp-add-buffer :which-key "add buffer")
+	  "lA" '(persp-set-buffer :which-key "add buf excl")
+	  "lb" '(persp-ivy-switch-buffer :which-key "switch buf")
+	  "lc" '(persp-kill :which-key "close layout")
+	  "lk" '(persp-remove-buffer :which-key "remove buffer")
+	  "ll" '(persp-switch-last :which-key "last layout")
+	  "lr" '(persp-rename :which-key "rename layout")
+	  "ls" '(persp-switch :which-key "switch layout")
+	  "ln" '(persp-next :which-key "next layout")
+	  "lp" '(persp-prev :which-key "prev layout")
+	  "l C-s" '(persp-state-save :which-key "save layout")
+	  "l C-l" '(persp-state-load :which-key "load layout")
+	  "o" '(:ignore t :which-key "org")
+	  "oa" '(org-agenda :which-key "agenda")
+	  "ob" '(:ignore t :which-key "babel")
+	  "obt" '(org-babel-tangle :which-key "tangle")
+	  "oi" '(:ignore t :which-key "insert")
+	  "oil" '(org-insert-link :which-key "link")
+	  "oit" '(:ignore t :which-key "timestamp")
+	  "oitt" '(org-time-stamp-inactive :which-key "inactive")
+	  "oita" '(org-time-stamp :which-key "active")
+	  "oj" '(consult-outline :which-key "jump")
+	  "oh" '(sp/hydra-org-headings/body :which-key "headings")
+	  "oc" '(:ignore t :which-key "checkbox")
+	  "occ" '(sp/org-insert-checkbox :which-key "insert")
+	  "oct" '(org-toggle-checkbox :which-key "toggle")
+	  "och" '(org-toggle-checkbox-half :which-key "toggle half")
+	  "ot" '(org-todo :which-key "todo")
+	  "or" '(org-refile :which-key "refile")
+	  "on" '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
+	  "oo" '(org-open-at-point :which-key "open/follow")
+	  "oe" '(org-export-dispatch :which-key "export")
+	  "p" '(projectile-command-map :which-key "projects")
+	  "r" '(:ignore t :which-key "registers")
+	  "rl" '(evil-show-registers :which-key "list")
+	  "rp" '(insert-line-and-paste-clipboard :which-key "insert line paste")
+	  "s" '(:ignore t :which-key "search")
+	  "sr" '(consult-ripgrep :which-key "ripgrep")
+	  "sg" '(consult-grep :which-key "grep")
+	  "sp" '(consult-line :which-key "swiper")
+	  "ss" '(avy-goto-char-2 :which-key "char2")
+	  "sl" '(avy-goto-line :which-key "line")
+	  "t" '(:ignore t :which-key "tabs")
+	  "tn" '(tab-bar-new-tab :which-key "new")
+	  "tc" '(tab-bar-close-tab :which-key "close")
+	  "tt" '(tab-bar-switch-to-tab :which-key "switch")
+	  "v" '(:ignore t :which-key "region")
+	  "vv" '(er/expand-region :which-key "expand")
+	  "v(" '(er/mark-outside-pairs :which-key "outside pairs")
+	  "v)" '(er/mark-inside-pairs :which-key "inside pairs")
+	  "v\"" '(er/mark-outside-quotes :which-key "outside quotes")
+	  "vq" '(er/mark-inside-quotes :which-key "inside quotes")
+	  "vd" '(er/mark-defun :which-key "function")
+	  "vc" '(er/mark-comment :which-key "comment")
+	  "ve" '(er/mark-email :which-key "email")
+	  "vu" '(er/mark-url :which-key "url")
+	  "w" '(:ignore t :which-key "windows")
+	  "wv" '(evil-window-vsplit :which-key "vsplit")
+	  "ws" '(evil-window-split :which-key "split")
+	  "wh" '(evil-window-left :which-key "go left")
+	  "wj" '(evil-window-down :which-key "go down")
+	  "wk" '(evil-window-up :which-key "go up")
+	  "wl" '(evil-window-right :which-key "go right")
+	  "wo" '(delete-other-windows :which-key "only")
+	  "wd" '(ace-delete-window :which-key "delete")
+	  "wu" '(winner-undo :which-key "winner undo")
+	  "wU" '(winner-redo :which-key "winner redo")
+	  "wF" '(make-frame :which-key "new frame")
+	  "x" '(:ignore t :which-key "text")
+	  "xc" '(sp/change-wrapping :which-key "change-wrapping")
+	  "xw" '(sp/wrap-word :which-key "wrap")
+	  "xt" '(:ignore t :which-key "transpose")
+	  "xtc" '(transpose-chars :which-key "chars")
+	  "xtw" '(transpose-words :which-key "words")
+	  "xtl" '(transpose-lines :which-key "lines")
+	  "xts" '(transpose-sexps :which-key "sexps")
+	  "xtr" '(transpose-regions :which-key "regions")
+	  "xz" '(hydra-zoom/body :which-key "zoom")
+	  "T" '(hydra-toggles/body :which-key "toggles"))
 
-    (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
-    (general-nmap "SPC h" (general-simulate-key "C-h"))
-    (general-nmap "SPC SPC" (general-simulate-key "M-x"))
-    (general-vmap "SPC SPC" (general-simulate-key "M-x"))
+	(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
+	(general-nmap "SPC h" (general-simulate-key "C-h"))
+	(general-nmap "SPC SPC" (general-simulate-key "M-x"))
+	(general-vmap "SPC SPC" (general-simulate-key "M-x"))
 
-    ;; ;; Multiple cursors
-    ;; (general-def 'normal
-    ;;   "M-n" 'evil-mc-make-and-goto-next-cursor
-    ;;   "M-p" 'evil-mc-make-and-goto-prev-cursor
-    ;;   "C-n" 'evil-mc-make-and-goto-next-match
-    ;;   "C-t" 'evil-mc-skip-and-goto-next-match
-    ;;   "C-p" 'evil-mc-make-and-goto-prev-match
-    ;;   "grm" 'evil-mc-make-all-cursors
-    ;;   "gru" 'evil-mc-undo-last-added-cursor
-    ;;   "grq" 'evil-mc-undo-all-cursors
-    ;;   "grs" 'evil-mc-pause-cursors
-    ;;   "grr" 'evil-mc-resume-cursors
-    ;;   "grf" 'evil-mc-make-and-goto-first-cursor
-    ;;   "grl" 'evil-mc-make-and-goto-last-cursor
-    ;;   "grh" 'evil-mc-make-cursor-here
-    ;;   "grj" 'evil-mc-make-cursor-move-next-line
-    ;;   "grk" 'evil-mc-make-cursor-move-prev-line
-    ;;   "grN" 'evil-mc-skip-and-goto-next-cursor
-    ;;   "grP" 'evil-mc-skip-and-goto-prev-cursor
-    ;;   "grn" 'evil-mc-skip-and-goto-next-match
-    ;;   "grp" 'evil-mc-skip-and-goto-prev-match
-    ;;   "grI" 'evil-mc-make-cursor-in-visual-selection-beg
-    ;;   "grA" 'evil-mc-make-cursor-in-visual-selection-end)
+	;; ;; Multiple cursors
+	;; (general-def 'normal
+	;;   "M-n" 'evil-mc-make-and-goto-next-cursor
+	;;   "M-p" 'evil-mc-make-and-goto-prev-cursor
+	;;   "C-n" 'evil-mc-make-and-goto-next-match
+	;;   "C-t" 'evil-mc-skip-and-goto-next-match
+	;;   "C-p" 'evil-mc-make-and-goto-prev-match
+	;;   "grm" 'evil-mc-make-all-cursors
+	;;   "gru" 'evil-mc-undo-last-added-cursor
+	;;   "grq" 'evil-mc-undo-all-cursors
+	;;   "grs" 'evil-mc-pause-cursors
+	;;   "grr" 'evil-mc-resume-cursors
+	;;   "grf" 'evil-mc-make-and-goto-first-cursor
+	;;   "grl" 'evil-mc-make-and-goto-last-cursor
+	;;   "grh" 'evil-mc-make-cursor-here
+	;;   "grj" 'evil-mc-make-cursor-move-next-line
+	;;   "grk" 'evil-mc-make-cursor-move-prev-line
+	;;   "grN" 'evil-mc-skip-and-goto-next-cursor
+	;;   "grP" 'evil-mc-skip-and-goto-prev-cursor
+	;;   "grn" 'evil-mc-skip-and-goto-next-match
+	;;   "grp" 'evil-mc-skip-and-goto-prev-match
+	;;   "grI" 'evil-mc-make-cursor-in-visual-selection-beg
+	;;   "grA" 'evil-mc-make-cursor-in-visual-selection-end)
 
   #+end_src
   
@@ -1144,30 +1145,32 @@
   Clocking and other properties here: https://orgmode.org/manual/Template-elements.html#Template-elements
   #+begin_src emacs-lisp
 
-    (setq org-capture-templates
-	  '(("t" "Tasks / Projects / Appointments")
-	    ("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
-	     "* TODO  %^{Title}\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  %?\n  :END:\n  %a\n  %i" :empty-lines 1)
-	    ("ta" "Appointment" entry (file+olp "~/Documents/org/tasks.org" "Appointments")
-	     "* TODO  %^{Title} %?\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  \n  :END:\n  %a\n  %i" :empty-lines 1)
-	    ("j" "Journal Entries")
-	    ("jj" "Journal" entry (file+olp+datetree "~/Documents/org/journal.org")
-	     "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n" :empty-lines 1)
+	(setq org-capture-templates
+	      '(("t" "Tasks / Projects / Appointments")
+		("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
+		 "* TODO  %^{Title}\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  %?\n  :END:\n  %a\n  %i" :empty-lines 1)
+		("ta" "Appointment" entry (file+olp "~/Documents/org/tasks.org" "Appointments")
+		 "* TODO  %^{Title} %?\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  \n  :END:\n  %a\n  %i" :empty-lines 1)
+		("j" "Journal Entries")
+		("jj" "Journal" entry (file+olp+datetree "~/Documents/org/journal.org")
+		 "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n" :empty-lines 1)
+		("jl" "Log" entry (file+olp+datetree "~/Documents/org/journal.org")
+		 "\n* %<%I:%M %p> - LOG :journal:log:\n** DONE  %?\n\n" :empty-lines 1)
 
-	    ("b" "Book log")
-	    ("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
-	     ;; "| %^{Title} | %^{Author} | %^{Pages} | %^{Started} |  |  | %^{Notes} |" :kill-buffer t)
-	     "* %^{Title}\n:PROPERTIES:\n:Title: %\\1\n:Author: %^{Author}\n:Pages: ?\n:Started: %U\n:Finished: ?\n:Sessions: ?\n:Notes: %^{Notes} %?\n:END:"
-	     :kill-buffer t)
-	    ("m" "Metrics Capture")
-	    ("mw" "Weight" table-line (file+headline "~/Documents/org/metrics.org" "Weight")
-	     "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
-	    ("mg" "Guitar" table-line (file+headline "~/Documents/org/metrics.org" "Guitar")
-	     "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
-	    ("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
-	     "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
-	    ("mr" "Reading" table-line (file+headline "~/Documents/org/metrics.org" "Reading")
-	     "| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
+		("b" "Book log")
+		("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
+		 ;; "| %^{Title} | %^{Author} | %^{Pages} | %^{Started} |  |  | %^{Notes} |" :kill-buffer t)
+		 "* %^{Title}\n:PROPERTIES:\n:Title: %\\1\n:Author: %^{Author}\n:Pages: ?\n:Started: %U\n:Finished: ?\n:Sessions: ?\n:Notes: %^{Notes} %?\n:END:"
+		 :kill-buffer t)
+		("m" "Metrics Capture")
+		("mw" "Weight" table-line (file+headline "~/Documents/org/metrics.org" "Weight")
+		 "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
+		("mg" "Guitar" table-line (file+headline "~/Documents/org/metrics.org" "Guitar")
+		 "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+		("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
+		 "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+		("mr" "Reading" table-line (file+headline "~/Documents/org/metrics.org" "Reading")
+		 "| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
 
   #+end_src
 
