@@ -1,0 +1,108 @@
+# restart daemons
+super + shift + r ; s
+    killall sxhkd && sxhkd &
+
+# shutdown
+super + shift + Delete
+    sudo shutdown now
+
+# lock screen
+super + shift + s
+    slock
+
+# brightness
+XF86MonBrightnessDown
+    backlight_control -10
+
+XF86MonBrightnessUp
+    backlight_control +10
+
+# volume
+XF86AudioRaiseVolume
+    pa-volup
+    #volup
+
+XF86AudioLowerVolume
+    pa-voldown
+    #voldown
+
+XF86AudioMute
+    pa-mute
+    #volmute
+
+XF86AudioPlay
+    mpc toggle
+
+XF86AudioStop
+    mpc stop
+
+XF86AudioNext
+    mpc next
+
+XF86AudioPrev
+    mpc prev
+
+# screenshots
+@Print
+    screenshot.sh
+
+super + Print
+    gnome-screenshot -i
+
+# dmenu-integrated scripts
+super + shift + b
+    bookmarklauncher.sh
+
+# launch gui programs
+super + x ; b
+    firefox -private >/dev/null 2>&1
+
+super + x ; g
+    gimp
+
+F8
+    emacs --with-profile simacs
+
+ctrl + F8
+    emacs --with-profile simacs -f sp/open-with-tasks-and-capture
+
+# launch terminal programs
+super + x ; w
+    st -e w3m https://www.duckduckgo.com/lite
+
+super + x ; m
+    st -e ncmpcpp
+
+super + x ; r
+    st -e start-rtv.sh
+
+super + x ; n
+    st -e newsbeuter
+
+# launch ranger in specific folder
+super + r ; b
+    st -e ranger ~/.local/usr/bin
+
+super + r ; c
+    st -e ranger ~/.config
+
+super + r ; d
+    st -e ranger ~/Documents
+
+super + r ; h
+    st -e ranger ~
+
+super + r ; j
+    st -e ranger ~/Projects
+
+super + r ; m
+    st -e ranger ~/Music
+
+super + r ; o
+    st -e ranger ~/Downloads
+
+super + r ; p
+    st -e ranger ~/Pictures
+
+super + r ; v
+    st -e ranger ~/Videos
