@@ -211,6 +211,23 @@
       :config
       (winner-mode))
 
+    (defun sp/vterm-toggle ()
+      "Toggle between vterm and the last buffer.
+    If no vterm buffer is open, then open it and go to it."
+      (interactive)
+      (if (equal major-mode 'vterm-mode)
+      (pop-to-buffer (other-buffer))
+      (sp/vterm-toggle--find-or-open-vterm)))
+
+    (defun sp/vterm-toggle--find-or-open-vterm ()
+      (let ((shell-buffer (get-buffer "*vterm*")))
+	(if shell-buffer (pop-to-buffer shell-buffer)
+	  (vterm))))
+
+    (with-eval-after-load 'evil
+	(define-key evil-normal-state-map (kbd "C-t") 'sp/vterm-toggle)
+	(define-key evil-insert-state-map (kbd "C-t") 'sp/vterm-toggle))
+
   #+end_src
 
 * Tabs
@@ -320,6 +337,8 @@
 
     (setq enable-recursive-minibuffers t)
 
+    (use-package consult)
+
     (use-package marginalia
       :config
       (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
@@ -406,75 +425,68 @@
 
   #+end_src
   
-* Hydras
-  #+begin_src emacs-lisp
+* Transients
+#+begin_src emacs-lisp
+  (require 'transient)
+  (transient-define-prefix sp/transient--parens ()
+    "Transient for manipulating lisp."
+    [["Navigate"
+      ("n" "next" sp-next-sexp :transient t)
+      ("p" "previous" sp-previous-sexp :transient t)
+      ("f" "forward" sp-forward-sexp :transient t)
+      ("c" "backward" sp-backward-sexp :transient t)
+      ("u" "up" sp-up-sexp :transient t)
+      ("v" "down" sp-down-sexp :transient t)
+      ("e" "end" sp-end-of-sexp :transient t)
+      ("E" "evaluate" eval-last-sexp :transient t)]
+     ["Change"
+      ("s" "slurp" sp-forward-slurp-sexp :transient t)
+      ("S" "backward slurp" sp-backward-slurp-sexp :transient t)
+      ("b" "forward barf" sp-forward-barf-sexp :transient t)
+      ("B" "backward barf" sp-backward-barf-sexp :transient t)]
+     ["Kill"
+      ("d" "kill" sp-kill-sexp :transient t)
+      ("D" "backward kill" sp-backward-kill-sexp :transient t)]]
+    [("q" "quit parens transient" transient-quit-all)])
 
-    (use-package hydra
-      :defer)
+  (transient-define-prefix sp/transient--zoom ()
+    "Transient to group zoom commands."
+    [("j" "zoom in" text-scale-increase :transient t)
+     ("k" "zoom out" text-scale-decrease :transient t)
+     ("q" "quit zoom" transient-quit-all)])
 
-    (defhydra hydra-parens (:color pink
-				   :hint nil)
-      "
-    ^Navigate sexp^         ^Change sexp^              
-    ^^^^^^^^--------------------------------------------------
-    _n_: next    _u_: up      _s_: slurp        _d_: kill      
-    _p_: prev    _v_: down    _S_: bkwd slurp   _D_: bkwd kill
-    _f_: fwd     _e_: end     _b_: barf         
-    _c_: back    _E_: eval    _B_: bkwd barf    _q_: quit            
-    "
+  (transient-define-prefix sp/transient--toggles ()
+    "Transient for toggles."
+    [("f" "fill" auto-fill-mode :transient t)
+     ("t" "truncate" toggle-truncate-lines :transient t)
+     ("w" "whitespace" whitespace-mode :transient t)
+     ("T" "theme" consult-theme :transient t)
+     ("q" "quit toggles" transient-quit-all)])
 
-      ("n" sp-next-sexp)
-      ("p" sp-previous-sexp)
-      ("f" sp-forward-sexp)
-      ("c" sp-backward-sexp)
-      ("e" sp-end-of-sexp)
-      ("E" eval-last-sexp)
-      ("u" sp-up-sexp)
-      ("v" sp-down-sexp)
-      ("d" sp-kill-sexp)
-      ("D" sp-backward-kill-sexp)
-      ("s" sp-forward-slurp-sexp)
-      ("S" sp-backward-slurp-sexp)
-      ("b" sp-forward-barf-sexp)
-      ("B" sp-backward-barf-sexp)
-      ("q" (message "Done") :exit t :color blue))
+  (transient-define-prefix sp/transient--org-headings ()
+    "Transient for org headings."
+    [["Toggle"
+      ("t" "toggle" org-toggle-heading :transient t)
+      ("i" "insert heading" org-insert-heading :transient t)]
+     ["Outline"
+      ("h" "promote" org-metaleft :transient t)
+      ("l" "demote" org-metaright :transient t)]
+     ["Sequence"
+      ("j" "move down" org-metadown :transient t)
+      ("k" "move up" org-metaup :transient t)]]
+     [("q" "quit org-headings transient" transient-quit-all)])
 
-    (defhydra hydra-zoom nil
-      "zoom"
-      ("j" text-scale-increase "in")
-      ("k" text-scale-decrease "out")
-      ("q" (message "Done") :exit t :color blue))
 
-    (defhydra hydra-toggles nil
-      "toggles"
-      ("f" auto-fill-mode "fill")
-      ("t" toggle-truncate-line "truncate")
-      ("w" whitespace-mode "whitespace")
-      ("T" consult-theme "theme")
-      ("q" nil "cancel"))
+  (transient-define-prefix sp/transient--smerge ()
+    "Transient for smerge commands."
+    [["Choose" ("a" "keep all" smerge-keep-all :transient t)
+      ("u" "keep upper" smerge-keep-upper :transient t)
+      ("l" "keep lower" smerge-keep-lower :transient t)]
+     ["Move" ("n" "next conflict" smerge-next :transient t)
+      ("p" "prev conflict" smerge-prev :transient t)]]
+    [("q" "quit smerge transient" transient-quit-all)])
 
-    (defhydra sp/hydra-org-headings (:color pink
-					    :hint nil)
-      "
-	  _h_: promote  _j_: move down  _k_: move up  _l_: demote  _t_: toggle  _i_: insert at point  _q_: quit" 
-      ("h" org-metaleft)
-      ("j" org-metadown)
-      ("k" org-metaup)
-      ("l" org-metaright)
-      ("t" org-toggle-heading)
-      ("i" org-insert-heading)
-      ("q" (message "Done") :exit t :color blue))
-
-    (defhydra hydra-smerge nil
-      "smerge commands"
-      ("a" smerge-keep-all "keep all")
-      ("u" smerge-keep-upper "keep upper")
-      ("l" smerge-keep-lower "keep lower")
-      ("n" smerge-next "next conflict")
-      ("p" smerge-prev "prev conflict")
-      ("q" (message "Done") :exit t :color blue))
-
-  #+end_src
+#+end_src
 
 * Keys: which-key and general
   #+begin_src emacs-lisp
@@ -531,13 +543,6 @@
       "aj" '(dired-jump :which-key "dired-jump")
       "at" '(vterm :which-key "terminal")
       "au" '(undo-tree-visualize :which-key "undo-tree")
-      "am"  '(:ignore t :which-key "media")
-      "amm" '(emms :which-key "open emms")
-      "amp" '(emms-pause :which-key "play / pause")
-      "amf" '(emms-play-file :which-key "play file")
-      "ama" '(emms-add-file :which-key "add file")
-      "amA" '(emms-add-directory :which-key "add directory")
-      "amt" '(emms-tag-editor-edit :which-key "edit tags")
       "ax" '(org-capture :which-key "org capture")
       "ae" '(:ignore t :which-key "eww")
       "aee" '(eww :which-key "run eww")
@@ -561,7 +566,7 @@
       "ft" '(treemacs :which-key "treemacs")
       "g" '(:ignore t :which-key "git")
       "gs" '(magit-status :which-key "status")
-      "gm" '(hydra-smerge/body :which-key "(s)merge")
+      "gm" '(sp/transient--smerge :which-key "(s)merge")
       "h" '(:ignore t :which-key "help")
       "q" '(:ignore t :which-key "quit")
       "qa" '(evil-quit-all :which-key "quit all")
@@ -572,7 +577,7 @@
       "jj" '(sp/open-journal :which-key "journal.org")
       "jt" '(sp/open-tasks :which-key "tasks.org")
       "k" '(:ignore t :which-key "lisp")
-      "kk" '(hydra-parens/body :which-key "hydra")
+      "kk" '(sp/transient--parens :which-key "parens")
       "ke" '(sp-end-of-sexp :which-key "end")
       "kE" '(eval-last-sexp :which-key "evaluate")
       "ks" '(sp-forward-slurp-sexp :which-key "forward slurp")
@@ -609,7 +614,7 @@
       "oitt" '(org-time-stamp-inactive :which-key "inactive")
       "oita" '(org-time-stamp :which-key "active")
       "oj" '(consult-outline :which-key "jump")
-      "oh" '(sp/hydra-org-headings/body :which-key "headings")
+      "oh" '(sp/transient--org-headings :which-key "headings")
       "oc" '(:ignore t :which-key "checkbox")
       "occ" '(sp/org-insert-checkbox :which-key "insert")
       "oct" '(org-toggle-checkbox :which-key "toggle")
@@ -675,8 +680,8 @@
       "xtl" '(transpose-lines :which-key "lines")
       "xts" '(transpose-sexps :which-key "sexps")
       "xtr" '(transpose-regions :which-key "regions")
-      "xz" '(hydra-zoom/body :which-key "zoom")
-      "T" '(hydra-toggles/body :which-key "toggles"))
+      "xz" '(sp/transient--zoom :which-key "zoom")
+      "T" '(sp/transient--toggles :which-key "toggles"))
 
     (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-timer)
     (general-nmap "SPC h" (general-simulate-key "C-h"))
@@ -795,6 +800,10 @@
     (use-package vterm
       :commands vterm)
 
+    (defun sp/add-vterm-toggle-key ()
+     (evil-define-key '(normal insert visual) vterm-mode-map (kbd "C-t") 'sp/vterm-toggle))
+
+    (add-hook 'vterm-mode-hook 'sp/add-vterm-toggle-key)
   #+end_src
   
 * Magit
@@ -955,46 +964,46 @@
 * DAP
   #+begin_src emacs-lisp
 
-    (use-package dap-mode
-      :defer
-      ;; Uncomment the config below if you want all UI panes to be hidden by default!
-      ;; :custom
-      ;; (lsp-enable-dap-auto-configure nil)
-      :config
-      (dap-ui-mode 1)
+    ;; (use-package dap-mode
+    ;;   :defer
+    ;;   ;; Uncomment the config below if you want all UI panes to be hidden by default!
+    ;;   ;; :custom
+    ;;   ;; (lsp-enable-dap-auto-configure nil)
+    ;;   :config
+    ;;   (dap-ui-mode 1)
 
-      :config
-      ;; Set up Node debugging
-      (require 'dap-node)
-      (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+    ;;   :config
+    ;;   ;; Set up Node debugging
+    ;;   (require 'dap-node)
+    ;;   (dap-node-setup) ;; Automatically installs Node debug adapter if needed
 
-      ;; Bind `C-c l d` to `dap-hydra` for easy access
-      (general-define-key
-       :keymaps 'lsp-mode-map
-       :prefix lsp-keymap-prefix
-       "d" '(dap-hydra t :which-key "debugger"))
-      (require 'dap-lldb)
-      (require 'dap-gdb-lldb)
-      ;; installs .extension/vscode
-      (dap-gdb-lldb-setup)
-      (dap-register-debug-template
-       "Rust::LLDB Run Configuration"
-       (list :type "lldb"
-	     :request "launch"
-	     :name "LLDB::Run"
-	     :gdbpath "rust-lldb"
-	     :target nil
-	     :cwd nil))
+    ;;   ;; Bind `C-c l d` to `dap-hydra` for easy access
+    ;;   (general-define-key
+    ;;    :keymaps 'lsp-mode-map
+    ;;    :prefix lsp-keymap-prefix
+    ;;    "d" '(dap-hydra t :which-key "debugger"))
+    ;;   (require 'dap-lldb)
+    ;;   (require 'dap-gdb-lldb)
+    ;;   ;; installs .extension/vscode
+    ;;   (dap-gdb-lldb-setup)
+    ;;   (dap-register-debug-template
+    ;;    "Rust::LLDB Run Configuration"
+    ;;    (list :type "lldb"
+    ;; 	 :request "launch"
+    ;; 	 :name "LLDB::Run"
+    ;; 	 :gdbpath "rust-lldb"
+    ;; 	 :target nil
+    ;; 	 :cwd nil))
 
-      (dap-register-debug-template
-       "Rust::GDB Run Configuration"
-       (list :type "gdb"
-	     :request "launch"
-	     :name "GDB::Run"
-	     :gdbpath "rust-gdb"
-	     :environment-variables '(("KEY" . "VALUE"))
-	     :target nil
-	     :cwd nil)))
+    ;;   (dap-register-debug-template
+    ;;    "Rust::GDB Run Configuration"
+    ;;    (list :type "gdb"
+    ;; 	 :request "launch"
+    ;; 	 :name "GDB::Run"
+    ;; 	 :gdbpath "rust-gdb"
+    ;; 	 :environment-variables '(("KEY" . "VALUE"))
+    ;; 	 :target nil
+    ;; 	 :cwd nil)))
 
   #+end_src
   
