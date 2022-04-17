@@ -618,7 +618,7 @@
       "oc" '(:ignore t :which-key "checkbox")
       "occ" '(sp/org-insert-checkbox :which-key "insert")
       "oct" '(org-toggle-checkbox :which-key "toggle")
-      "och" '(org-toggle-checkbox-half :which-key "toggle half")
+      "och" '(sp/org-toggle-checkbox-half :which-key "toggle half")
       "ot" '(org-todo :which-key "todo")
       "oT" '(:ignore t :which-key "table")
       "oTA" '(org-table-align :which-key "align")
