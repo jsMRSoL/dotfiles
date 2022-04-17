@@ -58,3 +58,4 @@ nvim/.config/nvim/plugin/packer_compiled.lua
 /simacs/.simacs_dir/layouts/
 /simacs/.simacs_dir/init.el
 /simacs/.simacs_dir/#simacs.org#
+/sxhkd/.config/sxhkd/sxhkdrc
