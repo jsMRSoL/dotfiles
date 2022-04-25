@@ -539,6 +539,7 @@
       "u" '(universal-argument :which-key "c-u")
       "`" '(org-capture :which-key "org capture")
       "a" '(:ignore t :which-key "apps")
+      "ac" '(calc :which-key "calc")
       "ad" '(dired :which-key "dired")
       "aj" '(dired-jump :which-key "dired-jump")
       "at" '(vterm :which-key "terminal")
