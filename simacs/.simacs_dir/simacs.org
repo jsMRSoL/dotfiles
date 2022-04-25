@@ -1043,6 +1043,11 @@
 
   #+end_src
 
+** Tables
+#+begin_src emacs-lisp
+  (setq org-table-use-standard-references t)
+#+end_src
+
 ** Logging
    #+begin_src emacs-lisp
 
