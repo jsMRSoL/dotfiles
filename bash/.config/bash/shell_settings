@@ -34,7 +34,7 @@ export NVM_DIR="$HOME/.config/nvm"
 export LSJ_PG_DATABASE_URL=postgres://simon:postgres@192.168.1.103/greeklexicon
 export LATIN_PG_DATABASE_URL=postgres://simon:postgres@localhost/test-latin
 ## To make python3 virtual environments work
-export PY_VE_WRAPPER="$HOME/.local/bin/virtualenvwrapper.sh"
+export PY_VE_WRAPPER="/usr/bin/virtualenvwrapper.sh"
 [ -f "$PY_VE_WRAPPER" ] && source "$PY_VE_WRAPPER"
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 ################################################################################
