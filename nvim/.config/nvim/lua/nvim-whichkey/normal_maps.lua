@@ -35,6 +35,16 @@ local normal_mappings = {
       p = { "<Cmd>:bprev<CR>", "prev" },
     },
 
+    c = {
+      name = "+quickfix",
+      n = { "<Cmd>cnext<CR>", "next" },
+      p = { "<Cmd>cprevious<CR>", "previous" },
+      o = { "<Cmd>copen<CR>", "open" },
+      c = { "<Cmd>cclose<CR>", "close" },
+      C = { "<Cmd>cexpr []<CR>", "clear" },
+      r = { "<Cmd>colder<CR>", "restore" },
+    },
+
     d = {
       name = "+dap",
       d = { "<Cmd>lua require('dap').continue()<CR>", "start/continue" },
