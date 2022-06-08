@@ -51,7 +51,6 @@ for var in "$@"; do
             ffmpegthumbnailer -i $var \
                 -s 250 \
                 -o thumbs/$var-del.jpg 2>/dev/null
-            newname=
             convert thumbs/$var-del.jpg \
                 -crop 250x250 \
                 -gravity center \
