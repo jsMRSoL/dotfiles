@@ -12,7 +12,7 @@ local opts = {
 local normal_mappings = {
   ["<leader>"] = {
     ["<leader>"] = { "<Esc>:", ":" },
-    ["\\"] = { "<Esc>:%s/", ":" },
+    ["\\"] = { "<Esc>:%s/", "%s/" },
     ["<CR>"] = { "@@", "repeat macro" },
     -- ["'"] = { "<Cmd>FloatermToggle<CR>", "toggle term" },
     a = {
@@ -78,11 +78,7 @@ local normal_mappings = {
         p = { "<Cmd>lua require('dap-settings.python-debug')<CR>", "python" },
         r = { "<Cmd>DebugRust<CR>", "rust" },
       },
-      k = { "<Cmd>lua require('dap.ui.variables').hover()<CR>", "hover var" },
-      K = {
-        "<Cmd>lua require('dap.ui.variables').hover()<CR>",
-        "hover scopes",
-      },
+      k = { "<Cmd>lua require('dapui').eval()<CR>", "hover var" },
       q = { "<Cmd>lua require('dapui').toggle()<CR>", "ui toggle" },
     },
     e = {
@@ -259,7 +255,7 @@ local normal_mappings = {
       C = { "<Cmd>Telescope colorscheme<CR>", "colours" },
       M = { "<Cmd>Telescope man_pages<CR>", "man" },
       c = { "<Cmd>nohls<CR>", "clear" },
-      d = { "<Cmd>Telescope diagnostics<CR>", "diagnostics" },
+      d = { "<Cmd>Telescope diagnostics<CR>", "clear" },
       f = {
         "<Cmd>lua require('nvim-telescope').search_dotfiles()<CR>",
         "dotfiles",
