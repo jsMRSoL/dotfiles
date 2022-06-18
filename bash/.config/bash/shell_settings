@@ -32,7 +32,7 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  ## This loads nvm bash_completion
 ## database URLs
 export LSJ_PG_DATABASE_URL=postgres://simon:postgres@192.168.1.103/greeklexicon
-export LATIN_PG_DATABASE_URL=postgres://simon:postgres@localhost/test-latin
+export LATIN_PG_DATABASE_URL=postgres://simon:postgres@localhost/latin_dictionary
 ## To make python3 virtual environments work
 export PY_VE_WRAPPER="/usr/bin/virtualenvwrapper.sh"
 [ -f "$PY_VE_WRAPPER" ] && source "$PY_VE_WRAPPER"
