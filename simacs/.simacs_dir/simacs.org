@@ -1263,7 +1263,7 @@
 	(let ((screen-width (window-width)))
         (evil-window-vsplit)
 	(find-file "~/Documents/org/tasks.org")
-	(evil-window-set-width (- screen-width 50))))
+	(evil-window-set-width (max (- screen-width 60) 60))))
 
       (sp/open-with-tasks-and-agenda)
 #+end_src
