@@ -216,6 +216,8 @@ local normal_mappings = {
       x = {
         name = "+trouble",
         x = { "<cmd>Trouble<CR>", "Trouble" },
+        t = { "<cmd>TroubleToggle<CR>", "toggle" },
+        r = { "<cmd>TroubleRefresh<CR>", "refresh" },
         w = {
           "<cmd>Trouble workspace_diagnostics<CR>",
           "workspace_diagnostics",
@@ -333,6 +335,11 @@ local normal_mappings = {
       k = { "<Cmd>lua require('sp-functions').keep_lines()<CR>", "keep lines (regexp)" },
       e = { "<Cmd>lua require('sp-functions').flush_empty_lines()<CR>", "flush empty lines" },
       p = { "<Cmd>lua require('sp-functions').popup_diacritic_words()<CR>", "pick diacritics" },
+      l = {
+        name = "+latin",
+        l = { "<Cmd>lua require('latin-dictionary').create_layout()<CR>", "dictionary mode"},
+        S = { "<Cmd>lua require('text-processing').para_to_lines()<CR>", "split para to lines"},
+      }
     },
 
     y = {
