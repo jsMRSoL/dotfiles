@@ -18,7 +18,10 @@ return require("packer").startup(function()
   use("nvim-lua/popup.nvim")
   use("nvim-lua/plenary.nvim")
   -- lsp config
-  use("neovim/nvim-lspconfig")
+  use({
+    "neovim/nvim-lspconfig",
+    after = "nvim-lsp-installer",
+  })
   use("nvim-lua/lsp_extensions.nvim")
   use("williamboman/nvim-lsp-installer")
   use("onsails/lspkind-nvim")
@@ -57,6 +60,7 @@ return require("packer").startup(function()
   use("nvim-telescope/telescope.nvim")
   use("nvim-telescope/telescope-fzy-native.nvim")
   use("nvim-telescope/telescope-media-files.nvim")
+  use("nvim-telescope/telescope-ui-select.nvim")
   -- explorer
   use("kyazdani42/nvim-tree.lua")
   use("kyazdani42/nvim-web-devicons")
@@ -136,4 +140,6 @@ return require("packer").startup(function()
       "nvim-lua/plenary.nvim",
     },
   })
+  use("AndrewRadev/splitjoin.vim")
+  use_rocks("lunajson")
 end)
