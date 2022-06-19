@@ -66,11 +66,11 @@
       :init (doom-modeline-mode 1))
 
     (use-package modus-themes
-      :init (load-theme 'modus-vivendi t)
-      :custom
-      (setq doom-themes-enable bold t
-	    doom-themes-enable-italic t)
-      (doom-themes-org-config))
+      :init (load-theme 'modus-vivendi t))
+      ;; :custom
+    ;;   (setq doom-themes-enable bold t
+    ;; 	doom-themes-enable-italic t)
+    ;;   (doom-themes-org-config))
 
     (custom-set-faces '(default ((t
 				  (:family "Source Code Pro"
