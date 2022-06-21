@@ -334,6 +334,8 @@ local normal_mappings = {
       l = {
         name = "+latin",
         l = { "<Cmd>lua require('latin-dictionary').create_layout()<CR>", "dictionary mode"},
+        g = { "<Cmd>lua require('latin-dictionary').get_line_entries({level = 'gcse'})<CR>", "dictionary mode"},
+        a = { "<Cmd>lua require('latin-dictionary').get_line_entries({level = 'asvocab'})<CR>", "dictionary mode"},
         S = { "<Cmd>lua require('text-processing').para_to_lines()<CR>", "split para to lines"},
       }
     },

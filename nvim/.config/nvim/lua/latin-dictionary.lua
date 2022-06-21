@@ -53,33 +53,83 @@ function latin_funcs.get_entries(on_headword)
   return entries
 end
 
+function latin_funcs.get_line_entries(opts)
+  local line = vim.api.nvim_get_current_line()
+  line = vim.fn.substitute(line, "[;:!,\\.]", "", "g")
+
+  local level
+  if ( opts.level == "gcse") then
+    level = "--gcse"
+  else
+    level = "--asvocab"
+  end
+
+  local cmd = "/home/simon/Projects/rust/latin_dictionary/target/debug/query_many"
+    .. " "
+    .. level
+    .. " "
+    .. line
+  local entries_json_string = vim.fn.system(cmd)
+
+  local entries_json = lunajson.decode(entries_json_string)
+
+  local terms = vim.fn.split(line)
+  local lines = {}
+
+  for _, term in pairs(terms) do
+    local json_entry = entries_json[term]
+    if #json_entry == 0 then
+      table.insert(lines, "- " .. term .. " : NOT FOUND")
+    else
+      for _, entry in pairs(json_entry) do
+        table.insert(
+          lines,
+          "- " .. entry[1] .. " [" .. entry[2] .. "] : " .. entry[3]
+        )
+      end
+    end
+  end
+
+  local line_nr, _ = unpack(vim.api.nvim_win_get_cursor(0))
+  -- P(line_nr)
+  api.nvim_buf_set_lines(0, line_nr, line_nr, true, lines)
+end
+
 function latin_funcs.create_layout()
   text_win = api.nvim_get_current_win()
   text_buf = api.nvim_get_current_buf()
   vim.api.nvim_buf_set_keymap(
     text_buf,
-    "n", "<CR>", ':lua require("latin-dictionary").lookup()' .. "<cr>",
-    { nowait = true, noremap = true, silent = true, }
+    "n",
+    "<CR>",
+    ':lua require("latin-dictionary").lookup()' .. "<cr>",
+    { nowait = true, noremap = true, silent = true }
   )
   vim.api.nvim_buf_set_keymap(
     text_buf,
-    "n", "<s-CR>", ':lua require("latin-dictionary").lookup(true)' .. "<cr>",
-    { nowait = true, noremap = true, silent = true, }
+    "n",
+    "<s-CR>",
+    ':lua require("latin-dictionary").lookup(true)' .. "<cr>",
+    { nowait = true, noremap = true, silent = true }
   )
 
   api.nvim_command("50vnew")
-  dict_win = api.nvim_get_current_win()
+  -- dict_win = api.nvim_get_current_win()
   dict_buf = api.nvim_get_current_buf()
   vim.api.nvim_buf_set_name(0, "Dictionary Entries")
   vim.api.nvim_buf_set_keymap(
     dict_buf,
-    "n", "<CR>", ':lua require("latin-dictionary").add_to_vocab()' .. "<cr>",
-    { nowait = true, noremap = true, silent = true, }
+    "n",
+    "<CR>",
+    ':lua require("latin-dictionary").add_to_vocab()' .. "<cr>",
+    { nowait = true, noremap = true, silent = true }
   )
   vim.api.nvim_buf_set_keymap(
     dict_buf,
-    "n", "N", ':lua require("latin-dictionary").next_entry()' .. "<cr>",
-    { nowait = true, noremap = true, silent = true, }
+    "n",
+    "N",
+    ':lua require("latin-dictionary").next_entry()' .. "<cr>",
+    { nowait = true, noremap = true, silent = true }
   )
 
   api.nvim_command("new")
@@ -191,14 +241,14 @@ function latin_funcs.add_to_vocab()
 end
 
 function latin_funcs.next_entry()
-  vim.fn.search('^#')
+  vim.fn.search("^#")
   local line = vim.api.nvim_get_current_line()
-  if line:find('# LEWIS') then
-    vim.fn.search('Meanings: ')
-  elseif line:find('#>Meanings: ') then
-      return
+  if line:find("# LEWIS") then
+    vim.fn.search("Meanings: ")
+  elseif line:find("#>Meanings: ") then
+    return
   else
-      vim.cmd('normal j')
+    vim.cmd("normal j")
   end
 end
 
