@@ -33,6 +33,7 @@ export NVM_DIR="$HOME/.config/nvm"
 ## database URLs
 export LSJ_PG_DATABASE_URL=postgres://simon:postgres@192.168.1.103/greeklexicon
 export LATIN_PG_DATABASE_URL=postgres://simon:postgres@localhost/latin_dictionary
+export LSJ_PG_DATABASE_URL_LOCAL=postgres://simon:postgres@localhost/greek_lexicon
 ## To make python3 virtual environments work
 export PY_VE_WRAPPER="/usr/bin/virtualenvwrapper.sh"
 [ -f "$PY_VE_WRAPPER" ] && source "$PY_VE_WRAPPER"
@@ -84,6 +85,7 @@ alias rm='echo "Would it be better to use trash-put? (Use \\rm if not.)"'
 alias tp='trash-put'
 alias tl='trash-list'
 alias trr='trash-restore'
+alias tmux='tmux -2'
 alias get_races='~/Projects/python/racingpost/rp.py'
 alias get_results='~/Projects/python/resultschecker/racingresults.py'
 alias get_stats='~/Projects/python/winners/winning-stats.py'
