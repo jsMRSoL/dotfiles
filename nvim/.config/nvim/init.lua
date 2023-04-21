@@ -26,6 +26,7 @@ require('nvim-tree-sitter')
 require('nvim-lspkind')
 require('nvim-tree-config')
 -- lsp
-require('lsp')
+-- require('lsp')
+require('nvim-mason-config')
 require('nvim-null-ls-settings')
 require('dap-settings')

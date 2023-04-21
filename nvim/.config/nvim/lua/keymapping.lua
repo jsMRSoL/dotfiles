@@ -38,7 +38,7 @@ local mappings = {
   { 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts },
   { 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts },
   { 'n', '<space>lq', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts },
-  { "n", "<space>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts },
+  { "n", "<space>lf", "<cmd>lua vim.lsp.buf.format { async = true }<CR>", opts },
   { "v", "<space>lf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts },
   -- "overpasting"
   { "v", "p", '"_dp', opts },

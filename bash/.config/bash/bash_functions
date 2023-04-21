@@ -54,19 +54,6 @@ function m() {
     tmux attach -t music:playlist.left
 }
 
-function v() {
-    if tmux has-session -t Editor; then
-        tmux attach -t Editor
-        exit
-    fi
-
-    tmux new-session -d -s Editor -n vim
-    tmux send-keys -t Editor:vim "vim -c Files" Enter
-    tmux split-window -t Editor:vim -h
-    tmux resize-pane -t Editor:vim.left -R 10
-    tmux attach -t Editor:vim.left
-}
-
 function n() {
     if tmux has-session -t RSS; then
         tmux attach -t RSS

@@ -5,7 +5,7 @@ if not status_ok then
   return
 end
 
-capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 
 local on_attach = function(client)
   -- Set autocommands conditional on server_capabilities
@@ -23,9 +23,10 @@ local on_attach = function(client)
   end
 end
 
-local lsp_installer = require("nvim-lsp-installer")
-
--- local lsp_config = require("lsp_config")
+require("mason").setup()
+require("mason-lspconfig").setup()
+-- local lsp_installer = require("nvim-lsp-installer")
+local lsp_installer = require("mason-lspconfig")
 
 -- Register a handler that will be called for all installed servers.
 -- Alternatively, you may also register handlers on specific server instances instead (see example below).
@@ -41,56 +42,65 @@ lsp_installer.on_server_ready(function(server)
   -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
   --
   if server.name == "rust_analyzer" then
-      -- opts.settings = {
-      --   ["rust-analyzer"] = {
-      --     assist = {
-      --       importMergeBehavior = "last",
-      --       importPrefix = "by_self",
-      --     },
-      --     diagnostics = {
-      --       disabled = { "unresolved-import" },
-      --     },
-      --     cargo = {
-      --       loadOutDirsFromCheck = true,
-      --     },
-      --     procMacro = {
-      --       enable = true,
-      --     },
-      --     checkOnSave = {
-      --       -- command = "clippy",
-      --       command = "check",
-      --     },
-      --   }, -- debugging stuff
-      --   dap = {
-      --     adapter = {
-      --       type = "executable",
-      --       command = "lldb-vscode",
-      --       name = "rt_lldb",
-      --     },
-      --   },
-      -- }
-      --
-      -- opts.handlers = {
-      --   ["textDocument/publishDiagnostics"] = vim.lsp.with(
-      --     vim.lsp.diagnostic.on_publish_diagnostics,
-      --     {
-      --       virtual_text = true,
-      --       signs = true,
-      --       underline = false,
-      --       update_in_insert = true,
-      --     }
-      --   ),
-      -- }
+    -- opts.settings = {
+    --   ["rust-analyzer"] = {
+    --     assist = {
+    --       importMergeBehavior = "last",
+    --       importPrefix = "by_self",
+    --     },
+    --     diagnostics = {
+    --       disabled = { "unresolved-import" },
+    --     },
+    --     cargo = {
+    --       loadOutDirsFromCheck = true,
+    --     },
+    --     procMacro = {
+    --       enable = true,
+    --     },
+    --     checkOnSave = {
+    --       -- command = "clippy",
+    --       command = "check",
+    --     },
+    --   }, -- debugging stuff
+    --   dap = {
+    --     adapter = {
+    --       type = "executable",
+    --       command = "lldb-vscode",
+    --       name = "rt_lldb",
+    --     },
+    --   },
+    -- }
+    --
+    -- opts.handlers = {
+    --   ["textDocument/publishDiagnostics"] = vim.lsp.with(
+    --     vim.lsp.diagnostic.on_publish_diagnostics,
+    --     {
+    --       virtual_text = true,
+    --       signs = true,
+    --       underline = false,
+    --       update_in_insert = true,
+    --     }
+    --   ),
+    -- }
 
-      -- Initialize the LSP via rust-tools instead
-      -- require("rust-tools").setup({
-      --   -- The "server" property provided in rust-tools setup function are the
-      --   -- settings rust-tools will provide to lspconfig during init.
-      --   -- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
-      --   -- with the user's own settings (opts).
-      --   server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
-      -- })
-    require("rust-tools").setup()
+    -- Initialize the LSP via rust-tools instead
+    -- require("rust-tools").setup({
+    --   -- The "server" property provided in rust-tools setup function are the
+    --   -- settings rust-tools will provide to lspconfig during init.
+    --   -- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
+    --   -- with the user's own settings (opts).
+    --   server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
+    -- })
+    require("rust-tools").setup({
+      tools = {
+        executor = require("rust-tools/executors").termopen,
+      },
+    })
+    require("lsp_signature").on_attach({
+      floating_window = false,
+      hint_enable = true,
+      hint_prefix = "(param) ",
+    })
     server:attach_buffers()
     -- server:setup(opts)
   elseif server.name == "sumneko_lua" then

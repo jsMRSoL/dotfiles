@@ -18,12 +18,17 @@ return require("packer").startup(function()
   use("nvim-lua/popup.nvim")
   use("nvim-lua/plenary.nvim")
   -- lsp config
-  use({
-    "neovim/nvim-lspconfig",
-    after = "nvim-lsp-installer",
-  })
+  -- use({
+  --   "neovim/nvim-lspconfig",
+  --   after = "nvim-lsp-installer",
+  -- })
   use("nvim-lua/lsp_extensions.nvim")
-  use("williamboman/nvim-lsp-installer")
+  -- use("williamboman/nvim-lsp-installer")
+  use({
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "neovim/nvim-lspconfig",
+    })
   use("onsails/lspkind-nvim")
   -- Lua
   use({
@@ -42,11 +47,15 @@ return require("packer").startup(function()
   use("hrsh7th/cmp-buffer")
   use("hrsh7th/cmp-path")
   use("hrsh7th/cmp-cmdline")
+  -- use("hrsh7th/cmp-nvim-lsp-signature-help")
   use("hrsh7th/nvim-cmp")
   -- For vsnip users.
   use("hrsh7th/cmp-vsnip")
   use("hrsh7th/vim-vsnip")
   use("hrsh7th/vim-vsnip-integ")
+  use({
+    "ray-x/lsp_signature.nvim",
+  })
   -- treesitter
   use("nvim-treesitter/nvim-treesitter")
   use("nvim-treesitter/playground")
@@ -117,12 +126,12 @@ return require("packer").startup(function()
     requires = { "kyazdani42/nvim-web-devicons", opt = true },
   })
   use("rbgrouleff/bclose.vim")
-  use({
-    "lewis6991/gitsigns.nvim",
-    requires = {
-      "nvim-lua/plenary.nvim",
-    },
-  })
+  -- use({
+  --   "lewis6991/gitsigns.nvim",
+  --   requires = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  -- })
   -- undo
   use("mbbill/undotree")
   -- org

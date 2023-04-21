@@ -10,27 +10,27 @@ local api = vim.api
 
 -- local test_json = '{\"lns\": [{\"head\":\"dominus\",\"orth_orig\":\"dŏmĭnus\",\"early_i_tags\":[\"a master\",\"possessor\",\"ruler\",\"lord\",\"proprietor\",\"owner\"],\"senses\":[{\"pos\":null,\"authors\":[\"Cato\",\"Cic.\",\"Hor.\",\"Non.\",\"Plaut.\",\"Quint.\",\"Sall.\",\"Suet.\",\"Ter.\",\"Varr.\",\"id.\"],\"i_tags\":[\"the young master\"]},{\"pos\":null,\"authors\":[\"Cic.\",\"Ov.\",\"Verg.\",\"id.\"],\"i_tags\":[\"a master\",\"lord\",\"ruler\",\"commander\",\"chief\",\"proprietor\",\"owner\",\"fin.\",\"the possessor of an art\"]},{\"pos\":\"adj.\",\"authors\":[\"Juv.\",\"Ov.\",\"Stat.\"],\"i_tags\":[\"<i>the auction spear\"]},{\"pos\":null,\"authors\":[],\"i_tags\":[]},{\"pos\":null,\"authors\":[\"Cic.\",\"Gell.\",\"Liv.\",\"Non.\"],\"i_tags\":[\"the master of a feast\",\"the entertainer\",\"host\"]},{\"pos\":null,\"authors\":[\"Cic.\",\"Plaut.\"],\"i_tags\":[\"The master of a play\",\"of public games; the employer\"]},{\"pos\":null,\"authors\":[\"Inscr. Orell.\",\"Mart.\",\"Phaedr.\",\"Suet.\",\"Tib.\"],\"i_tags\":[\"a title of the emperors\"]},{\"pos\":null,\"authors\":[\"Ov.\"],\"i_tags\":[\"A term of endearment in addressing a lover\"]},{\"pos\":null,\"authors\":[\"Mart.\",\"Sen.\",\"Suet.\"],\"i_tags\":[\"Sir\"]},{\"pos\":null,\"authors\":[\"Cic.\"],\"i_tags\":[\"A master\",\"assignee\"]},{\"pos\":null,\"authors\":[\"Oros.\",\"Vulg.\"],\"i_tags\":[\"the Lord\",\"fin.\"]}]}], \"gcse\": [[\"dominus, domini, m\",\"noun 2\",\"master\"]], \"clc\": [[\"dominus, domini, m.\",\"master\"]], \"asvocab\": [[\"dominus, domini, m\",\"noun 2\",\"master\"]], \"wwords\": [[\"dominus, domini\",\"NOUN\",\"2M\",\"owner, lord, master; the Lord; title for ecclesiastics/gentlemen;\"]]}'
 
-local latin_funcs = {}
+local greek_funcs = {}
 
-function latin_funcs.lookup(on_headword)
+function greek_funcs.lookup(on_headword)
   if layout_set == false then
-    latin_funcs.create_layout()
+    greek_funcs.create_layout()
     -- else
     --   print("Layout has been set")
   end
 
   -- dominos
-  local entries_json = latin_funcs.get_entries(on_headword)
+  local entries_json = greek_funcs.get_entries(on_headword)
 
   entries_json = vim.fn.substitute(entries_json, "\n", "", "g")
   -- print(dict_buf)
   -- api.nvim_buf_set_lines(dict_buf, 0, -1, true, { entries_json })
   -- clear buffer and add program output
-  local entries_formatted = latin_funcs.extract_and_format(entries_json)
+  local entries_formatted = greek_funcs.extract_and_format(entries_json)
   api.nvim_buf_set_lines(dict_buf, 0, -1, true, entries_formatted)
 end
 
-function latin_funcs.get_entries(on_headword)
+function greek_funcs.get_entries(on_headword)
   -- on_headword = on_headword or false
   -- get word under cursor using <cword>
   local current_word
@@ -38,12 +38,12 @@ function latin_funcs.get_entries(on_headword)
   local cmd
   if on_headword then
     current_word = vim.fn.input("Enter headword: ")
-    cmd = "/home/simon/Projects/rust/latin_dictionary/target/debug/query_headwords"
+    cmd = "/home/simon/Projects/rust/greek-db-maker/target/debug/query_headwords"
       .. " "
       .. current_word
   else
     current_word = vim.fn.expand("<cword>")
-    cmd = "/home/simon/Projects/rust/latin_dictionary/target/debug/query"
+    cmd = "/home/simon/Projects/rust/greek-db-maker/target/debug/query"
       .. " "
       .. current_word
   end
@@ -53,76 +53,8 @@ function latin_funcs.get_entries(on_headword)
   return entries
 end
 
-function latin_funcs.async_lookup(on_headword)
-  if layout_set == false then
-    latin_funcs.create_layout()
-    -- else
-    --   print("Layout has been set")
-  end
-  local current_word
-  local cmd
-  if on_headword then
-    current_word = vim.fn.input("Enter headword: ")
-    cmd =
-      "/home/simon/Projects/rust/latin_dictionary/target/debug/query_headwords"
-  else
-    current_word = vim.fn.expand("<cword>")
-    cmd = "/home/simon/Projects/rust/latin_dictionary/target/debug/query"
-  end
-  -- start async query
-  latin_funcs.async_get_entry(cmd, current_word)
-end
-
-function latin_funcs.display_entries(entries_json)
-  entries_json = vim.fn.substitute(entries_json, "\n", "", "g")
-  local entries_formatted = latin_funcs.extract_and_format(entries_json)
-  api.nvim_buf_set_lines(dict_buf, 0, -1, true, entries_formatted)
-end
-
-function latin_funcs.async_get_entry(cmd, current_word)
-  local entries = {}
-  print(cmd)
-  local function onread_out(err, data)
-    if err then
-      print("Error: ", err)
-    end
-    if data then
-      table.insert(entries, data)
-    end
-  end
-  local function onread_err(_, data)
-    if data then
-      print("Error: ", data)
-    end
-  end
-  local stdout = vim.loop.new_pipe(false)
-  local stderr = vim.loop.new_pipe(false)
-
-  Handle = vim.loop.spawn(
-    cmd,
-    {
-      args = { current_word },
-      stdio = { nil, stdout, stderr },
-    },
-    vim.schedule_wrap(function()
-      stdout:read_stop()
-      stderr:read_stop()
-      stdout:close()
-      stderr:close()
-      Handle:close()
-      -- P(entries)
-      if #entries > 0 then
-        latin_funcs.display_entries(entries[1])
-      end
-    end)
-  )
-  vim.loop.read_start(stdout, onread_out)
-  vim.loop.read_start(stderr, onread_err)
-end
-
-function latin_funcs.get_line_entries(opts)
+function greek_funcs.get_line_entries(opts)
   local line = vim.api.nvim_get_current_line()
-  print(line)
   line = vim.fn.substitute(line, "[;:!,\\.]", "", "g")
 
   local level
@@ -132,7 +64,7 @@ function latin_funcs.get_line_entries(opts)
     level = "--asvocab"
   end
 
-  local cmd = "/home/simon/Projects/rust/latin_dictionary/target/debug/query_many"
+  local cmd = "/home/simon/Projects/rust/greek_dictionary/target/debug/query_many"
     .. " "
     .. level
     .. " "
@@ -163,21 +95,21 @@ function latin_funcs.get_line_entries(opts)
   api.nvim_buf_set_lines(0, line_nr, line_nr, true, lines)
 end
 
-function latin_funcs.create_layout()
+function greek_funcs.create_layout()
   text_win = api.nvim_get_current_win()
   text_buf = api.nvim_get_current_buf()
   vim.api.nvim_buf_set_keymap(
     text_buf,
     "n",
     "<CR>",
-    ':lua require("latin-dictionary").lookup()' .. "<cr>",
+    ':lua require("greek-lexicon").lookup()' .. "<cr>",
     { nowait = true, noremap = true, silent = true }
   )
   vim.api.nvim_buf_set_keymap(
     text_buf,
     "n",
     "<s-CR>",
-    ':lua require("latin-dictionary").lookup(true)' .. "<cr>",
+    ':lua require("greek-lexicon").lookup(true)' .. "<cr>",
     { nowait = true, noremap = true, silent = true }
   )
 
@@ -189,14 +121,14 @@ function latin_funcs.create_layout()
     dict_buf,
     "n",
     "<CR>",
-    ':lua require("latin-dictionary").add_to_vocab()' .. "<cr>",
+    ':lua require("greek-lexicon").add_to_vocab()' .. "<cr>",
     { nowait = true, noremap = true, silent = true }
   )
   vim.api.nvim_buf_set_keymap(
     dict_buf,
     "n",
     "N",
-    ':lua require("latin-dictionary").next_entry()' .. "<cr>",
+    ':lua require("greek-lexicon").next_entry()' .. "<cr>",
     { nowait = true, noremap = true, silent = true }
   )
 
@@ -209,32 +141,28 @@ function latin_funcs.create_layout()
   layout_set = true
 end
 
-function latin_funcs.extract_and_format(raw_json)
+function greek_funcs.extract_and_format(raw_json)
   local lines = {}
   local json = lunajson.decode(raw_json)
   -- P(json)
   local gcse = json["gcse"]
   local asvocab = json["asvocab"]
-  local wwords = json["wwords"]
-  local lns = json["lns"]
+  local lsj = json["lsj"]
   -- P(wwords)
   if #gcse > 0 then
-    table.insert(lines, latin_funcs.format_gcse_as_entries(gcse, "GCSE"))
+    table.insert(lines, greek_funcs.format_gcse_as_entries(gcse, "GCSE"))
   end
   if #asvocab > 0 then
-    table.insert(lines, latin_funcs.format_gcse_as_entries(asvocab, "ASVOCAB"))
+    table.insert(lines, greek_funcs.format_gcse_as_entries(asvocab, "ASVOCAB"))
   end
-  if #wwords > 0 then
-    table.insert(lines, latin_funcs.format_wwords_entries(wwords, "WWORDS"))
-  end
-  if #lns > 0 then
-    table.insert(lines, latin_funcs.format_lns_entries(lns, "LEWIS AND SHORT"))
+  if #lsj > 0 then
+    table.insert(lines, greek_funcs.format_lsj_entries(lsj, "LSJ"))
   end
   -- P(lines)
   return vim.tbl_flatten(lines)
 end
 
-function latin_funcs.format_gcse_as_entries(entries_array, label)
+function greek_funcs.format_gcse_as_entries(entries_array, label)
   local output = {}
   table.insert(output, "# " .. label)
   for _, entry in pairs(entries_array) do
@@ -244,20 +172,7 @@ function latin_funcs.format_gcse_as_entries(entries_array, label)
   return output
 end
 
-function latin_funcs.format_wwords_entries(entries_array, label)
-  local output = {}
-  table.insert(output, "# " .. label)
-  for _, entry in pairs(entries_array) do
-    table.insert(
-      output,
-      entry[1] .. " " .. entry[2] .. " " .. entry[3] .. " : " .. entry[4]
-    )
-  end
-  table.insert(output, "")
-  return output
-end
-
-function latin_funcs.format_lns_entries(entries_array, label)
+function greek_funcs.format_lsj_entries(entries_array, label)
   local output = {}
   table.insert(output, "# " .. label)
   for _, entry in pairs(entries_array) do
@@ -290,7 +205,7 @@ function latin_funcs.format_lns_entries(entries_array, label)
   return output
 end
 
-function latin_funcs.add_to_vocab()
+function greek_funcs.add_to_vocab()
   local line = api.nvim_get_current_line()
   if line:find("Meanings: ") then
     -- print("Got here")
@@ -308,10 +223,10 @@ function latin_funcs.add_to_vocab()
   api.nvim_set_current_win(text_win)
 end
 
-function latin_funcs.next_entry()
+function greek_funcs.next_entry()
   vim.fn.search("^#")
   local line = vim.api.nvim_get_current_line()
-  if line:find("# LEWIS") then
+  if line:find("# LSJ") then
     vim.fn.search("Meanings: ")
   elseif line:find("#>Meanings: ") then
     return
@@ -320,4 +235,4 @@ function latin_funcs.next_entry()
   end
 end
 
-return latin_funcs
+return greek_funcs

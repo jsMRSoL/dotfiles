@@ -25,4 +25,6 @@ vim.cmd([[
 vim.cmd[[highlight Normal guifg=#bbbbbb]]
 vim.cmd[[highlight FloatBorder guifg=#a0a8b0 guibg=#000000]]
 -- my highlight groups
+vim.cmd[[highlight NormalFloat gui=italic guifg=#a0a8b0 guibg=#000000]]
 vim.cmd[[highlight MyNormalFloat gui=italic guifg=#a0a8b0 guibg=#000000]]
+vim.cmd[[highlight LspSignatureActiveParameter gui=italic guifg=#a0a8b0 guibg=#2d3133]]

@@ -95,6 +95,7 @@ alias update_totals='~/Projects/python/totals/totals.py'
 alias process_results='~/Racing/process_results.sh'
 ## programs
 #alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
+alias music='mpv --no-video'
 alias vim='nvim'
 alias wwwd='w3m www.duckduckgo.com'
 alias r='ranger-cd'
