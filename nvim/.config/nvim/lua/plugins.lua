@@ -1,29 +1,34 @@
-local execute = vim.api.nvim_command
-local fn = vim.fn
 -- bootstrap packer
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+local is_bootstrap = false
 
-if fn.empty(fn.glob(install_path)) > 0 then
-  execute(
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+  is_bootstrap = true
+  vim.fn.execute(
     "!git clone https://github.com/wbthomason/packer.nvim " .. install_path
   )
-  execute("packadd packer.nvim")
+  vim.cmd("packadd packer.nvim")
 end
 
 -- run packer
-return require("packer").startup(function()
+require("packer").startup(function()
   -- Packer can manage itself
   use("wbthomason/packer.nvim")
   -- Necessary for so many good things
   use("nvim-lua/popup.nvim")
   use("nvim-lua/plenary.nvim")
   -- lsp config
-  use({
-    "neovim/nvim-lspconfig",
-    after = "nvim-lsp-installer",
-  })
-  use("nvim-lua/lsp_extensions.nvim")
-  use("williamboman/nvim-lsp-installer")
+  use { -- LSP Configuration & Plugins
+    'neovim/nvim-lspconfig',
+    requires = {
+      -- Automatically install LSPs to stdpath for neovim
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+
+      -- Useful status updates for LSP
+      'j-hui/fidget.nvim',
+    },
+  }
   use("onsails/lspkind-nvim")
   -- Lua
   use({
@@ -48,7 +53,11 @@ return require("packer").startup(function()
   use("hrsh7th/vim-vsnip")
   use("hrsh7th/vim-vsnip-integ")
   -- treesitter
-  use("nvim-treesitter/nvim-treesitter")
+  use({"nvim-treesitter/nvim-treesitter",
+    run = function()
+      pcall(require("nvim-treesitter.install").update { with_sync = true })
+    end,
+  })
   use("nvim-treesitter/playground")
   -- dap
   use("mfussenegger/nvim-dap")
@@ -62,8 +71,17 @@ return require("packer").startup(function()
   use("nvim-telescope/telescope-media-files.nvim")
   use("nvim-telescope/telescope-ui-select.nvim")
   -- explorer
-  use("kyazdani42/nvim-tree.lua")
-  use("kyazdani42/nvim-web-devicons")
+  use({
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v2.x",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+    }
+  })
+  -- use("kyazdani42/nvim-tree.lua")
+  -- use("kyazdani42/nvim-web-devicons")
   use("ryanoasis/vim-devicons")
   use("airblade/vim-rooter")
   -- terminal
@@ -143,3 +161,14 @@ return require("packer").startup(function()
   use("AndrewRadev/splitjoin.vim")
   use_rocks("lunajson")
 end)
+
+if is_bootstrap then
+  require("packer").sync()
+end
+
+local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
+vim.api.nvim_create_autocmd('BufWritePost', {
+  command = 'source <afile> | PackerCompile',
+  group = packer_group,
+  pattern = vim.fn.expand '$MYVIMRC',
+})

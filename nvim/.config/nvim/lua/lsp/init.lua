@@ -5,102 +5,86 @@ if not status_ok then
   return
 end
 
-capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 
-local on_attach = function(client)
-  -- Set autocommands conditional on server_capabilities
-  if client.resolved_capabilities.document_highlight then
-    vim.api.nvim_exec(
-      [[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]],
-      false
-    )
+-- LSP settings.
+--  This function gets run when an LSP connects to a particular buffer.
+local on_attach = function(_, bufnr)
+  -- NOTE: Remember that lua is a real programming language, and as such it is possible
+  -- to define small helper and utility functions so you don't have to repeat yourself
+  -- many times.
+  --
+  -- In this case, we create a function that lets us more easily define mappings specific
+  -- for LSP related items. It sets the mode, buffer and description for us each time.
+  local nmap = function(keys, func, desc)
+    if desc then
+      desc = 'LSP: ' .. desc
+    end
+
+    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+  end
+
+  nmap('<leader>lr', vim.lsp.buf.rename, '[R]e[n]ame')
+  nmap('<leader>lc', vim.lsp.buf.code_action, '[C]ode [A]ction')
+
+  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+  nmap('<leader>lD', vim.lsp.buf.type_definition, 'Type [D]efinition')
+  nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  nmap('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+  -- See `:help K` for why this keymap
+  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+  -- Lesser used LSP functionality
+  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  nmap('<leader>lwa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+  nmap('<leader>lwr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+  nmap('<leader>lwl', function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end, '[W]orkspace [L]ist Folders')
+
+  -- Create a command `:Format` local to the LSP buffer
+  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+    if vim.lsp.buf.format then
+      vim.lsp.buf.format()
+    elseif vim.lsp.buf.formatting then
+      vim.lsp.buf.formatting()
+    end
+  end, { desc = 'Format current buffer with LSP' })
+end
+
+-- Setup mason so it can manage external tooling
+require('mason').setup()
+
+-- Enable the following language servers
+-- Feel free to add/remove any LSPs that you want here. They will automatically be installed
+-- local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'sumneko_lua', 'gopls' }
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'lua_ls', 'gopls' }
+
+-- Ensure the servers above are installed
+require('mason-lspconfig').setup {
+  ensure_installed = servers,
+}
+
+for _, lsp in ipairs(servers) do
+  require('lspconfig')[lsp].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }
+  if lsp == "rust_analyzer" then
+    require("rust-tools").setup()
+  elseif lsp == "lua_ls" then
+    local lua_ls_opts = require("lsp.settings.lua_ls")
+    require("lspconfig").lua_ls.setup(lua_ls_opts)
   end
 end
 
-local lsp_installer = require("nvim-lsp-installer")
-
+-- Turn on lsp status information
+require('fidget').setup()
 -- local lsp_config = require("lsp_config")
-
--- Register a handler that will be called for all installed servers.
--- Alternatively, you may also register handlers on specific server instances instead (see example below).
-lsp_installer.on_server_ready(function(server)
-  local opts = { on_attach = on_attach, capabilities = capabilities }
-
-  -- (optional) Customize the options passed to the server
-  -- if server.name == "tsserver" then
-  --     opts.root_dir = function() ... end
-  -- end
-
-  -- This setup() function is exactly the same as lspconfig's setup function.
-  -- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-  --
-  if server.name == "rust_analyzer" then
-      -- opts.settings = {
-      --   ["rust-analyzer"] = {
-      --     assist = {
-      --       importMergeBehavior = "last",
-      --       importPrefix = "by_self",
-      --     },
-      --     diagnostics = {
-      --       disabled = { "unresolved-import" },
-      --     },
-      --     cargo = {
-      --       loadOutDirsFromCheck = true,
-      --     },
-      --     procMacro = {
-      --       enable = true,
-      --     },
-      --     checkOnSave = {
-      --       -- command = "clippy",
-      --       command = "check",
-      --     },
-      --   }, -- debugging stuff
-      --   dap = {
-      --     adapter = {
-      --       type = "executable",
-      --       command = "lldb-vscode",
-      --       name = "rt_lldb",
-      --     },
-      --   },
-      -- }
-      --
-      -- opts.handlers = {
-      --   ["textDocument/publishDiagnostics"] = vim.lsp.with(
-      --     vim.lsp.diagnostic.on_publish_diagnostics,
-      --     {
-      --       virtual_text = true,
-      --       signs = true,
-      --       underline = false,
-      --       update_in_insert = true,
-      --     }
-      --   ),
-      -- }
-
-      -- Initialize the LSP via rust-tools instead
-      -- require("rust-tools").setup({
-      --   -- The "server" property provided in rust-tools setup function are the
-      --   -- settings rust-tools will provide to lspconfig during init.
-      --   -- We merge the necessary settings from nvim-lsp-installer (server:get_default_options())
-      --   -- with the user's own settings (opts).
-      --   server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
-      -- })
-    require("rust-tools").setup()
-    server:attach_buffers()
-    -- server:setup(opts)
-  elseif server.name == "sumneko_lua" then
-    local sumneko_lua_opts = require("lsp.settings.sumneko_lua")
-    opts = vim.tbl_deep_extend("force", sumneko_lua_opts, opts)
-    server:setup(opts)
-  else
-    server:setup(opts)
-  end
-end)
 
 local lsp_setup_status_ok, my_lsp_setup = pcall(require, "lsp.common")
 if not lsp_setup_status_ok then
