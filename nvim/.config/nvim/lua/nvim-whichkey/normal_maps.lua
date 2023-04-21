@@ -130,7 +130,7 @@ local normal_mappings = {
         t = { "<Cmd>tabedit<CR>", "tabedit" },
         e = { '<Cmd>tabedit <C-R>=expand("%:p:h")<CR>/<CR>', "fd file" },
       },
-      T = { "<Cmd>NvimTreeToggle<CR>", "tree" },
+      T = { "<Cmd>NeoTreeShowToggle<CR>", "tree" },
     },
 
     g = {

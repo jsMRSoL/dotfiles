@@ -24,7 +24,6 @@ require('nvim-vsnip')
 require('nvim-gitsigns')
 require('nvim-tree-sitter')
 require('nvim-lspkind')
-require('nvim-tree-config')
 -- lsp
 -- require('lsp')
 require('nvim-mason-config')
