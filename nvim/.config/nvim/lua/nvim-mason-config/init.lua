@@ -119,8 +119,8 @@ require("mason-lspconfig").setup_handlers({
     }
     require("rust-tools").setup(opts)
   end,
-  ["sumneko_lua"] = function()
-    lspconfig.sumneko_lua.setup({
+  ["lua_ls"] = function()
+    lspconfig.lua_ls.setup({
       settings = {
         Lua = {
           diagnostics = { globals = { "use", "vim", "use_rocks" } },
