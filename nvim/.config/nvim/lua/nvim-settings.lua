@@ -3,6 +3,7 @@ vim.opt.mouse = 'a'
 -- buffers
 vim.opt.hidden = true
 -- ui
+vim.opt.cmdheight = 0
 vim.opt.showmode = false
 vim.opt.number = true
 vim.opt.relativenumber = true
