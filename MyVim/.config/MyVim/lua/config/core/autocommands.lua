@@ -15,6 +15,13 @@ vim.cmd([[
         setlocal norelativenumber
     augroup END
 ]])
+-- highlight on yank
+vim.cmd([[
+  augroup highlight-on-yank
+  autocmd! |
+  autocmd TextYankPost * silent! lua vim.highlight.on_yank()
+  augroup END
+]])
 -- customize standard highlight groups
 -- vim.cmd[[highlight Normal guifg=#bbbbbb]]
 -- vim.cmd[[highlight FloatBorder guifg=#a0a8b0 guibg=#000000]]
