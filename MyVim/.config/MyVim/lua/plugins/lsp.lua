@@ -1,4 +1,5 @@
 return {
+  { 'folke/neodev.nvim' },
   { 'j-hui/fidget.nvim' },
   {
     "onsails/lspkind.nvim",
@@ -138,7 +139,18 @@ return {
         -- 'gopls',
       })
 
-      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      require('neodev').setup()
+      -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      local lspconfig = require('lspconfig')
+      lspconfig.lua_ls.setup({
+        settings = {
+          Lua = {
+            completion = {
+              callSnippet = "Replace"
+            }
+          }
+        }
+      })
 
       lsp.skip_server_setup({ 'rust_analyzer' })
 
