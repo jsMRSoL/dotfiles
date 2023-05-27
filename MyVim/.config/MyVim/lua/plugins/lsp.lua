@@ -1,5 +1,22 @@
 return {
   { 'folke/neodev.nvim' },
+  {
+    'folke/trouble.nvim',
+    config = function()
+      local trouble = require("trouble.providers.telescope")
+
+      local telescope = require("telescope")
+
+      telescope.setup {
+        defaults = {
+          mappings = {
+            i = { ["<c-x>"] = trouble.open_with_trouble },
+            n = { ["<c-x>"] = trouble.open_with_trouble },
+          },
+        },
+      }
+    end
+  },
   { 'j-hui/fidget.nvim' },
   {
     "onsails/lspkind.nvim",
@@ -212,7 +229,6 @@ return {
         },
         server = {
           on_attach = function(_, bufnr)
-
             local keymap = {
               { "<space>lh",  "<cmd>RustHoverActions<CR>" },
               { "<space>lH",  "<cmd>RustHoverRange<CR>" },
