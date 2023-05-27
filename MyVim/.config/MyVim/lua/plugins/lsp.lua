@@ -109,7 +109,7 @@ return {
         end
 
         nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
-        nmap('<leader>ca', vim.lsp.buf.code_action, 'Code action')
+        nmap('<leader>la', vim.lsp.buf.code_action, 'Code action')
 
         nmap('gd', vim.lsp.buf.definition, 'Go to definition')
         nmap('gr', require('telescope.builtin').lsp_references, 'Go to references')
