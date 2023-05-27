@@ -7,6 +7,11 @@ function tagger() {
 	lltag -t "$3" --yes "$1"
 }
 
+function dir_in_vim() {
+  NVIM_APPNAME=MyVim nvim "$( fd --type d . ~/ | fzf )"
+}
+bind '"\e[":dir_in_vim'
+
 function vff() {
     [ -z "$1" ] && echo "\$1 must be a directory" ; return
 	vim "$(find "$1" | fzf -e --select-1)"

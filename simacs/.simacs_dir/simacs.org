@@ -613,8 +613,10 @@
       "oi" '(:ignore t :which-key "insert")
       "oil" '(org-insert-link :which-key "link")
       "oit" '(:ignore t :which-key "timestamp")
-      "oitt" '(org-time-stamp-inactive :which-key "inactive")
-      "oita" '(org-time-stamp :which-key "active")
+      "oitt" '(sp/org-time-stamp-time-inactive :which-key "datetime inactive")
+      "oitT" '(org-time-stamp-inactive :which-key "date inactive")
+      "oita" '(sp/org-time-stamp-time-active :which-key "datetime active")
+      "oitA" '(org-time-stamp :which-key "date active")
       "oj" '(consult-outline :which-key "jump")
       "oh" '(sp/transient--org-headings :which-key "headings")
       "oc" '(:ignore t :which-key "checkbox")
@@ -1242,6 +1244,20 @@
        (interactive)
        (let ((current-prefix-arg '(16)))
 	 (call-interactively 'org-toggle-checkbox)))
+
+     (defun sp/org-time-stamp-time-active ()
+       "Convenience function to insert an inactive date and time stamp in org mode."
+       (interactive)
+       ;if prefix is 16, then insert stamp without calendar popup
+       (let ((current-prefix-arg '(16)))
+	 (call-interactively 'org-time-stamp)))
+
+     (defun sp/org-time-stamp-time-inactive ()
+       "Convenience function to insert an inactive date and time stamp in org mode."
+       (interactive)
+       ;if prefix is 16, then insert stamp without calendar popup
+       (let ((current-prefix-arg '(16)))
+	 (call-interactively 'org-time-stamp-inactive)))
 
      (defun sp/org-table-recalculate-all ()
        "Convenience function to recalculate a whole table in org mode."

@@ -10,6 +10,7 @@ require("telescope").setup({
       "--line-number",
       "--column",
       "--smart-case",
+      "--hidden",
     },
     prompt_prefix = " ",
     selection_caret = " ",
