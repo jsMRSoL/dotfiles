@@ -240,7 +240,7 @@
   #+begin_src emacs-lisp
     (use-package perspective
       :init
-      (setq persp-mode-prefix-key "C-c C-c l")
+      (setq persp-mode-prefix-key "l")
       (persp-mode)
       (setq persp-state-default-file "~/.simacs_dir/layouts/layouts"))
   #+end_src
