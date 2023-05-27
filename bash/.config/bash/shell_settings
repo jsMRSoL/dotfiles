@@ -4,6 +4,7 @@
 ## convenience environmental variables
 export DOTFILES="$HOME/.dotfiles"
 export CONFIGS="$HOME/.config"
+export MACHINE="$(cat /etc/hostname)"
 ## set XDG directories
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DOWNLOAD_DIR="$HOME/Downloads"
