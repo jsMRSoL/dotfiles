@@ -62,3 +62,4 @@ nvim/.config/nvim/plugin/packer_compiled.lua
 /simacs/.simacs_dir/games/
 tmux/.config/tmux/plugins
 /MyVim/.config/MyVim/lazy-lock.json
+MyVim/.config/MyVim/lua/.luarc.json
