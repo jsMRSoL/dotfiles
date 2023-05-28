@@ -153,6 +153,7 @@ local mappings = {
   { "n", "<leader>xp", "<cmd>PopupDiacritics<CR>", { desc = "pick diacritics" } },
   { "n", "<leader>xS", "<cmd>SplitPara<CR>", { desc = "split para to lines" } },
   { "v", "<leader>xn", ":NumberLines<CR>", { desc = "number lines" } },
+  { "v", "<leader>xr", ":RenumberLines<CR>", { desc = "renumber lines" } },
   { "v", "<leader>xa", ":AlignOnChar<CR>", { desc = "align on char" } },
   -- latin
   { "n", "<leader>xll", "<Cmd>lua require('lewis.latin-dictionary').create_layout()<CR>", { desc = "dictionary mode" } },
