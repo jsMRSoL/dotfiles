@@ -61,50 +61,10 @@ local mappings = {
   { "n", "<leader>fr",  "<cmd>Telescope oldfiles<cr>",                       { desc = "Recent" } },
   { "n", "<leader>fs", "<cmd>write<cr>", { desc = "Save" } },
   { "n", "<leader>fd", "<cmd>cd %:p:h<cr>", { desc = "Set cwd" } },
-  { "n", "<leader>fc",
-    function()
-      require("telescope.builtin").find_files({
-        prompt_title = "<= neovim config =>",
-        cwd = "~/.config/MyVim",
-      })
-    end,
-    { desc = "Vim configs" },
-  },
-  {
-    "n",
-    "<leader>fC",
-    function()
-      local opts = {
-        prompt_title = "<= ~/.config =>",
-        cwd = "~/.config",
-        follow = true,
-      }
-      require("telescope.builtin").find_files((opts))
-    end,
-    { desc = "All configs" },
-  },
-  {
-    "n",
-    "<leader>fl",
-    function()
-      require("telescope.builtin").find_files({
-        prompt_title = "<= ~/.local =>",
-        cwd = "~/.local",
-      })
-    end,
-    { desc = "xdg_data" },
-  },
-  {
-    "n",
-    "<leader>fp",
-    function()
-      require("telescope.builtin").find_files({
-        prompt_title = "<= Projects =>",
-        cwd = "~/Projects",
-      })
-    end,
-    { desc = "Find projects" },
-  },
+  { "n", "<leader>fc", "<cmd>FindVimConfigs<cr>", { desc = "Vim configs" } },
+  { "n", "<leader>fC", "<cmd>FindConfigs<cr>", { desc = "All configs" } },
+  { "n", "<leader>fl", "<cmd>FindDotLocal<cr>", { desc = "xdg_data" } },
+  { "n", "<leader>fp", "<cmd>FindProjects<cr>", { desc = "Find projects" } },
   { "n", "<leader>ft", "<cmd>Neotree focus toggle reveal_force_cwd<cr>", { desc = "Filetree" } },
   { "n", "<leader>fu", "<cmd>UndotreeToggle<cr>", { desc = "Undotree" } },
   -- git
@@ -124,13 +84,13 @@ local mappings = {
   { "n", "<leader>lxq", "<cmd>TroubleToggle quickfix<cr>",               },
   { "n", "<leader>lxr", "<cmd>TroubleToggle lsp_references<cr>",         },
   -- Trouble -- jump to the next item, skipping the groups
-  { "n", "<leader>lxn", "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", { desc = "jump next" } },
+  { "n", "<leader>lxn", "<cmd>TroubleSkipNext<cr>", { desc = "jump next" } },
   -- Trouble -- jump to the previous item, skipping the groups
-  { "n", "<leader>lxp", "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", { desc = "jump prev" } },
+  { "n", "<leader>lxp", "<cmd>TroubleSkipPrev<cr>", { desc = "jump prev" } },
   -- Trouble -- jump to the first item, skipping the groups
-  { "n", "<leader>lxf", "<cmd>lua require('trouble').first({skip_groups = true, jump = true})<cr>", { desc = "jump first" } },
+  { "n", "<leader>lxf", "<cmd>TroubleSkipFirst<cr>", { desc = "jump first" } },
   -- Trouble -- jump to the last item, skipping the groups
-  { "n", "<leader>lxl", "<cmd>lua require('trouble').last({skip_groups = true, jump = true})<cr>", { desc = "jump last" } },
+  { "n", "<leader>lxl", "<cmd>TroubleSkipLast<cr>", { desc = "jump last" } },
   -- packages
   { "n", "<leader>pu",  "<cmd>Lazy update<cr>",                                             { desc = "Update (Lazy)" } },
   { "n", "<leader>pl",  "<cmd>Lazy<cr>",                                                               { desc = "Lazy" } },
@@ -186,15 +146,13 @@ local mappings = {
   { "n", "<leader>un", "<cmd>set number!<cr>",         { desc = "Toggle relnr" } },
   { "n", "<leader>uC", "<cmd>Telescope colorscheme enable_preview=true<cr>", { desc = "Colorscheme with preview" } },
   -- text
-  { "n", "<leader>xf", "<Cmd>lua require('txtin.trans').flush_lines()<CR>", { desc = "flush lines (regexp)" } },
-  { "n", "<leader>xk", "<Cmd>lua require('txtin.trans').keep_lines()<CR>", { desc = "keep lines (regexp)" } },
-  { "n", "<leader>xe", "<Cmd>lua require('txtin.trans').flush_empty_lines()<CR>", { desc = "flush empty lines" } },
-  { "n", "<leader>xp", "<Cmd>lua require('txtin.diacritics').popup_diacritic_words()<CR>", { desc = "pick diacritics" } },
-  { "n", "<leader>xS", "<Cmd>lua require('txtin.trans').para_to_lines()<CR>", { desc = "split para to lines" } },
-  { "v", "<leader>xn", "<Cmd>lua require('txtin.trans').number_lines2()<CR>", { desc = "number lines" } },
-  -- { "v", "<leader>xN",  "<Cmd>NumberLines<CR>", { silent = true, desc = "number lines comm" } },
-  { "v", "<leader>xa", "<Cmd>lua require('txtin.trans').align_on_char2()<CR>", { desc = "align on char" } },
-  -- { "v", "<leader>xA",  "<Cmd>AlignOnChar<CR>", { silent = true, desc = "align on char comm" } },
+  { "n", "<leader>xf", "<cmd>FlushLinesRegexp<cr>", { desc = "flush lines (regexp)" } },
+  { "n", "<leader>xk", "<cmd>KeepLines<CR>", { desc = "keep lines (regexp)" } },
+  { "n", "<leader>xe", "<cmd>FlushEmptyLines<CR>", { desc = "flush empty lines" } },
+  { "n", "<leader>xp", "<cmd>PopupDiacritics<CR>", { desc = "pick diacritics" } },
+  { "n", "<leader>xS", "<cmd>SplitPara<CR>", { desc = "split para to lines" } },
+  { "v", "<leader>xn", ":NumberLines<CR>", { desc = "number lines" } },
+  { "v", "<leader>xa", ":AlignOnChar<CR>", { desc = "align on char" } },
   -- latin
   { "n", "<leader>xll", "<Cmd>lua require('lewis.latin-dictionary').create_layout()<CR>", { desc = "dictionary mode" } },
   { "n", "<leader>xlg", "<Cmd>lua require('lewis.latin-dictionary').get_line_entries({level = 'gcse'})<CR>", { desc = "line gcse" } },
