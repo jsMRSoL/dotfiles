@@ -60,6 +60,7 @@ local mappings = {
   { "n", "<leader>fn",  "<cmd>enew<cr>",                                     { desc = "New" } },
   { "n", "<leader>fr",  "<cmd>Telescope oldfiles<cr>",                       { desc = "Recent" } },
   { "n", "<leader>fs", "<cmd>write<cr>", { desc = "Save" } },
+  { "n", "<leader>fo", "<cmd>source %<cr>", { desc = "Source this" } },
   { "n", "<leader>fd", "<cmd>cd %:p:h<cr>", { desc = "Set cwd" } },
   { "n", "<leader>fc", "<cmd>FindVimConfigs<cr>", { desc = "Vim configs" } },
   { "n", "<leader>fC", "<cmd>FindConfigs<cr>", { desc = "All configs" } },
