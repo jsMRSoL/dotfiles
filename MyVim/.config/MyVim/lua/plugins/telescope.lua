@@ -38,6 +38,7 @@ return {
           require("telescope.builtin").find_files({
             prompt_title = "<= ~/.config =>",
             cwd = "~/.config",
+            follow = true,
           })
         end,
         {}
