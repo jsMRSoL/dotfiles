@@ -36,8 +36,8 @@ return {
       cmd('FindConfigs',
         function()
           require("telescope.builtin").find_files({
-            prompt_title = "<= neovim config =>",
-            cwd = "~/.config/MyVim",
+            prompt_title = "<= ~/.config =>",
+            cwd = "~/.config",
           })
         end,
         {}
