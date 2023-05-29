@@ -10,7 +10,8 @@
 # to the user's home directory starting with `~/`.
 import:
 #  - /path/to/alacritty.yml
-- /home/simon/.config/alacritty/jellybeans.yml
+- ~/.config/alacritty/catppuccin/catppuccin-mocha.yml
+# - /home/simon/.config/alacritty/jellybeans.yml
 # - /home/simon/.config/alacritty/dracula.yml
 
 # Any items in the `env` entry below will be added as
