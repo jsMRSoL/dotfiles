@@ -22,7 +22,7 @@ export GPG_TTY=$(tty)
 export MAILDIR="/home/simon/.mail/Yahoo"
 ## default programs
 # export TERM="st"
-export EDITOR="nvim"
+export EDITOR="myvim"
 export BROWSER="surf"
 export PAGER="less"
 export RTV_BROWSER="w3m"
@@ -100,7 +100,8 @@ alias music='mpv --no-video'
 alias vim='nvim'
 alias lazy='NVIM_APPNAME=LazyVim nvim $@'
 alias astro='NVIM_APPNAME=AstroNvim nvim $@'
-alias myvim='NVIM_APPNAME=MyVim nvim $@'
+# alias myvim='NVIM_APPNAME=MyVim nvim $@'
+alias v='myvim'
 alias d='dir_in_vim'
 alias wwwd='w3m www.duckduckgo.com'
 alias r='ranger-cd'
