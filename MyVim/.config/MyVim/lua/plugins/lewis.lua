@@ -1,3 +1,5 @@
 return {
-  { dir = '~/Projects/lua/lewis.nvim' }
+  { dir = '~/Projects/lua/lewis.nvim',
+    config = true,
+  }
 }
