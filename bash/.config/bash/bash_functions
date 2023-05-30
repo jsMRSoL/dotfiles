@@ -7,25 +7,60 @@ function tagger() {
 	lltag -t "$3" --yes "$1"
 }
 
-function dir_in_vim() {
-  NVIM_APPNAME=MyVim nvim "$( fd --type d . ~/ | fzf )"
+function c() {
+  local dir
+  dir=$( fd --type d . ~/ | fzf )
+  cd "$dir"
+  exa -lh --icons
 }
-bind '"\e[":dir_in_vim'
+
+function ff() {
+  local dirs
+  dirs="config\nlocal\norg\nDocuments\nDownloads\nhome"
+  local dir
+  dir="$(printf $dirs | fzf)"
+  [[ -z dir ]] && return
+
+  case $dir in
+    "config")
+    path=".config" ;;
+    "local")
+    path=".local" ;;
+    "org")
+    path="Documents/org" ;;
+    "documents")
+    path="Documents" ;;
+    "downloads")
+    path="Downloads" ;;
+    "home")
+    path="" ;;
+    *)
+    path=""
+  esac
+
+  local file
+  file="$(fd --type f -L . /home/simon/$path | fzf --preview='bat --color always {}')"
+
+  cd "$(dirname $file)"
+  myvim "$file"
+}
+
+function dir_in_vim() {
+  myvim "$( fd --type d . ~/ | fzf )"
+}
 
 function vff() {
-    [ -z "$1" ] && echo "\$1 must be a directory" ; return
-	vim "$(find "$1" | fzf -e --select-1)"
+  [ -z "$1" ] && echo "\$1 must be a directory" ; return
+	myvim "$(find "$1" | fzf -e --select-1)"
 
 }
 
-function vf() { find . | fzf | xargs bash -c '</dev/tty $EDITOR "$@"' ignoreme ;}
-
 function cheat() {
-	vim "$(find /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1)"
+	myvim "$(find /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1)"
 }
 
 function cfg() {
-	vim "$(find /home/simon/.config | fzf -e --query="$1" --select-1)"
+	myvim "$(find /home/simon/.config | fzf -e --query="$1" --select-1)"
 }
 
 function snipper() {
@@ -100,9 +135,9 @@ function vu() {
 function escr() {
     FILE=$( whereis "$1" | cut -d' ' -f2 )
     if [ "$(stat -c %U "$FILE")" == "$USER" ]; then
-        vim "$FILE"
+        myvim "$FILE"
     else
-        sudo vim "$FILE"
+        sudo myvim "$FILE"
     fi
 }
 
