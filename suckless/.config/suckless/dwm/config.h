@@ -12,14 +12,21 @@ static const char *fonts[]          = { "Source Code Pro:pixelsize=22" };
 /* static const char dmenufont[]       = "Source Code Pro:pixelsize=15"; */
 static const char dmenufont[]       = "Source Code Pro:pixelsize=22";
 
-static const char norm_fg[] = "#bbbbbb";
-static const char norm_bg[] = "#000000";
-static const char norm_border[] = "#08080D"; // indicates inactive window
+/* static const char norm_fg[] = "#bbbbbb"; */
+/* static const char norm_bg[] = "#000000"; */
+/* static const char norm_border[] = "#08080D"; // indicates inactive window */
+static const char norm_fg[] = "#cdd6f4";
+static const char norm_bg[] = "#1e1e2e";
+static const char norm_border[] = "#3B4252"; // indicates inactive window
 
-static const char sel_fg[] = "#bbbbbb";
-static const char sel_bg[] = "#262829"; // shows active tag /is window title bg/ previously 44475a
-static const char sel_border[] = "#bbbbbb"; // indicates active window
+/* static const char sel_fg[] = "#bbbbbb"; */
+/* static const char sel_bg[] = "#262829"; // shows active tag /is window title bg/ previously 44475a */
+/* static const char sel_border[] = "#bbbbbb"; // indicates active window */
+static const char sel_fg[] = "#D8DEE9";
+static const char sel_bg[] = "#626880"; // shows active tag /is window title bg/ previously 44475a
+static const char sel_border[] = "#74c7ec"; // indicates active window
 
+/* do these ever get used? */
 static const char urg_fg[] = "#a9c0ca";
 static const char urg_bg[] = "#5D534D";
 static const char urg_border[] = "#AC5842";
