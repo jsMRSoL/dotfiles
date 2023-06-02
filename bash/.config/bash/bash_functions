@@ -7,60 +7,64 @@ function tagger() {
 	lltag -t "$3" --yes "$1"
 }
 
+# fuzzy cd and fancy ls -lh
 function c() {
   local dir
-  dir=$( fd --type d . ~/ | fzf )
+  dir="$( fd --type d -H . -d 1 ~/ | fzf )"
+  [[ -z $dir ]] && return
   cd "$dir"
-  exa -lh --icons
+  exa -l --icons
 }
 
+# fuzzy search for a file and open it in myvim.
 function ff() {
-  local dirs
-  dirs="config\nlocal\norg\nDocuments\nDownloads\nhome"
   local dir
-  dir="$(printf $dirs | fzf)"
-  [[ -z dir ]] && return
-
-  case $dir in
-    "config")
-    path=".config" ;;
-    "local")
-    path=".local" ;;
-    "org")
-    path="Documents/org" ;;
-    "documents")
-    path="Documents" ;;
-    "downloads")
-    path="Downloads" ;;
-    "home")
-    path="" ;;
-    *)
-    path=""
-  esac
+  dir="$( fd --type d -H . -d 1 ~/ | fzf )"
+  [[ -z $dir ]] && return
 
   local file
-  file="$(fd --type f -L . /home/simon/$path | fzf --preview='bat --color always {}')"
+  file="$(fd --type f -HL . $dir | fzf --preview='bat --color always {}')"
+  [[ -z $file ]] && return
 
   cd "$(dirname $file)"
   myvim "$file"
 }
 
+# open directory in myvim
 function dir_in_vim() {
   myvim "$( fd --type d . ~/ | fzf )"
 }
 
-function vff() {
-  [ -z "$1" ] && echo "\$1 must be a directory" ; return
-	myvim "$(find "$1" | fzf -e --select-1)"
-
+# Install packages using paru
+function install() {
+    paru -Slq | fzf -q "$1" -m --preview 'paru -Si {1}'| xargs -ro paru -S
+}
+# Remove installed packages using paru
+function remove() {
+    paru -Qq | fzf -q "$1" -m --preview 'paru -Qi {1}' | xargs -ro paru -Rns
 }
 
 function cheat() {
-	myvim "$(find /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1)"
+  fd --type f -H . /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1 | xargs -ro myvim
 }
 
 function cfg() {
-	myvim "$(find /home/simon/.config | fzf -e --query="$1" --select-1)"
+  fd --type f -H . /home/simon/.config | fzf -e --query="$1" --select-1 | xargs -ro myvim
+}
+
+# fdr - cd to selected parent directory
+fdr() {
+  local declare dirs=()
+  get_parent_dirs() {
+    if [[ -d "${1}" ]]; then dirs+=("$1"); else return; fi
+    if [[ "${1}" == '/' ]]; then
+      for _dir in "${dirs[@]}"; do echo $_dir; done
+    else
+      get_parent_dirs $(dirname "$1")
+    fi
+  }
+  local DIR=$(get_parent_dirs $(realpath "${1:-$PWD}") | fzf-tmux --tac)
+  cd "$DIR"
 }
 
 function snipper() {
@@ -81,13 +85,18 @@ function bak() {
 }
 
 function m() {
+    if [[ -n $TMUX ]]; then
+      echo "Already in tmux. Start this in a separate terminal."
+      return 0
+    fi
+
     if tmux has-session -t music; then
         tmux attach -t music
-        exit
+        return 0
     fi
 
     tmux new-session -d -s music -n playlist
-    tmux set status off
+    tmux set-window-option status off
     tmux set-window-option -t music:playlist window-style 'bg=#1d1f21'
     tmux send-keys -t music:playlist "ncmpcpp -c ~/.config/ncmpcpp/config" Enter
     tmux split-window -t music:playlist -h
