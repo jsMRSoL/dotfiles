@@ -1269,20 +1269,23 @@
 * Start screen
 #+begin_src emacs-lisp
 
-      (defun sp/open-with-tasks-and-agenda ()
-	"Open tasks.org and org-capture for simacs.
+  (defun sp/open-with-tasks-and-agenda ()
+    "Open tasks.org and org-capture for simacs.
 
-      This is mainly intended to be used from the command line as a startup convenience."
-	(interactive)
-	(tab-new)
-	(org-agenda-list)
-	(ace-delete-window)
-	(let ((screen-width (window-width)))
-        (evil-window-vsplit)
-	(find-file "~/Documents/org/tasks.org")
-	(evil-window-set-width (max (- screen-width 60) 60))))
+  This is mainly intended to be used from the command line as a startup convenience."
+    (interactive)
+    (tab-new)
+    (org-agenda-list)
+    (ace-delete-window)
+    (let ((screen-width (window-width)))
+    (evil-window-vsplit)
+    (find-file "~/Documents/org/tasks.org")
+    (evil-window-set-width (max (- screen-width 60) 60)))
+    (persp-switch "git")
+    (magit-status "/home/simon/.dotfiles")
+    (persp-switch "main"))
 
-      (sp/open-with-tasks-and-agenda)
+  (sp/open-with-tasks-and-agenda)
 #+end_src
 * LSJ2 mode
   #+begin_src emacs-lisp
@@ -1298,4 +1301,5 @@
     ;; Make GC pauses faster by decreasing the threshold.
     (setq gc-cons-threshold (* 2 1000 1000))
   #+end_src
+  
   
