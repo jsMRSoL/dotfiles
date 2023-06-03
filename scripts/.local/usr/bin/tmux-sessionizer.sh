@@ -3,17 +3,14 @@
 session="$1"
 in_tmux=false
 
-if !tmux has-session -t $session; then
+if ! tmux has-session -t $session >/dev/null 2>&1; then
   tmux new-session -s $session -d
 fi
 
-if [[ -z $TMUX ]]; then
+if [[ -n $TMUX ]]; then
   tmux switch-client -t $session
-  return
 else
   tmux attach -t $session
-  return
 fi
-
 
 exit 0

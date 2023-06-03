@@ -11,6 +11,7 @@ local opts = {
   conceallevel = 3, -- Hide * markup for bold and italic
   confirm = true,
   cursorline = true,
+  diffopt = 'vertical',
   encoding = 'UTF-8',
   expandtab = true,
   fileencoding = 'UTF-8',
