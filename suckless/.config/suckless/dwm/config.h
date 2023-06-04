@@ -8,10 +8,10 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 /* static const char *fonts[]          = { "Hack-Regular:pixelsize=16" }; */
 /* static const char *fonts[]          = { "Source Code Pro:pixelsize=15" }; */
 /* static const char *fonts[]          = { "Source Code Pro:pixelsize=22" }; */
-static const char *fonts[]          = { "FiraCode Nerd Font-14" };
+static const char *fonts[]          = { "FiraCode Nerd Font-15" };
 /* static const char dmenufont[]       = "Hack-Regular:pixelsize=16"; */
 /* static const char dmenufont[]       = "Source Code Pro:pixelsize=15"; */
-static const char dmenufont[]       = "FiraCode Nerd Font-14";
+static const char dmenufont[]       = "FiraCode Nerd Font-15";
 
 /* static const char norm_fg[] = "#bbbbbb"; */
 /* static const char norm_bg[] = "#000000"; */
@@ -84,7 +84,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg, "-sb", sel_bg, "-sf", sel_fg, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-l", "38", "-g", "5", "-p", "Select application: ", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg, "-sb", sel_bg, "-sf", sel_fg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *shutcmd[] = { "sudo", "shutdown", "-h", "now", NULL };
 static const char *mutecmd[] = { "amixer", "-q", "sset", "Master", "toggle", NULL };
