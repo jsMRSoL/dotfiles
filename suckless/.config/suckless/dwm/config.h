@@ -3,14 +3,15 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const int showbar            = 1;        /* 0 means no bar */
+static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 /* static const char *fonts[]          = { "Hack-Regular:pixelsize=16" }; */
 /* static const char *fonts[]          = { "Source Code Pro:pixelsize=15" }; */
-static const char *fonts[]          = { "Source Code Pro:pixelsize=22" };
+/* static const char *fonts[]          = { "Source Code Pro:pixelsize=22" }; */
+static const char *fonts[]          = { "FiraCode Nerd Font-14" };
 /* static const char dmenufont[]       = "Hack-Regular:pixelsize=16"; */
 /* static const char dmenufont[]       = "Source Code Pro:pixelsize=15"; */
-static const char dmenufont[]       = "Source Code Pro:pixelsize=22";
+static const char dmenufont[]       = "FiraCode Nerd Font-14";
 
 /* static const char norm_fg[] = "#bbbbbb"; */
 /* static const char norm_bg[] = "#000000"; */
@@ -50,6 +51,7 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "firefox",  NULL,       NULL,       1 << 7,       0,           -1 },
 	{ "Emacs",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 

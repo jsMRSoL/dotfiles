@@ -1,14 +1,23 @@
 #!/bin/bash
 #Set background
-xsetroot -solid "#18181b"
+#xsetroot -solid "#18181b"
 # xsetroot -solid "#1d1f21"
-# xsetroot -solid "#000000"
+# hsetroot -solid "#000000"
+hsetroot -solid "#1e1e2e"
 #swap ctrl and capslock
-/usr/bin/setxkbmap -layout gb,gb,gr -variant ,colemak,polytonic -option "ctrl:nocaps" -option "grp:shifts_toggle" -option "compose:menu"
+if [[ $(cat /etc/hostname) != "derek" ]]
+then
+    /usr/bin/setxkbmap -layout gb,gb,gr -variant ,colemak,polytonic -option "ctrl:nocaps" -option "grp:shifts_toggle" -option "compose:menu"
+else
+    /usr/bin/setxkbmap -layout us,gr -variant ,polytonic -option "ctrl:nocaps" -option "grp:shifts_toggle"
+fi
+# set up clipboard manager daemon
+clipmenud &
 #Set colour schemes
 #wal -R
 #Enable transparency
-compton -b
+#compton -b
+picom &
 #music player daemon
 mpd ~/.config/mpd/mpd.conf
 # hotkeys
@@ -42,5 +51,11 @@ do
 	fi
 	sleep 1m
 done &
+# start simacs
+simacs &
+# start myvim
+openmyvim.sh &
+# start firefox
+firefox &
 #start dwm
 exec dwm
