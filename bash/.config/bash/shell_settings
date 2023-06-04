@@ -98,6 +98,8 @@ alias tmux='tmux -2'
 alias ts='tmux-sessionizer.sh $@'
 alias tks='tmux kill-server && echo "tmux killed"; tmux list-sessions'
 alias tls='tmux list-sessions'
+## custom program launcher
+alias j4='launcher.sh &'
 ## programs
 #alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
 alias music='mpv --no-video'
