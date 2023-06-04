@@ -23,7 +23,7 @@ export MAILDIR="/home/simon/.mail/Yahoo"
 ## default programs
 # export TERM="st"
 export EDITOR="myvim"
-export BROWSER="surf"
+export BROWSER="firefox"
 export PAGER="less"
 export RTV_BROWSER="w3m"
 export PLAYER="mpv"
