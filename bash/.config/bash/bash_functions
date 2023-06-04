@@ -10,7 +10,7 @@ function tagger() {
 # fuzzy cd and fancy ls -lh
 function c() {
   local dir
-  dir="$( fd --type d -H . -d 1 ~/ | fzf )"
+  dir="$( fd --type d -H . -d 5 ~/ | fzf )"
   [[ -z $dir ]] && return
   cd "$dir"
   exa -l --icons
