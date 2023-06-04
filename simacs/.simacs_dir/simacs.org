@@ -84,7 +84,7 @@
     ;; 					  :weight normal :height sp/font-height
     ;; 					  :width normal))))))
 
-    (when (string= "derek" (system-name)) (set-frame-font "Source Code Pro-13"))
+    (when (string= "derek" (system-name)) (set-frame-font "FiraCode Nerd Font-14"))
     (global-prettify-symbols-mode t)
 
   #+end_src
@@ -1283,6 +1283,8 @@
     (evil-window-set-width (max (- screen-width 60) 60)))
     (persp-switch "git")
     (magit-status "/home/simon/.dotfiles")
+    (persp-switch "org")
+    (dired "/home/simon/Documents/org")
     (persp-switch "main"))
 
   (sp/open-with-tasks-and-agenda)
