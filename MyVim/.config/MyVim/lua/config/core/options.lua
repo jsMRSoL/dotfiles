@@ -23,8 +23,9 @@ local opts = {
   formatoptions = 'jcroqlnt', -- tcqj
   grepformat = "%f:%l:%c:%m",
   grepprg = "rg --vimgrep",
-  guicursor =
-  'n-v-c:block-Normal,i-ci-ve:ver25-iCursor,r-cr:hor20-rCursor,o:hor50,sm:block-blinkwait175-blinkoff150-blinkon175',
+  -- The following did not work well with catppuccin.
+  -- guicursor =
+  -- 'n-v-c:block-Normal,i-ci-ve:ver25-iCursor,r-cr:hor20-rCursor,o:hor50,sm:block-blinkwait175-blinkoff150-blinkon175',
   hidden = true,
   ignorecase = true,
   inccommand = 'nosplit',
