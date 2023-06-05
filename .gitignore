@@ -43,9 +43,7 @@ nvim/.config/nvim/plugin/packer_compiled.vim
 /simacs/.simacs_dir/url/
 /w3m/.config/w3m/cookie
 /w3m/.config/w3m/history
-/w3m/.config/w3m/mailcap
 /simacs/.simacs_dir/bookmarks
-
 lvim/.config/lvim/plugin/packer_compiled.lua
 nvim/.config/nvim/plugin/packer_compiled.lua
 /simacs/.simacs_dir/#recentf#
