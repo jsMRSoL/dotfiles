@@ -34,7 +34,13 @@ if ! tmux has-session -t $session >/dev/null 2>&1; then
 fi
 
 # ...and switch to it.
-if [[ -n $TMUX ]]; then
+attached=$( tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1 )
+# if [[ -n $TMUX ]]; then 
+# the above test works only if the script is called from within the attached client
+if [[ -n $attached ]]; then
+# whenever a client is attached, we switch with switch-client.
+# this method allows this script to be called (with an argument)
+# from dmenu.
   tmux switch-client -t $session
 else
   tmux attach -t $session
