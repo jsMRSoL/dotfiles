@@ -49,6 +49,7 @@ return {
           require("telescope.builtin").find_files({
             prompt_title = "<= ~/.local =>",
             cwd = "~/.local",
+            follow = true,
           })
         end,
         {}
