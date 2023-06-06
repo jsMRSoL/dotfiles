@@ -13,7 +13,7 @@ saveplay() { ytsp "$1" ;}
 # dmenu function
 # The URL will be shown visually in 30 characters or less.
 ask() {
-x=$(echo -e "clip\nw3m\nwaterfox\nmpv\nmupdf\nwget\nsaveplay\nsxiv\nytdl" | dmenu -i -p "How to open?")
+x=$(echo -e "clip\nw3m\nwaterfox\nmpv\nmupdf\nwget\nsaveplay\nsxiv\nytdl" | dmenu -p "How to open?")
 
 case "$x" in
     clip) printf '%s' "$1" | xclip -selection clipboard ;;

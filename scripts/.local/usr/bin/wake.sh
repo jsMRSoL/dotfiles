@@ -2,7 +2,7 @@
 
 #dmenu function
 ask() {
-x=$(echo -e "ant\nderek" | dmenu -i -p "Wake which machine?")
+x=$(echo -e "ant\nderek" | dmenu -p "Wake which machine?")
 
 ping -q -c 1 "$x"
 PING=$?

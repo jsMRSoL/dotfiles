@@ -15,7 +15,7 @@ play() {
 
 choices="Radio 1\nRadio 2\nRadio 3\nRadio 4\nRadio Glos\nPlanet Rock"
 
-chosen=$(echo -e "$choices" | dmenu -i -p "Select station:")
+chosen=$(echo -e "$choices" | dmenu -p "Select station:")
 
 case "$chosen" in 
 	"Radio 1") play $radio1 ;;

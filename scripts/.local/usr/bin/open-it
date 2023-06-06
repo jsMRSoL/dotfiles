@@ -1,7 +1,7 @@
 #!/bin/bash
 
 webcli() { w3m "$1" ;}
-webgui() { waterfox "$1" 2&>/dev/null & disown ;}
+webgui() { firefox "$1" 2&>/dev/null & disown ;}
 vidplay() { mpv --no-terminal "$1" 2&>/dev/null & disown ;}
 gifview() { sxiv -a -s f -- "$1" 2&>/dev/null & disown ;}
 pdfview() { mupdf "$1" 2&>/dev/null & disown ;}
@@ -13,12 +13,12 @@ saveplay() { ytsp "$1" ;}
 # dmenu function
 # The URL will be shown visually in 30 characters or less.
 ask() {
-x=$(echo -e "clip\nw3m\nwaterfox\nmpv\nmupdf\nwget\nsaveplay\nsxiv\nytdl" | dmenu -i -p "How to open?")
+x=$(echo -e "clip\nw3m\nfirefox\nmpv\nmupdf\nwget\nsaveplay\nsxiv\nytdl" | dmenu -p "How to open?")
 
 case "$x" in
     clip) printf '%s' "$1" | xclip -selection clipboard ;;
 	w3m) webcli "$1" ;;
-	waterfox) webgui "$1" ;;
+  firefox) webgui "$1" ;;
 	mpv) vidplay "$1" ;;
 	feh) imageview "$1" ;;
 	mupdf) pdfview "$1" ;;
