@@ -54,7 +54,7 @@ done &
 # start simacs
 simacs &
 # start myvim
-openmyvim.sh &
+tmux-myvim &
 # start firefox
 firefox &
 #start dwm
