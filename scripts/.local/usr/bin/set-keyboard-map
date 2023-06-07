@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ $(cat /etc/hostname) != "derek" ]]
+then
+    /usr/bin/setxkbmap -layout gb,gb,gr -variant ,colemak,polytonic -option "ctrl:nocaps" -option "grp:shifts_toggle" -option "compose:menu"
+else
+    /usr/bin/setxkbmap -layout us,gr -variant ,polytonic -option "ctrl:nocaps" -option "grp:shifts_toggle"
+fi

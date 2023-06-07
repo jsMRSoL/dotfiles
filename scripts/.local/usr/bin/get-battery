@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if acpi -a | grep off-line > /dev/null
+then
+  BAT="󱧥 $(acpi -b | awk '{ print $4 " " $5 }' | tr -d ',')"
+else
+  BAT=" "
+fi

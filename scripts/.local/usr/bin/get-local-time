@@ -1,0 +1,5 @@
+#!/bin/bash
+
+LOCALDATE=$(date +%a\ %d-%m-%Y)
+LOCALTIME=$(date +%H:%M)
+echo " ""$LOCALDATE""  ""$LOCALTIME"

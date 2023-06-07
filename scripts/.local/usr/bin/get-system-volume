@@ -1,0 +1,25 @@
+#!/bin/bash
+
+get_volume_alsa() {
+    if [ $(amixer sget Master | tail -1 | grep -o "\[on\]\|\[off\]") == '[off]' ]; then
+        echo '󰝟 __'
+    else
+        echo " ""$( amixer sget Master | tail -1 | sed 's/.*\[\([0-9].*%\).*/\1/' )"
+    fi
+}
+
+get_volume_pulse() {
+  if [ $( pulseaudio-ctl full-status | cut -d' ' -f2) == 'yes' ]
+  then
+    echo '󰝟 __'
+  else
+    echo " ""$( pulseaudio-ctl full-status | cut -d' ' -f1 )"
+  fi
+}
+
+if [ $( cat /etc/hostname ) == 'derek' ]
+then
+  get_volume_alsa
+else
+  get_volume_pulse
+fi

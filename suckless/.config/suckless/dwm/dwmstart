@@ -1,22 +1,11 @@
 #!/bin/bash
 #Set background
-#xsetroot -solid "#18181b"
-# xsetroot -solid "#1d1f21"
-# hsetroot -solid "#000000"
 hsetroot -solid "#1e1e2e"
 #swap ctrl and capslock
-if [[ $(cat /etc/hostname) != "derek" ]]
-then
-    /usr/bin/setxkbmap -layout gb,gb,gr -variant ,colemak,polytonic -option "ctrl:nocaps" -option "grp:shifts_toggle" -option "compose:menu"
-else
-    /usr/bin/setxkbmap -layout us,gr -variant ,polytonic -option "ctrl:nocaps" -option "grp:shifts_toggle"
-fi
+set-keyboard-map
 # set up clipboard manager daemon
 clipmenud &
-#Set colour schemes
-#wal -R
 #Enable transparency
-#compton -b
 picom &
 #music player daemon
 mpd ~/.config/mpd/mpd.conf
@@ -27,29 +16,15 @@ redshift &
 ##data for status bar
 while true
 do
-    INT=""
-    if $(ping -c 1 www.google.com > /dev/null)
-    then
-        INT=" I"
-    fi
-    if [ $(amixer sget Master | tail -1 | grep -o "\[on\]\|\[off\]") == "[off]" ]
-    then
-        VOL=" M "
-    else
-        VOL=$(amixer sget Master | tail -1 | sed 's/.*\[\([0-9]*%\)\].*/\1/')
-    fi
-	LOCALTIME=$(date +%a\ %d-%m-%Y\ %H:%M)
-	IP=$(for i in `ip r`; do echo $i; done | grep -A 1 src | tail -n1) # can get confused if you use vmware
-	TEMP="$(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000))C"
+  INT="$(get-internet-connectivity)"
+  VOL="$(get-system-volume)"
+  IP=$(for i in `ip r`; do echo $i; done | grep -A 1 src | tail -n1) # can get confused if you use vmware
+  TEMP="$(get-system-temperature)"
+  LOCALTIME="$(get-local-time)"
+  BAT="$(get-battery)"
 
-	if acpi -a | grep off-line > /dev/null
-	then
-		BAT="Bat. $(acpi -b | awk '{ print $4 " " $5 }' | tr -d ',')"
-		xsetroot -name "$INT $IP $BAT $VOL $TEMP $LOCALTIME"
-	else
-		xsetroot -name "$INT $IP $VOL $TEMP $LOCALTIME"
-	fi
-	sleep 1m
+  xsetroot -name " $INT $IP $BAT $VOL $TEMP $LOCALTIME"
+  sleep 1m
 done &
 # start simacs
 simacs &
