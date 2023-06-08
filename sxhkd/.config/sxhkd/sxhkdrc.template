@@ -47,7 +47,8 @@ XF86AudioPrev
     screenshot.sh
 
 super + Print
-    gnome-screenshot -i
+    screenshot-window.sh
+    #gnome-screenshot -i
 
 # dmenu-integrated scripts
 super + shift + b
@@ -68,41 +69,41 @@ ctrl + F8
 
 # launch terminal programs
 super + x ; w
-    st -e w3m https://www.duckduckgo.com/lite
+    alacritty -e w3m https://www.duckduckgo.com/lite
 
 super + x ; m
-    st -e ncmpcpp
+    alacritty -e ncmpcpp
 
 super + x ; r
-    st -e start-rtv.sh
+    alacritty -e start-rtv.sh
 
 super + x ; n
-    st -e newsbeuter
+    alacritty -e newsbeuter
 
 # launch ranger in specific folder
 super + r ; b
-    st -e ranger ~/.local/usr/bin
+    alacritty -e ranger ~/.local/usr/bin
 
 super + r ; c
-    st -e ranger ~/.config
+    alacritty -e ranger ~/.config
 
 super + r ; d
-    st -e ranger ~/Documents
+    alacritty -e ranger ~/Documents
 
 super + r ; h
-    st -e ranger ~
+    alacritty -e ranger ~
 
 super + r ; j
-    st -e ranger ~/Projects
+    alacritty -e ranger ~/Projects
 
 super + r ; m
-    st -e ranger ~/Music
+    alacritty -e ranger ~/Music
 
 super + r ; o
-    st -e ranger ~/Downloads
+    alacritty -e ranger ~/Downloads
 
 super + r ; p
-    st -e ranger ~/Pictures
+    alacritty -e ranger ~/Pictures
 
 super + r ; v
-    st -e ranger ~/Videos
+    alacritty -e ranger ~/Videos
