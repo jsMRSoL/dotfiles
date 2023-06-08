@@ -1283,7 +1283,7 @@
     (let ((screen-width (window-width)))
     (evil-window-vsplit)
     (find-file "~/Documents/org/tasks.org")
-    (evil-window-set-width (max (- screen-width 60) 60)))
+    (evil-window-set-width (max (round (* screen-width 0.55)) 60)))
     (persp-switch "git")
     (magit-status "/home/simon/.dotfiles")
     (persp-switch "org")
