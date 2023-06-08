@@ -4,5 +4,13 @@ if acpi -a | grep off-line > /dev/null
 then
   BAT="󱧥 $(acpi -b | awk '{ print $4 " " $5 }' | tr -d ',')"
 else
-  BAT=" "
+  output=$(acpi -b)
+  if [[ "$output" == *"Not charging"* ]]
+  then
+    BAT=" 100%"
+  else
+    BAT=" $(echo "$output" | awk '{ print $4 }' | tr -d ',')"
+  fi
 fi
+
+echo "$BAT"
