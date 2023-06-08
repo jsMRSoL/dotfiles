@@ -19,7 +19,7 @@ return {
         ["<leader>du"] = { name = "+dapui" },
         ["<leader>f"] = { name = "+file/find"},
         ["<leader>g"] = { name = "+git" },
-        ["<leader>gh"] = { name = "+hunks" },
+        -- ["<leader>gh"] = { name = "+hunks" },
         ["<leader>l"] = { name = "+lsp" },
         ["<leader>lw"] = { name = "+workspace" },
         ["<leader>lx"] = { name = "+diagnostics" },
