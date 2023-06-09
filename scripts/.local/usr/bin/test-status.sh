@@ -8,7 +8,7 @@ TEMP="$(get-system-temperature)"
 LOCALTIME="$(get-local-time)"
 BAT="$(get-battery)"
 
-echo "$INT $IP$BAT $VOL $TEMP $LOCALTIME"
+echo " $INT $IP | $BAT | $VOL | $TEMP | $LOCALTIME"
 
 
 
