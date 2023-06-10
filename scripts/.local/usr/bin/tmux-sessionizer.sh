@@ -43,10 +43,10 @@ if [[ -n $attached ]]; then
 # from dmenu.
   tmux switch-client -t $session
 else
-  # tmux attach -t $session
+  tmux attach -t $session
   # If tmux is not attached to a session, that means
   # it's not open. So spawn a terminal, run tmux and attach.
-  exec alacritty -e tmux attach -t $session &
+  # exec alacritty -e tmux attach -t $session &
 fi
 
 exit 0
