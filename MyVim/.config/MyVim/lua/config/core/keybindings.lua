@@ -94,6 +94,7 @@ local mappings = {
  { "n", "<leader>bn", "<cmd>bnext<cr>", { desc = "next" } },
  { "n", "<leader>bp", "<cmd>bprev<cr>", { desc = "delete" } },
  { "n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "delete" } },
+ { "n", "<leader>bh", "<cmd>Alpha<cr>", { desc = "home" } },
  -- lsp
  { "n", "<leader>lxx", "<cmd>TroubleToggle<cr>", },
  { "n", "<leader>lxw", "<cmd>TroubleToggle workspace_diagnostics<cr>", },
