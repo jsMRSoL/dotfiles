@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# Is tmux running?
-running=false
-if tmux run 2> /dev/null; then
-  running=true
-fi
+source "$HOME/.config/bash/tmux_running.sh"
 
 # Do we already know what session we want?
 if [[ $# -eq 1 ]]; then
@@ -12,18 +8,14 @@ if [[ $# -eq 1 ]]; then
 fi
 
 # Do we want an already running session?
-if [[ -z $session ]] && $running; then
+if [[ -z $session ]] && tmux_running; then
   session=$(tmux list-sessions | cut -d: -f1 | fzf --prompt='Pick session or C-c for new session: ')
 fi
 
-# Then pick a folder for a new session.
+# If not, then pick a folder for a new session.
 if [[ -z $session ]]; then
-  # dir=$( fd --type d -H -d 1 . ~/ | fzf --prompt='Pick branch: ')
-  # [[ -z $dir ]] && exit 0
-  # path=$( fd --type d -HL . $dir | fzf --prompt="Pick subfolder or C-c to use $dir: " )
   path=$(fd --type d -HL . ~/ | fzf --prompt="Pick folder or C-c to cancel: ")
   [[ -z $path ]] && exit 0
-  # session=$(basename "${path:-$dir}" | tr . _ )
   session=$(basename "$path" | tr . _)
   [[ -z $path ]] && path=$dir
 fi
@@ -34,19 +26,16 @@ if ! tmux has-session -t $session > /dev/null 2>&1; then
 fi
 
 # ...and switch to it.
-attached=$(tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1)
-# if [[ -n $TMUX ]]; then
-# the above test works only if the script is called from within the attached client
-if [[ -n $attached ]]; then
+if tmux_attached; then
   # whenever a client is attached, we switch with switch-client.
   # this method allows this script to be called (with an argument)
   # from dmenu.
   tmux switch-client -t $session
 else
+  # This needs to be run in a terminal, and tmux will start in that terminal.
+  # tmux-sessionizer is used in the tmux_ready function.
+  # Will this code ever be reached in practice?
   tmux attach -t $session
-  # If tmux is not attached to a session, that means
-  # it's not open. So spawn a terminal, run tmux and attach.
-  # exec alacritty -e tmux attach -t $session &
 fi
 
 exit 0

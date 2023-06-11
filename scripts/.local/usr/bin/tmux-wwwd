@@ -3,8 +3,12 @@
 source "$HOME/.config/bash/tmux_running.sh"
 
 launch_w3m() {
-  tmux new-window -n w3m \
-    && tmux send-keys -t :w3m 'wwwd && exit' Enter Tab Enter
+  if tmux_window_exists w3m; then
+    tmux select-window -t w3m
+  else
+    tmux new-window -n w3m \
+      && tmux send-keys -t :w3m 'wwwd && exit' Enter Tab Enter
+  fi
 }
 
-tmux_running && launch_w3m
+tmux_ready && launch_w3m

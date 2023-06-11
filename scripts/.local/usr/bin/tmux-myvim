@@ -3,8 +3,12 @@
 source "$HOME/.config/bash/tmux_running.sh"
 
 launch() {
-  tmux new-window -t home -n MyVim \
+  if tmux_window_exists MyVim; then
+    tmux select-window -t MyVim
+  else
+  tmux new-window -n MyVim \
     && tmux send-keys -t :MyVim 'myvim && exit' Enter
+  fi
 }
 
-tmux_running && launch
+tmux_ready && launch
