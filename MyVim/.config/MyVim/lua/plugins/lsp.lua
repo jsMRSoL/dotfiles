@@ -1,5 +1,25 @@
 return {
   {
+    'jose-elias-alvarez/null-ls.nvim',
+    config = function()
+      local null_ls = require('null-ls')
+
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.stylua,
+          -- null_ls.builtins.formatting.beautysh.with({
+          --   filetypes = { 'bash', 'sh', 'zsh' },
+          -- }),
+          null_ls.builtins.formatting.shfmt.with({
+            args = { '-i', '2', '-bn', '-ci', '-sr' },
+          }),
+          -- null_ls.builtins.diagnostics.eslint,
+          null_ls.builtins.completion.spell,
+        },
+      })
+    end,
+  },
+  {
     'lewis6991/gitsigns.nvim',
     config = function()
       require('gitsigns').setup()
@@ -13,44 +33,52 @@ return {
       end
 
       map('n', ']c', function()
-        if vim.wo.diff then return ']c' end
-        vim.schedule(function() gs.next_hunk() end)
+        if vim.wo.diff then
+          return ']c'
+        end
+        vim.schedule(function()
+          gs.next_hunk()
+        end)
         return '<Ignore>'
       end, { expr = true })
 
       map('n', '[c', function()
-        if vim.wo.diff then return '[c' end
-        vim.schedule(function() gs.prev_hunk() end)
+        if vim.wo.diff then
+          return '[c'
+        end
+        vim.schedule(function()
+          gs.prev_hunk()
+        end)
         return '<Ignore>'
       end, { expr = true })
 
       -- text object
       map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-    end
+    end,
   },
   {
     'folke/neodev.nvim',
     config = function()
-      require("neodev").setup({
-        library = { plugins = { "nvim-dap-ui" }, types = true },
+      require('neodev').setup({
+        library = { plugins = { 'nvim-dap-ui' }, types = true },
       })
-    end
+    end,
   },
   {
     'folke/trouble.nvim',
     config = function()
-      local trouble = require("trouble.providers.telescope")
+      local trouble = require('trouble.providers.telescope')
 
-      local telescope = require("telescope")
+      local telescope = require('telescope')
 
-      telescope.setup {
+      telescope.setup({
         defaults = {
           mappings = {
-            i = { ["<c-x>"] = trouble.open_with_trouble },
-            n = { ["<c-x>"] = trouble.open_with_trouble },
+            i = { ['<c-x>'] = trouble.open_with_trouble },
+            n = { ['<c-x>'] = trouble.open_with_trouble },
           },
         },
-      }
+      })
 
       local cmd = vim.api.nvim_create_user_command
 
@@ -69,11 +97,11 @@ return {
       cmd('TroubleSkipLast', function()
         require('trouble').last({ skip_groups = true, jump = true })
       end, {})
-    end
+    end,
   },
   { 'j-hui/fidget.nvim' },
   {
-    "onsails/lspkind.nvim",
+    'onsails/lspkind.nvim',
     config = function()
       require('lspkind').init({
         mode = 'symbol_text',
@@ -97,13 +125,13 @@ return {
           Folder = ' ﱮ ',
           EnumMember = '  ',
           Constant = '  ',
-          Struct = '  '
+          Struct = '  ',
         },
       })
-    end
+    end,
   },
   {
-    "simrat39/rust-tools.nvim",
+    'simrat39/rust-tools.nvim',
   },
   {
     'VonHeikemen/lsp-zero.nvim',
@@ -117,43 +145,41 @@ return {
         build = function()
           local ok, _ = pcall(vim.cmd, 'MasonUpdate')
           if not ok then
-            vim.notify("Could not run MasonUpdate")
+            vim.notify('Could not run MasonUpdate')
           end
         end,
       },
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
       -- Autocompletion
-      { 'hrsh7th/nvim-cmp', },    -- Required
+      { 'hrsh7th/nvim-cmp' },     -- Required
       { 'hrsh7th/cmp-nvim-lsp' }, -- Required
-      { "hrsh7th/cmp-buffer" },
-      { "hrsh7th/cmp-path" },
-      { "hrsh7th/cmp-cmdline" },
+      { 'hrsh7th/cmp-buffer' },
+      { 'hrsh7th/cmp-path' },
+      { 'hrsh7th/cmp-cmdline' },
       -- { "saadparwaiz1/cmp_luasnip"},
       { 'L3MON4D3/LuaSnip' }, -- Required
     },
     config = function()
-      local lsp = require('lsp-zero').preset(
-
-        {
-          float_border = 'rounded',
-          call_servers = 'local',
-          configure_diagnostics = true,
-          setup_servers_on_start = true,
-          set_lsp_keymaps = {
-            preserve_mappings = false,
-            omit = {},
-          },
-          -- manage_nvim_cmp = false,
-          manage_nvim_cmp = {
-            set_sources = 'recommended',
-            set_basic_mappings = true,
-            set_extra_mappings = true,
-            use_luasnip = true,
-            set_format = true,
-            documentation_window = true,
-          },
-        })
+      local lsp = require('lsp-zero').preset({
+        float_border = 'rounded',
+        call_servers = 'local',
+        configure_diagnostics = true,
+        setup_servers_on_start = true,
+        set_lsp_keymaps = {
+          preserve_mappings = false,
+          omit = {},
+        },
+        -- manage_nvim_cmp = false,
+        manage_nvim_cmp = {
+          set_sources = 'recommended',
+          set_basic_mappings = true,
+          set_extra_mappings = true,
+          use_luasnip = true,
+          set_format = true,
+          documentation_window = true,
+        },
+      })
 
       lsp.on_attach(function(_, bufnr)
         -- lsp.default_keymaps({ buffer = bufnr })
@@ -188,7 +214,7 @@ return {
         end, 'Workspace List Folders')
 
         -- Set some keybinds conditional on server capabilities
-        nmap("<space>lf", "<cmd>lua vim.lsp.buf.format({async = true})<CR>", "Format buffer")
+        nmap('<space>lf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', 'Format buffer')
         -- elseif client.resolved_capabilities.document_range_formatting then
         --   nmap("<space>lf", "<cmd>lua vim.lsp.buf.format()<CR>", "Format")
         -- end
@@ -198,7 +224,7 @@ return {
         error = '✘',
         warn = '▲',
         hint = '⚑',
-        info = '»'
+        info = '»',
       })
 
       lsp.ensure_installed({
@@ -217,10 +243,10 @@ return {
         settings = {
           Lua = {
             completion = {
-              callSnippet = "Replace"
-            }
-          }
-        }
+              callSnippet = 'Replace',
+            },
+          },
+        },
       })
 
       lsp.skip_server_setup({ 'rust_analyzer' })
@@ -232,7 +258,7 @@ return {
 
       local lspkind = require('lspkind')
       local cmp = require('cmp')
-      cmp.setup {
+      cmp.setup({
         -- fields = { 'abbr', 'kind', 'menu' },
         fields = { 'kind', 'menu' },
         formatting = {
@@ -246,71 +272,71 @@ return {
             -- before = function(entry, vim_item)
             --   return vim_item
             -- end
-          })
+          }),
         },
         mapping = {
           ['<CR>'] = cmp.mapping.confirm({ select = false }),
-        }
-      }
-
-      cmp.setup.cmdline("/", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer" },
         },
       })
 
-      cmp.setup.cmdline(":", {
+      cmp.setup.cmdline('/', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = 'buffer' },
+        },
+      })
+
+      cmp.setup.cmdline(':', {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
-          { name = "path" },
+          { name = 'path' },
         }, {
-          { name = "cmdline" },
+          { name = 'cmdline' },
         }),
       })
 
       local rust_tools = require('rust-tools')
 
-      local mason_registry = require("mason-registry")
-      local codelldb = mason_registry.get_package("codelldb")
-      local extension_path = codelldb:get_install_path() .. "/extension/"
+      local mason_registry = require('mason-registry')
+      local codelldb = mason_registry.get_package('codelldb')
+      local extension_path = codelldb:get_install_path() .. '/extension/'
       local codelldb_path = extension_path .. 'adapter/codelldb'
       local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
 
       rust_tools.setup({
         tools = {
-          focus = true
+          focus = true,
         },
         server = {
           on_attach = function(_, bufnr)
             local keymap = {
-              { "<space>lh",  "<cmd>RustHoverActions<CR>" },
-              { "<space>lH",  "<cmd>RustHoverRange<CR>" },
-              { "<space>le",  "<cmd>RustExpandMacro<CR>" },
-              { "<space>lE",  "<cmd>RustOpenExternalDocs<CR>" },
-              { "<space>lR",  "<cmd>RustRunnables<CR>" },
-              { "<space>lD",  "<cmd>RustDebuggables<CR>" },
-              { "<space>lmd", "<cmd>RustMoveItemDown<CR>" },
-              { "<space>lmu", "<cmd>RustMoveItemUp<CR>" },
-              { "<space>lc",  "<cmd>RustOpenCargo<CR>" },
-              { "<space>lp",  "<cmd>RustParentModule<CR>" },
-              { "<space>lj",  "<cmd>RustJoinLines<CR>" },
+              { '<space>lh',  '<cmd>RustHoverActions<CR>' },
+              { '<space>lH',  '<cmd>RustHoverRange<CR>' },
+              { '<space>le',  '<cmd>RustExpandMacro<CR>' },
+              { '<space>lE',  '<cmd>RustOpenExternalDocs<CR>' },
+              { '<space>lR',  '<cmd>RustRunnables<CR>' },
+              { '<space>lD',  '<cmd>RustDebuggables<CR>' },
+              { '<space>lmd', '<cmd>RustMoveItemDown<CR>' },
+              { '<space>lmu', '<cmd>RustMoveItemUp<CR>' },
+              { '<space>lc',  '<cmd>RustOpenCargo<CR>' },
+              { '<space>lp',  '<cmd>RustParentModule<CR>' },
+              { '<space>lj',  '<cmd>RustJoinLines<CR>' },
             }
 
             for _, v in pairs(keymap) do
-              vim.keymap.set("n", v[1], v[2], { noremap = true, buffer = bufnr })
+              vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
             end
 
             local wk = require('which-key')
             wk.register({
-              ["<leader>lm"] = { name = "+move" }
+              ['<leader>lm'] = { name = '+move' },
             })
-          end
+          end,
         },
         dap = {
-          adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path)
-        }
+          adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path),
+        },
       })
     end,
-  }
+  },
 }
