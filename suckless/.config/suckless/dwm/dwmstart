@@ -23,7 +23,7 @@ do
   LOCALTIME="$(get-local-time)"
   BAT="$(get-battery)"
 
-  xsetroot -name " $INT $IP $BAT $VOL $TEMP $LOCALTIME"
+  xsetroot -name  " $INT $IP | $BAT | $VOL | $TEMP | $LOCALTIME"
   sleep 1m
 done &
 # start simacs
