@@ -1,8 +1,15 @@
 #!/bin/bash
 
 mode="$1"
-current="$(cat /sys/class/backlight/amdgpu_bl0/actual_brightness)"
-max="$(cat /sys/class/backlight/amdgpu_bl0/max_brightness)"
+
+if [[ "$( cat /etc/hostname)" == "derek" ]]; then
+  controller="intel_backlight"
+else
+  controller="amdgpu_bl0"
+fi
+
+current="$(cat /sys/class/backlight/$controller/actual_brightness)"
+max="$(cat /sys/class/backlight/$controller/max_brightness)"
 increment=$(($max / 15))
 
 if [[ $mode == "up" ]]; then
@@ -10,7 +17,7 @@ if [[ $mode == "up" ]]; then
   if [[ $new_level -gt $max ]]; then
     new_level=$max
   fi
-  echo $new_level > /sys/class/backlight/amdgpu_bl0/brightness
+  echo $new_level > /sys/class/backlight/$controller/brightness
   refreshdwmbar
   exit
 fi
@@ -20,28 +27,28 @@ if [[ $mode == "down" ]]; then
   if [[ $new_level -lt 0 ]]; then
     new_level=0
   fi
-  echo $new_level > /sys/class/backlight/amdgpu_bl0/brightness
+  echo $new_level > /sys/class/backlight/$controller/brightness
   refreshdwmbar
   exit
 fi
 
 if [[ $mode == "high" ]]; then
   new_level=$(($max / 15 * 14))
-  echo $new_level > /sys/class/backlight/amdgpu_bl0/brightness
+  echo $new_level > /sys/class/backlight/$controller/brightness
   refreshdwmbar
   exit
 fi
 
 if [[ $mode == "medium" ]]; then
   new_level=$(($max / 15 * 7))
-  echo $new_level > /sys/class/backlight/amdgpu_bl0/brightness
+  echo $new_level > /sys/class/backlight/$controller/brightness
   refreshdwmbar
   exit
 fi
 
 if [[ $mode == "low" ]]; then
   new_level=$(($max / 15))
-  echo $new_level > /sys/class/backlight/amdgpu_bl0/brightness
+  echo $new_level > /sys/class/backlight/$controller/brightness
   refreshdwmbar
   exit
 fi
