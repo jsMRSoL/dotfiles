@@ -1,14 +1,13 @@
 #!/bin/bash
 
 main() {
-  mode=$( echo -e \
+  mode=$(echo -e \
     "2. Kill another session\n1. Kill this session and switch\n" \
     | fzf --prompt='What do you want to do? ')
 
   [[ -z $mode ]] && exit
 
-  if [[ $mode == "1. "* ]]
-  then
+  if [[ $mode == "1. "* ]]; then
     switch_and_kill_this
   else
     kill_another
@@ -16,18 +15,18 @@ main() {
 }
 
 switch_and_kill_this() {
-  this_session=$( tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1 | cut -d' ' -f2)
-  destination=$( pick_session "Pick session to switch to: ")
+  this_session=$(tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1 | cut -d' ' -f2)
+  destination=$(pick_session "Pick session to switch to: ")
   tmux switch-client -t $destination && tmux kill-session -t $this_session
 }
 
 kill_another() {
-  target=$( pick_session "Pick session to kill: ")
+  target=$(pick_session "Pick session to kill: ")
   tmux kill-session -t $target
 }
 
 pick_session() {
-  session=$( tmux list-sessions | cut -d: -f1 | fzf --prompt="$1" )
+  session=$(tmux list-sessions | cut -d: -f1 | fzf --prompt="$1")
   echo $session
 }
 

@@ -3,8 +3,8 @@
 source "$HOME/.config/bash/tmux_running.sh"
 
 launch() {
-  tmux new-window -n nmcli && \
-    tmux send-keys -t :nmcli 'nmcli && echo Use nmtui for interface...' Enter
+  tmux new-window -n nmcli \
+    && tmux send-keys -t :nmcli 'nmcli && echo Use nmtui for interface...' Enter
 }
 
 tmux_running && launch

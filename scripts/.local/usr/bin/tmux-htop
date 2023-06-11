@@ -3,8 +3,8 @@
 source "$HOME/.config/bash/tmux_running.sh"
 
 launch() {
-  tmux new-window -n htop && \
-    tmux send-keys -t :htop 'htop && exit' Enter
+  tmux new-window -n htop \
+    && tmux send-keys -t :htop 'htop && exit' Enter
 }
 
 tmux_running && launch

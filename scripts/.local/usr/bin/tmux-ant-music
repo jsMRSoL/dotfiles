@@ -3,11 +3,11 @@
 source "$HOME/.config/bash/tmux_running.sh"
 
 launch() {
-  tmux-sessionizer.sh music && \
-  tmux rename-window -t music: mpv && \
-  tmux send-keys -t music:mpv 'mpv http://192.168.1.103:8000' Enter && \
-  tmux new-window -t music -n control && \
-  tmux send-keys -t music:control 'ncmpcpp -h 192.168.1.103 -p 6600' Enter
+  tmux-sessionizer.sh music \
+    && tmux rename-window -t music: mpv \
+    && tmux send-keys -t music:mpv 'mpv http://192.168.1.103:8000' Enter \
+    && tmux new-window -t music -n control \
+    && tmux send-keys -t music:control 'ncmpcpp -h 192.168.1.103 -p 6600' Enter
 }
 
 tmux_running && launch

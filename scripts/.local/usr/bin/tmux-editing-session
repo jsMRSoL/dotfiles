@@ -3,24 +3,24 @@
 source "$HOME/.config/bash/tmux_running.sh"
 
 launch() {
-  file=$( fd --type f -HL . ~/ | fzf --prompt="Pick file or C-c to cancel: " )
+  file=$(fd --type f -HL . ~/ | fzf --prompt="Pick file or C-c to cancel: ")
   [[ -z $file ]] && exit 0
-  path=$( dirname $file )
-  session=$(basename "$file" | tr . _ )
+  path=$(dirname $file)
+  session=$(basename "$file" | tr . _)
 
-  if ! tmux has-session -t $session >/dev/null 2>&1; then
+  if ! tmux has-session -t $session > /dev/null 2>&1; then
     tmux new-session -s $session -d -c $path
   fi
 
-  tmux new-window -n MyVim && \
-    tmux send-keys -t :MyVim "myvim $file && exit" Enter
-  }
+  tmux new-window -n MyVim \
+    && tmux send-keys -t :MyVim "myvim $file && exit" Enter
+}
 
-  attached=$( tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1 )
-  if [[ -n $attached ]]; then
-    tmux switch-client -t $session
-  else
-    tmux attach -t $session
-  fi
+attached=$(tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1)
+if [[ -n $attached ]]; then
+  tmux switch-client -t $session
+else
+  tmux attach -t $session
+fi
 
-  tmux_running && launch
+tmux_running && launch
