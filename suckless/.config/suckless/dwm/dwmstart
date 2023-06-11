@@ -5,6 +5,8 @@ hsetroot -solid "#1e1e2e"
 set-keyboard-map
 # set up clipboard manager daemon
 clipmenud &
+# set default brightness
+brightness.sh medium
 #Enable transparency
 picom &
 #music player daemon
@@ -16,14 +18,7 @@ redshift &
 ##data for status bar
 while true
 do
-  INT="$(get-internet-connectivity)"
-  VOL="$(get-system-volume)"
-  IP=$(for i in `ip r`; do echo $i; done | grep -A 1 src | tail -n1) # can get confused if you use vmware
-  TEMP="$(get-system-temperature)"
-  LOCALTIME="$(get-local-time)"
-  BAT="$(get-battery)"
-
-  xsetroot -name  " $INT $IP | $BAT | $VOL | $TEMP | $LOCALTIME"
+  xsetroot -name "$(get-status)"
   sleep 1m
 done &
 # start simacs

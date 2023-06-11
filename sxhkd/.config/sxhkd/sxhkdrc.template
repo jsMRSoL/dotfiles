@@ -12,10 +12,12 @@ super + shift + s
 
 # brightness
 XF86MonBrightnessDown
-    backlight_control -10
+    brightness.sh down
+    # backlight_control -10
 
 XF86MonBrightnessUp
-    backlight_control +10
+    brightness.sh up
+    # backlight_control +10
 
 # volume
 XF86AudioRaiseVolume
