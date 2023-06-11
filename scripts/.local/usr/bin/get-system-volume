@@ -2,9 +2,9 @@
 
 get_volume_alsa() {
     if [ $(amixer sget Master | tail -1 | grep -o "\[on\]\|\[off\]") == '[off]' ]; then
-        echo '󰝟 __%'
+        echo '󰝟 __'
     else
-        echo " ""$( amixer sget Master | tail -1 | sed 's/.*\[\([0-9].*%\).*/\1/' )%"
+        echo " ""$( amixer sget Master | tail -1 | sed 's/.*\[\([0-9].*%\).*/\1/' )"
     fi
 }
 
