@@ -62,32 +62,19 @@
 * Theming
   #+begin_src emacs-lisp
 
-    ;; (use-package modus-themes
-    ;;   :init (load-theme 'modus-vivendi t))
     (use-package catppuccin-theme
       :init (load-theme 'catppuccin t))
 
     (use-package doom-modeline
       :init (doom-modeline-mode 1))
 
-    ;; (custom-set-faces '(default ((t
-    ;; 				  (:family "Source Code Pro"
-    ;; 					   :foundry "ADBO" :slant normal
-    ;; 					   :weight normal :height 180
-    ;; 					   :width normal)))))
     (custom-set-faces '(default ((t
-				  (:family "FiraCode Nerd Font Mono"
+				  (:family "FiraCode Nerd Font Propo"
 					   :foundry "CTDB" :slant normal
 					   :weight normal :height 150
 					   :width normal)))))
-    ;; (let ((sp/font-height (if (string= "derek" (system-name)) 130, 180)))
-    ;;   `(custom-set-faces '(default ((t
-    ;; 				 (:family "Source Code Pro"
-    ;; 					  :foundry "ADBO" :slant normal
-    ;; 					  :weight normal :height sp/font-height
-    ;; 					  :width normal))))))
 
-    (when (string= "derek" (system-name)) (set-frame-font "FiraCode Nerd Font-14"))
+    (when (string= "derek" (system-name)) (set-frame-font "FiraCode Nerd Font Propo-14"))
     (global-prettify-symbols-mode t)
 
   #+end_src
@@ -1283,12 +1270,12 @@
     (let ((screen-width (window-width)))
     (evil-window-vsplit)
     (find-file "~/Documents/org/tasks.org")
-    (evil-window-set-width (max (round (* screen-width 0.55)) 60)))
     (persp-switch "git")
     (magit-status "/home/simon/.dotfiles")
     (persp-switch "org")
     (dired "/home/simon/Documents/org")
-    (persp-switch "main"))
+    (persp-switch "main")
+    (evil-window-set-width (max (round (* screen-width 0.55)) 60))))
 
   (sp/open-with-tasks-and-agenda)
 #+end_src
