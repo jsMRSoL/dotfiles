@@ -10,4 +10,4 @@ launch() {
     && tmux send-keys -t music:control 'ncmpcpp -h 192.168.1.103 -p 6600' Enter
 }
 
-check_tmux_terminal_open && launch
+tmux_ready && launch
