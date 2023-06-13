@@ -7,13 +7,13 @@ return {
       null_ls.setup({
         sources = {
           null_ls.builtins.formatting.stylua,
-          -- null_ls.builtins.formatting.beautysh.with({
-          --   filetypes = { 'bash', 'sh', 'zsh' },
-          -- }),
+          null_ls.builtins.diagnostics.luacheck.with({
+            args = { '--globals', 'vim' },
+          }),
           null_ls.builtins.formatting.shfmt.with({
             args = { '-i', '2', '-bn', '-ci', '-sr' },
           }),
-          -- null_ls.builtins.diagnostics.eslint,
+          null_ls.builtins.diagnostics.shellcheck,
           null_ls.builtins.completion.spell,
         },
       })
