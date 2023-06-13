@@ -1,10 +1,12 @@
 #!/bin/bash
 
+# dmenu options
+dmenu_opts=(-l 3 -fn 'FiraCode Nerd Font-15' -nf '#cdd6f4' -nb '#1e1e2e' -sf '#D8DEE9' -sb '#626880' -p 'Choose action: ')
 # dmenu function
-x=$(echo -e "copy it\nopen it\ndownload it" | dmenu -p "How to open?")
+x="$(echo -e "Copy it\nDownload it\nOpen it" | dmenu "${dmenu_opts[@]}")"
 
 case "$x" in
-    "copy it") printf '%s' "$1" | xclip -selection clipboard ;;
-	"open it") open-it "$1" ;;
-	"download it") dl-it "$1" ;;
+  "Copy it") printf '%s' "$1" | xclip -selection clipboard ;;
+  "Open it") open-it "$1" ;;
+  "Download it") dl-it "$1" ;;
 esac
