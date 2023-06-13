@@ -1,6 +1,7 @@
 return {
   {
     'mfussenegger/nvim-dap',
+    event = 'VeryLazy',
     config = function()
       local dap = require('dap')
       local dapui = require('dapui')
@@ -61,6 +62,7 @@ return {
   },
   {
     'jbyuki/one-small-step-for-vimkind',
+    event = 'VeryLazy',
     config = function()
       local dap = require('dap')
       dap.configurations.lua = {

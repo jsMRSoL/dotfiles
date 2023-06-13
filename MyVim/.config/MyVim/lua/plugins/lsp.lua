@@ -1,6 +1,8 @@
 return {
   {
     'jose-elias-alvarez/null-ls.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       local null_ls = require('null-ls')
 
@@ -21,6 +23,7 @@ return {
   },
   {
     'lewis6991/gitsigns.nvim',
+    event = 'VeryLazy',
     config = function()
       require('gitsigns').setup()
 
@@ -58,6 +61,7 @@ return {
   },
   {
     'folke/neodev.nvim',
+    event = 'VeryLazy',
     config = function()
       require('neodev').setup({
         library = { plugins = { 'nvim-dap-ui' }, types = true },
@@ -66,6 +70,7 @@ return {
   },
   {
     'folke/trouble.nvim',
+    event = 'VeryLazy',
     config = function()
       local trouble = require('trouble.providers.telescope')
 
@@ -102,6 +107,7 @@ return {
   { 'j-hui/fidget.nvim' },
   {
     'onsails/lspkind.nvim',
+    event = 'VeryLazy',
     config = function()
       require('lspkind').init({
         mode = 'symbol_text',
@@ -131,16 +137,17 @@ return {
     end,
   },
   {
-    'simrat39/rust-tools.nvim',
-  },
-  {
     'VonHeikemen/lsp-zero.nvim',
+    event = 'VeryLazy',
     branch = 'v2.x',
     dependencies = {
       -- LSP Support
       { 'neovim/nvim-lspconfig' }, -- Required
+      -- Optional
       {
-        -- Optional
+        'simrat39/rust-tools.nvim',
+      },
+      {
         'williamboman/mason.nvim',
         build = function()
           local ok, _ = pcall(vim.cmd, 'MasonUpdate')
