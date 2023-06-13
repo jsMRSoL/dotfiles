@@ -5,16 +5,16 @@ source "$HOME/.config/bash/tmux_running.sh"
 launch() {
   file=$(fd --type f -HL . ~/ | fzf --prompt="Pick file or C-c to cancel: ")
   [[ -z $file ]] && exit 0
-  path=$(dirname $file)
+  path="$(dirname "$file")"
   session=$(basename "$file" | tr . _)
 
-  if ! tmux has-session -t $session > /dev/null 2>&1; then
-    tmux new-session -s $session -d -c $path
+  if ! tmux has-session -t "$session" > /dev/null 2>&1; then
+    tmux new-session -s "$session" -d -c "$path"
   fi
 
-  tmux new-window -n MyVim -t $session \
-    && tmux send-keys -t $session:MyVim "myvim $file && exit" Enter \
-    && tmux switch-client -t $session
+  tmux new-window -n MyVim -t "$session" \
+    && tmux send-keys -t "$session":MyVim "myvim $file && exit" Enter \
+    && tmux switch-client -t "$session"
 }
 
 tmux_ready && launch

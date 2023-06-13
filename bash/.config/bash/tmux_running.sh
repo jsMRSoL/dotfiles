@@ -9,7 +9,8 @@ tmux_running() {
 }
 
 tmux_attached() {
-  attached=$(tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1)
+  attached="$(tmux list-sessions -F \
+    '#{session_attached} #{session_name}' | grep ^1)"
   if [[ -n $attached ]]; then
     # return true
     return 0
@@ -20,11 +21,10 @@ tmux_attached() {
 
 tmux_ready() {
   if tmux_running && tmux_attached; then
-    echo "Got to here."
     return 0
   else
     exec alacritty -e tmux-sessionizer.sh home &
-    for i in {1..50}; do
+    for _i in {1..50}; do
       if tmux has-session -t home 2> /dev/null; then
         # good to go
         return 0
@@ -36,8 +36,8 @@ tmux_ready() {
 }
 
 tmux_window_exists() {
-  exists="$(tmux list-windows -F '#{session_attached} #{window_name}' \
-    | grep $1)"
+  exists="$(tmux list-windows -F \
+    '#{session_attached} #{window_name}' | grep "$1")"
   if [[ -n $exists ]]; then
     return 0
   fi
