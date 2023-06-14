@@ -1,21 +1,22 @@
 #!/bin/bash
 
 # step one : convert to tif
+count=0
 for image in *.png; do
-  convert "$image" "${image/.png/.tif}"
+  count=$((count + 1))
+  no=$(printf "%02d" $count)
+  convert "$image" "$no.tif"
 done
 
-# step two : unpaper
-for image in *.tif; do
-  unpaper "$image" "${image/.tif/-unp.tif}"
-done
+# # step two : unpaper
+# for image in *.tif; do
+#   unpaper "$image" "${image/.tif/-unp.tif}"
+# done
 
 # step three : ocr
-count=1
-for page in *-unp.tif; do
-  no=$(printf "%02d" $count)
-  tesseract "$page" "${page/unp.tif/$no}" -l grc+eng
-  count=$((count + 1))
+# for page in *-unp.tif; do
+for page in *.tif; do
+  tesseract "$page" "${page/.tif/}" -l grc+eng
   rm "$page"
 done
 
@@ -25,4 +26,6 @@ for file in *.txt; do
   rm "$file"
 done
 
-rm "*.tif"
+# rm ./*.tif
+
+notify-send "Greek OCR" "$count page(s) ready!"
