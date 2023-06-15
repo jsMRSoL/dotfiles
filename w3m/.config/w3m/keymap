@@ -10,6 +10,13 @@
 # Right : RIGHT, ^[[C
 # Left  : LEFT, ^[[D
 
+# my custom binds
+keymap xb EXTERN_LINK $BROWSER
+keymap  xx  COMMAND "READ_SHELL ~/.w3m/cgi-bin/fnx_fzfmiru.cgi ; BACK ; GOTO file:/cgi-bin/fnx_execute.cgi ; BACK"
+
+
+###
+
 keymap	C-@	MARK
 keymap	C-a	LINE_BEGIN
 keymap	C-b	MOVE_LEFT
