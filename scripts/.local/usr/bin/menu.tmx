@@ -1,0 +1,30 @@
+#!/bin/bash
+
+display_menu() {
+  cat << EOF
+7. Switch
+6. New
+5. Detached
+4. List
+3. Kill
+2. Vim
+1. Editing
+EOF
+}
+
+mode="$(display_menu | fzf)"
+
+case $mode in
+  "7. Switch") tmux-sessionizer.sh ;;
+  "6. New") read -rp "Enter new session name: " session \
+    && tmux-sessionizer.sh "$session" ;;
+  "5. Detached") read -rp "Enter new detached session name: " session \
+    && tmux new-session -s "$session" -d ;;
+  "4. List") tmux-list-sessions; echo -e "\n"; \
+    read -rp "Press any key to continue..."  ;;
+  "3. Kill") tmux-kill-session ;;
+  "2. Vim") tmux-myvim ;;
+  "1. Editing" ) tmux-editing-session ;;
+  *) notify-send "Tmux menu" "No action taken";;
+esac
+

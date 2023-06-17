@@ -1,0 +1,4 @@
+#!/bin/bash
+
+tmux display-popup -w 60% -h 100% -E 'read -rp "Search for: " query \
+      && w3m https://lite.duckduckgo.com/lite?q="${query// /%20}"'
