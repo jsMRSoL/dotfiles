@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source "$HOME/.config/bash/tmux_running.sh"
+
+launch_w3m() {
+    dmenu_opts=(-l 1 -fn 'FiraCode Nerd Font-15' -nf '#cdd6f4' -nb '#1e1e2e' -sf '#D8DEE9' -sb '#626880' -p 'Search for: ')
+    query="$( dmenu "${dmenu_opts[@]}" </dev/null | sed "s| |%20|g")"
+    cmd="w3m https://lite.duckduckgo.com/lite?q=$query && exit"
+    tmux new-window -n search \
+      && tmux send-keys -t :search "$cmd" Enter Tab Tab Tab Tab Tab Tab
+}
+
+tmux_ready && launch_w3m
+
