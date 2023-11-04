@@ -5,7 +5,7 @@ mode="$1"
 if [[ "$( cat /etc/hostname)" == "derek" ]]; then
   controller="intel_backlight"
 else
-  controller="amdgpu_bl0"
+  controller="amdgpu_bl1"
 fi
 
 current="$(cat /sys/class/backlight/$controller/actual_brightness)"
@@ -47,7 +47,7 @@ if [[ $mode == "medium" ]]; then
 fi
 
 if [[ $mode == "low" ]]; then
-  new_level=$(max / 15)
+  new_level=$((max / 15))
   echo "$new_level" > /sys/class/backlight/$controller/brightness
   refreshdwmbar
   exit
