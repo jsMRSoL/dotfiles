@@ -104,7 +104,11 @@ return {
       end, {})
     end,
   },
-  { 'j-hui/fidget.nvim' },
+  {
+    'j-hui/fidget.nvim',
+    tag = 'legacy',
+    event = 'LspAttach',
+  },
   {
     'onsails/lspkind.nvim',
     event = 'VeryLazy',
@@ -164,8 +168,9 @@ return {
       { 'hrsh7th/cmp-buffer' },
       { 'hrsh7th/cmp-path' },
       { 'hrsh7th/cmp-cmdline' },
-      -- { "saadparwaiz1/cmp_luasnip"},
+      { 'saadparwaiz1/cmp_luasnip' },
       { 'L3MON4D3/LuaSnip' }, -- Required
+      { 'rafamadriz/friendly-snippets' },
     },
     config = function()
       local lsp = require('lsp-zero').preset({
@@ -264,8 +269,87 @@ return {
       lsp.setup()
 
       local lspkind = require('lspkind')
+      local luasnip = require('luasnip')
+      local vscode_loaders = require('luasnip.loaders.from_vscode')
+      vscode_loaders.lazy_load()
+
+      local types = require("luasnip.util.types")
+      luasnip.setup({
+        keep_roots = true,
+        link_roots = true,
+        link_children = true,
+
+        -- Update more often, :h events for more info.
+        update_events = 'TextChanged,TextChangedI',
+        -- Snippets aren't automatically removed if their text is deleted.
+        -- `delete_check_events` determines on which events (:h events) a check for
+        -- deleted snippets is performed.
+        -- This can be especially useful when `history` is enabled.
+        delete_check_events = 'TextChanged',
+        ext_opts = {
+          [types.choiceNode] = {
+            active = {
+              virt_text = { { 'choiceNode', 'Comment' } },
+            },
+          },
+        },
+        -- treesitter-hl has 100, use something higher (default is 200).
+        ext_base_prio = 300,
+        -- minimal increase in priority.
+        ext_prio_increase = 1,
+        -- enable_autosnippets = true,
+        -- mapping for cutting selected text so it's usable as SELECT_DEDENT,
+        -- SELECT_RAW or TM_SELECTED_TEXT (mapped via xmap).
+        -- store_selection_keys = '<Tab>',
+        -- luasnip uses this function to get the currently active filetype. This
+        -- is the (rather uninteresting) default, but it's possible to use
+        -- eg. treesitter for getting the current filetype by setting ft_func to
+        -- require("luasnip.extras.filetype_functions").from_cursor (requires
+        -- `nvim-treesitter/nvim-treesitter`). This allows correctly resolving
+        -- the current filetype in eg. a markdown-code block or `vim.cmd()`.
+        -- ft_func = function()
+        --   return vim.split(vim.bo.filetype, '.', true)
+        -- end,
+      })
+      local ok, _ = pcall(require, 'config.user-snippets')
+      if not ok then
+        vim.notify("Could not load user snippets!", vim.log.levels.WARN )
+      end
+
+      -- set keybinds for both INSERT and VISUAL.
+      vim.api.nvim_set_keymap('i', '<C-n>', '<Plug>luasnip-next-choice', {})
+      vim.api.nvim_set_keymap('s', '<C-n>', '<Plug>luasnip-next-choice', {})
+      vim.api.nvim_set_keymap('i', '<C-p>', '<Plug>luasnip-prev-choice', {})
+      vim.api.nvim_set_keymap('s', '<C-p>', '<Plug>luasnip-prev-choice', {})
+
       local cmp = require('cmp')
       cmp.setup({
+        mapping = {
+          ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
+          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete({}),
+          ['<CR>'] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+          }),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+        },
         -- fields = { 'abbr', 'kind', 'menu' },
         fields = { 'kind', 'menu' },
         formatting = {
@@ -280,9 +364,6 @@ return {
             --   return vim_item
             -- end
           }),
-        },
-        mapping = {
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
         },
       })
 
