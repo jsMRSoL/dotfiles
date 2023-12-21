@@ -1,4 +1,5 @@
 local opts = {
+  autochdir = true,
   autoindent = true,
   backspace = 'indent,eol,start',
   breakindent = true,

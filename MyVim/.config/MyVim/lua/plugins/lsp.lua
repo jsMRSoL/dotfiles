@@ -9,8 +9,9 @@ return {
       null_ls.setup({
         sources = {
           null_ls.builtins.formatting.stylua,
+          null_ls.builtins.formatting.prettierd,
           null_ls.builtins.diagnostics.luacheck.with({
-            args = { '--globals', 'vim' },
+            args = { '--no-global' },
           }),
           null_ls.builtins.formatting.shfmt.with({
             args = { '-i', '2', '-bn', '-ci', '-sr' },
@@ -163,7 +164,7 @@ return {
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
       -- Autocompletion
-      { 'hrsh7th/nvim-cmp' },     -- Required
+      { 'hrsh7th/nvim-cmp' }, -- Required
       { 'hrsh7th/cmp-nvim-lsp' }, -- Required
       { 'hrsh7th/cmp-buffer' },
       { 'hrsh7th/cmp-path' },
@@ -182,15 +183,7 @@ return {
           preserve_mappings = false,
           omit = {},
         },
-        -- manage_nvim_cmp = false,
-        manage_nvim_cmp = {
-          set_sources = 'recommended',
-          set_basic_mappings = true,
-          set_extra_mappings = true,
-          use_luasnip = true,
-          set_format = true,
-          documentation_window = true,
-        },
+        manage_nvim_cmp = true,
       })
 
       lsp.on_attach(function(_, bufnr)
@@ -256,6 +249,15 @@ return {
           Lua = {
             completion = {
               callSnippet = 'Replace',
+            },
+            diagnostics = {
+              -- get the language server to recogniser
+              -- globals used in plenary tests
+              globals = {
+                'describe',
+                'it',
+                'before_each',
+              },
             },
           },
         },
@@ -323,8 +325,23 @@ return {
       vim.api.nvim_set_keymap('s', '<C-p>', '<Plug>luasnip-prev-choice', {})
 
       local cmp = require('cmp')
+      local luasnip = require('luasnip')
+      require('luasnip.loaders.from_vscode').lazy_load()
       cmp.setup({
-        mapping = {
+        fields = { 'kind', 'menu' },
+        formatting = {
+          format = lspkind.cmp_format({
+            mode = 'symbol_text', -- show only symbol annotations
+            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+          }),
+        },
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        mapping = cmp.mapping.preset.insert({
           ['<C-n>'] = cmp.mapping.select_next_item(),
           ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
@@ -335,39 +352,28 @@ return {
             select = true,
           }),
           ['<Tab>'] = cmp.mapping(function(fallback)
-            if luasnip.expand_or_jumpable() then
+            if luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             else
               fallback()
             end
           end, { 'i', 's' }),
-
           ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if luasnip.jumpable(-1) then
+            if luasnip.locally_jumpable(-1) then
               luasnip.jump(-1)
             else
               fallback()
             end
           end, { 'i', 's' }),
-        },
-        -- fields = { 'abbr', 'kind', 'menu' },
-        fields = { 'kind', 'menu' },
-        formatting = {
-          format = lspkind.cmp_format({
-            mode = 'symbol_text',  -- show only symbol annotations
-            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-
-            -- The function below will be called before any actual modifications from lspkind
-            -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-            -- before = function(entry, vim_item)
-            --   return vim_item
-            -- end
-          }),
+        }),
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+          { name = 'path' },
         },
       })
 
-      cmp.setup.cmdline('/', {
+      cmp.setup.cmdline({ '/', '?' }, {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
           { name = 'buffer' },
@@ -398,17 +404,17 @@ return {
         server = {
           on_attach = function(_, bufnr)
             local keymap = {
-              { '<space>lh',  '<cmd>RustHoverActions<CR>' },
-              { '<space>lH',  '<cmd>RustHoverRange<CR>' },
-              { '<space>le',  '<cmd>RustExpandMacro<CR>' },
-              { '<space>lE',  '<cmd>RustOpenExternalDocs<CR>' },
-              { '<space>lR',  '<cmd>RustRunnables<CR>' },
-              { '<space>lD',  '<cmd>RustDebuggables<CR>' },
+              { '<space>lh', '<cmd>RustHoverActions<CR>' },
+              { '<space>lH', '<cmd>RustHoverRange<CR>' },
+              { '<space>le', '<cmd>RustExpandMacro<CR>' },
+              { '<space>lE', '<cmd>RustOpenExternalDocs<CR>' },
+              { '<space>lR', '<cmd>RustRunnables<CR>' },
+              { '<space>lD', '<cmd>RustDebuggables<CR>' },
               { '<space>lmd', '<cmd>RustMoveItemDown<CR>' },
               { '<space>lmu', '<cmd>RustMoveItemUp<CR>' },
-              { '<space>lc',  '<cmd>RustOpenCargo<CR>' },
-              { '<space>lp',  '<cmd>RustParentModule<CR>' },
-              { '<space>lj',  '<cmd>RustJoinLines<CR>' },
+              { '<space>lc', '<cmd>RustOpenCargo<CR>' },
+              { '<space>lp', '<cmd>RustParentModule<CR>' },
+              { '<space>lj', '<cmd>RustJoinLines<CR>' },
             }
 
             for _, v in pairs(keymap) do
@@ -420,6 +426,16 @@ return {
               ['<leader>lm'] = { name = '+move' },
             })
           end,
+          settings = {
+            ['rust-analyzer'] = {
+              runnables = {
+                -- extraArgs = { '--', '--show-output', '--color always', '--test-threads=1' },
+              },
+              -- checkOnSave = {
+              --   command = { 'clippy', '--', '-W', 'clippy::pedantic', '-W', 'clippy::nursery', '-W', 'clippy::unwrap_used' }
+              -- }
+            },
+          },
         },
         dap = {
           adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path),

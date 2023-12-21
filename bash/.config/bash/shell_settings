@@ -102,6 +102,7 @@ alias tls='tmux list-sessions'
 alias j4='launcher.sh &'
 ## programs
 #alias m='ncmpcpp -c ~/.config/ncmpcpp/config'
+alias clippy='cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used'
 alias music='mpv --no-video'
 alias vim='nvim'
 alias lazy='NVIM_APPNAME=LazyVim nvim $@'
