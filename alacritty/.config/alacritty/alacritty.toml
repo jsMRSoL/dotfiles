@@ -1,0 +1,38 @@
+import = ["/home/simon/.config/alacritty/catppuccin/catppuccin-mocha.toml"]
+
+[font]
+builtin_box_drawing = true
+size = 10.0
+
+[font.bold]
+family = "FiraCode Nerd Font"
+
+[font.bold_italic]
+family = "FiraCode Nerd Font"
+
+[font.italic]
+family = "FiraCode Nerd Font"
+
+[font.normal]
+family = "FiraCode Nerd Font"
+
+# [font.vi_mode_cursor]
+# cursor = "CellForeground"
+# text = "CellBackground"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
+
+[window]
+opacity = 0.95
+
+[window.padding]
+x = 5
+y = 4
