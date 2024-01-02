@@ -8,10 +8,10 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 /* static const char *fonts[]          = { "Hack-Regular:pixelsize=16" }; */
 /* static const char *fonts[]          = { "Source Code Pro:pixelsize=15" }; */
 /* static const char *fonts[]          = { "Source Code Pro:pixelsize=22" }; */
-static const char *fonts[]          = { "FiraCode Nerd Font-15" };
+static const char *fonts[]          = { "FiraCode Nerd Font Propo-15" };
 /* static const char dmenufont[]       = "Hack-Regular:pixelsize=16"; */
 /* static const char dmenufont[]       = "Source Code Pro:pixelsize=15"; */
-static const char dmenufont[]       = "FiraCode Nerd Font-15";
+static const char dmenufont[]       = "FiraCode Nerd Font Propo-15";
 
 /* static const char norm_fg[] = "#bbbbbb"; */
 /* static const char norm_bg[] = "#000000"; */

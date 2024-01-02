@@ -29,12 +29,12 @@ function M.reset_this()
 end
 
 M.test_line_nr = function()
-  local line = vim.api.nvim_buf_get_lines(0, 0, 2, nil)
+  local line = vim.api.nvim_buf_get_lines(0, 0, 2, false)
   P(line)
 end
 
 M.test_split = function()
-  local lines = vim.api.nvim_buf_get_lines(0, 0, 4, nil)
+  local lines = vim.api.nvim_buf_get_lines(0, 0, 4, false)
   P(lines)
   local parts = {}
   for i, line in ipairs(lines) do
@@ -50,7 +50,7 @@ M.test_split = function()
       parts[i] = parts[i][1] .. " + " .. parts[i][2]
     end
   end
-  vim.api.nvim_buf_set_lines(0, 0, 4, nil, parts)
+  vim.api.nvim_buf_set_lines(0, 0, 4, false, parts)
 end
 
 M.test_mode = function()

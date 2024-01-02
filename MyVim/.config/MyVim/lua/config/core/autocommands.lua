@@ -28,3 +28,12 @@ vim.cmd([[
 -- my highlight groups
 -- vim.cmd[[highlight NormalFloat gui=italic guifg=#a0a8b0 guibg=#000000]]
 -- vim.cmd[[highlight LspSignatureActiveParameter gui=italic guifg=#a0a8b0 guibg=#2d3133]]
+
+-- switch to project root Why doesn't this work. It works for vimrooter!
+-- vim.cmd([[
+--   augroup to-project-root
+--   autocmd! |
+--   autocmd VimEnter,BufReadPost,BufEnter * if &filetype == 'rust' | echo(expand('<abuf>'))
+--   augroup END
+-- ]])
+

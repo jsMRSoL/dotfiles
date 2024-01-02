@@ -1175,7 +1175,8 @@
 		 "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n" :empty-lines 1)
 		("jl" "Log" entry (file+olp+datetree "~/Documents/org/journal.org")
 		 "\n* %<%I:%M %p> - LOG :journal:log:\n** DONE  %?\nCLOSED: %U\n" :empty-lines 1)
-
+		("jn" "Notes" entry (file+olp+datetree "~/Documents/org/journal.org")
+		 "\n* %<%I:%M %p> - LOG :journal:log:\n** NOTE  %?\n%U\n" :empty-lines 1)
 		("b" "Book log")
 		("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
 		 "* %^{Title}\n:PROPERTIES:\n:Title: %\\1\n:Author: %^{Author}\n:Pages: ?\n:Started: %U\n:Finished: ?\n:Sessions: ?\n:Notes: %^{Notes} %?\n:END:"
