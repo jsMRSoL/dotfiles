@@ -34,7 +34,7 @@ local mappings = {
   { 'n', '<leader>:', '<cmd>Telescope command_history<cr>', { desc = 'Command History' } },
   { 'n', '<leader>e', '<cmd>Neotree focus<cr>', { desc = 'Explorer' } },
   -- ranger
-  { 'n', '<leader>r', '<cmd>FloatermNew --opener=edit ranger<CR>', { desc = 'Ranger' } },
+  { 'n', '<leader>r', '<cmd>FloatermNew --opener=edit --name=ranger ranger<CR>', { desc = 'Ranger' } },
   -- quickfix
   { 'n', '<leader>cn', '<cmd>cnext<CR>', { desc = 'next' } },
   { 'n', '<leader>cp', '<cmd>cprevious<CR>', { desc = 'previous' } },
