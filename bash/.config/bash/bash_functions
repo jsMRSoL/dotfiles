@@ -73,9 +73,9 @@ function snipper() {
 }
 
 function giffer() {
-  options="-ss ${1} -to ${2} -i ${3}"
-  high_quality_gif_settings='-vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0'
-  ffmpeg "$options" "high_quality_gif_settings" "${4}"
+  options=(-i "${1}" -ss "${2}" -to "${3}")
+  high_quality_gif_settings=(-vf "fps=10,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0)
+  ffmpeg "${options[@]}" "${high_quality_gif_settings[@]}" "${4}"
 }
 
 function bak() {
