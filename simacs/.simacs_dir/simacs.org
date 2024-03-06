@@ -42,7 +42,7 @@
     (setq ring-bell-function 'ignore)
 
     (column-number-mode)
-    (global-display-line-numbers-mode t)
+    ;;(global-display-line-numbers-mode t)
     (global-hl-line-mode t)
     (setq fill-column 78)
     ;; disable line numbers for these modes:
@@ -64,6 +64,10 @@
 
     (use-package catppuccin-theme
       :init (load-theme 'catppuccin t))
+
+    (add-hook 'after-make-frame-functions (lambda (frame)
+					    (with-selected-frame frame
+					      (load-theme 'catppuccin t))))
 
     (use-package doom-modeline
       :init (doom-modeline-mode 1))
@@ -521,6 +525,13 @@
       (find-file "~/Documents/org/tasks.org")
       (org-capture))
 
+    (defun sp/magit-dotfiles-other-frame ()
+      "Open dotfiles in magit in another frame"
+      (interactive)
+      (with-selected-frame (make-frame)
+	(magit-status "/home/simon/.dotfiles")))
+
+
     (sp/leader-keys
       "1" '(winum-select-window-1 :which-key "win 1")
       "2" '(winum-select-window-2 :which-key "win 2")
@@ -558,6 +569,7 @@
       "ft" '(treemacs :which-key "treemacs")
       "g" '(:ignore t :which-key "git")
       "gs" '(magit-status :which-key "status")
+      "gg" '(sp/magit-dotfiles-other-frame :which-key "dotfiles")
       "gm" '(sp/transient--smerge :which-key "(s)merge")
       "h" '(:ignore t :which-key "help")
       "q" '(:ignore t :which-key "quit")
@@ -803,17 +815,20 @@
 * Magit
   #+begin_src emacs-lisp
 
-    (use-package magit
-      :commands (magit-status)
-      :config
-      (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-      (add-hook 'with-editor-mode-hook #'evil-insert-state))
+       (use-package magit
+	 :commands (magit-status)
+	 :config
+	 (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+	 (add-hook 'with-editor-mode-hook #'evil-insert-state))
 
-    (setq vc-follow-symlinks t)
+       (setq vc-follow-symlinks t)
 
-    (use-package git-gutter
-      :hook ((text-mode . git-gutter-mode)
-	     (prog-mode . git-gutter-mode)))
+       (defun sp/add-magit-layout-switch-key ()
+	 (evil-define-key '(normal insert visual) magit-mode-map (kbd "") 'sp/vterm-toggle))
+
+       (use-package git-gutter
+	 :hook ((text-mode . git-gutter-mode)
+		(prog-mode . git-gutter-mode)))
 
   #+end_src
 
@@ -1003,7 +1018,7 @@
   
 * Org
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook #'auto-fill-mode)
+  (add-hook 'org-mode-hook #'visual-line-mode)
   (setq org-hide-emphasis-markers t)
   (setq electric-pair-inhibit-predicate
 	(lambda (c)
@@ -1164,32 +1179,32 @@
   Clocking and other properties here: https://orgmode.org/manual/Template-elements.html#Template-elements
   #+begin_src emacs-lisp
 
-	(setq org-capture-templates
-	      '(("t" "Tasks / Projects / Appointments")
-		("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
-		 "* TODO  %^{Title}\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  %?\n  :END:\n  %a\n  %i" :empty-lines 1)
-		("ta" "Appointment" entry (file+olp "~/Documents/org/tasks.org" "Appointments")
-		 "* TODO  %^{Title} %?\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  \n  :END:\n  %a\n  %i" :empty-lines 1)
-		("j" "Journal Entries")
-		("jj" "Journal" entry (file+olp+datetree "~/Documents/org/journal.org")
-		 "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n" :empty-lines 1)
-		("jl" "Log" entry (file+olp+datetree "~/Documents/org/journal.org")
-		 "\n* %<%I:%M %p> - LOG :journal:log:\n** DONE  %?\nCLOSED: %U\n" :empty-lines 1)
-		("jn" "Notes" entry (file+olp+datetree "~/Documents/org/journal.org")
-		 "\n* %<%I:%M %p> - LOG :journal:log:\n** NOTE  %?\n%U\n" :empty-lines 1)
-		("b" "Book log")
-		("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
-		 "* %^{Title}\n:PROPERTIES:\n:Title: %\\1\n:Author: %^{Author}\n:Pages: ?\n:Started: %U\n:Finished: ?\n:Sessions: ?\n:Notes: %^{Notes} %?\n:END:"
-		 :kill-buffer t)
-		("m" "Metrics Capture")
-		("mw" "Weight" table-line (file+headline "~/Documents/org/metrics.org" "Weight")
-		 "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
-		("mg" "Guitar" table-line (file+headline "~/Documents/org/metrics.org" "Guitar")
-		 "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
-		("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
-		 "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
-		("mr" "Reading" table-line (file+headline "~/Documents/org/metrics.org" "Reading")
-		 "| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
+    (setq org-capture-templates
+	  '(("t" "Tasks / Projects / Appointments")
+	    ("tt" "Task" entry (file+olp "~/Documents/org/tasks.org" "To organise")
+	     "* TODO  %^{Title}\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  %?\n  :END:\n  %a\n  %i" :empty-lines 1)
+	    ("ta" "Appointment" entry (file+olp "~/Documents/org/tasks.org" "Appointments")
+	     "* TODO  %^{Title} %?\n  :LOGBOOK:\n  - Created: %U\n   :END:\n  :SUBTASKS:\n  - [ ]  \n  :END:\n  %a\n  %i" :empty-lines 1)
+	    ("j" "Journal Entries")
+	    ("jj" "Journal" entry (file+olp+datetree "~/Documents/org/journal.org")
+	     "\n* %<%I:%M %p> - Journal :journal:\n**  %?\n\n" :empty-lines 1)
+	    ("jl" "Log" entry (file+olp+datetree "~/Documents/org/journal.org")
+	     "\n* %<%I:%M %p> - LOG :journal:log:\n** DONE  %?\nCLOSED: %U\n" :empty-lines 1)
+	    ("jn" "Notes" entry (file+olp+datetree "~/Documents/org/journal.org")
+	     "\n* %<%I:%M %p> - LOG :notes:\n** NOTE  %?\n%U\n" :empty-lines 1)
+	    ("b" "Book log")
+	    ("br" "Read" entry (file+headline "~/Documents/org/Books.org" "2021")
+	     "* %^{Title}\n:PROPERTIES:\n:Title: %\\1\n:Author: %^{Author}\n:Pages: ?\n:Started: %U\n:Finished: ?\n:Sessions: ?\n:Notes: %^{Notes} %?\n:END:"
+	     :kill-buffer t)
+	    ("m" "Metrics Capture")
+	    ("mw" "Weight" table-line (file+headline "~/Documents/org/metrics.org" "Weight")
+	     "| %U | %^{Weight} | %^{Notes} |" :kill-buffer t)
+	    ("mg" "Guitar" table-line (file+headline "~/Documents/org/metrics.org" "Guitar")
+	     "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+	    ("mp" "Piano" table-line (file+headline "~/Documents/org/metrics.org" "Piano")
+	     "| %U | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)
+	    ("mr" "Reading" table-line (file+headline "~/Documents/org/metrics.org" "Reading")
+	     "| %U | %^{Book} | %^{Time spent (m)} | %^{Notes} |" :kill-buffer t)))
 
   #+end_src
 
@@ -1257,28 +1272,77 @@
 	 (call-interactively 'org-table-recalculate)))
    #+end_src
    
+** Skeletons
+  #+begin_src emacs-lisp
+    (define-skeleton skel-org-title
+	"Insert title headings in an org file"
+	"Doesn't do anything"
+	"#+TITLE: " 
+	(cond
+	((buffer-file-name)
+	(file-name-base buffer-file-name))
+	(t
+	"none"))
+	"\n"
+	"#+TAGS: " "\n"
+	"#+OPTIONS: toc:nil" "\n"
+	"#+DATE: " (format-time-string "<%Y-%m-%d %a>")"\n"
+	"#+EMAIL: " user-mail-address "\n")
+  #+end_src
+
 * Start screen
 #+begin_src emacs-lisp
 
   (defun sp/open-with-tasks-and-agenda ()
     "Open tasks.org and org-capture for simacs.
 
-  This is mainly intended to be used from the command line as a startup convenience."
+    This is mainly intended to be used from the command line as a startup convenience."
     (interactive)
     (tab-new)
     (org-agenda-list)
     (ace-delete-window)
     (let ((screen-width (window-width)))
+      (evil-window-vsplit)
+      (find-file "~/Documents/org/tasks.org")
+      (persp-switch "git")
+      (magit-status "/home/simon/.dotfiles")
+      (persp-switch "org")
+      (dired "/home/simon/Documents/org")
+      (persp-switch "main")
+      (evil-window-set-width (max (round (* screen-width 0.55)) 60))))
+
+  ;; (sp/open-with-tasks-and-agenda)
+
+  (defun sp/longest-buffer-line ()
+    "Get length of longest line in buffer."
+    (interactive)
+    (goto-char (point-min))
+    (let ((length 0))
+      (while (not (eobp))
+	(setq length (max length (- (line-end-position) (line-beginning-position))))
+	(forward-line 1))
+      length))
+
+  (defun sp/narrow-other ()
+    "Make other window as narrow as its longest line allows."
+    (interactive)
+    (other-window 1)
+    (evil-window-set-width (sp/longest-buffer-line))
+    (other-window 1))
+
+  (defun sp/open-dashboard ()
+    "Open tasks and agenda list."
+    (interactive)
+    (tab-new)
+    (org-agenda-list)
+    (delete-other-windows)
     (evil-window-vsplit)
     (find-file "~/Documents/org/tasks.org")
-    (persp-switch "git")
-    (magit-status "/home/simon/.dotfiles")
-    (persp-switch "org")
-    (dired "/home/simon/Documents/org")
-    (persp-switch "main")
-    (evil-window-set-width (max (round (* screen-width 0.55)) 60))))
+    (other-window 1)
+    (evil-window-set-width (sp/longest-buffer-line))
+    (other-window 1))
 
-  (sp/open-with-tasks-and-agenda)
+  (sp/open-dashboard)
 #+end_src
 * LSJ2 mode
   #+begin_src emacs-lisp
