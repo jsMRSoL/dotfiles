@@ -62,3 +62,4 @@ tmux/.config/tmux/plugins
 /MyVim/.config/MyVim/lazy-lock.json
 .luarc.json
 /ncmpcpp/.config/ncmpcpp/lyrics/
+/simacs/.simacs_dir/eln-cache/
