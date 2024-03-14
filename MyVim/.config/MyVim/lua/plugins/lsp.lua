@@ -26,7 +26,12 @@ return {
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
     config = function()
-      require('gitsigns').setup()
+      require('gitsigns').setup({
+        signs = {
+          add = { text = '┆' },
+          change = { text = '┆' },
+        },
+      })
 
       local gs = package.loaded.gitsigns
 
@@ -164,7 +169,7 @@ return {
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
       -- Autocompletion
-      { 'hrsh7th/nvim-cmp' }, -- Required
+      { 'hrsh7th/nvim-cmp' },     -- Required
       { 'hrsh7th/cmp-nvim-lsp' }, -- Required
       { 'hrsh7th/cmp-buffer' },
       { 'hrsh7th/cmp-path' },
@@ -275,7 +280,7 @@ return {
       local vscode_loaders = require('luasnip.loaders.from_vscode')
       vscode_loaders.lazy_load()
 
-      local types = require("luasnip.util.types")
+      local types = require('luasnip.util.types')
       luasnip.setup({
         keep_roots = true,
         link_roots = true,
@@ -315,7 +320,7 @@ return {
       })
       local ok, _ = pcall(require, 'config.user-snippets')
       if not ok then
-        vim.notify("Could not load user snippets!", vim.log.levels.WARN )
+        vim.notify('Could not load user snippets!', vim.log.levels.WARN)
       end
 
       -- set keybinds for both INSERT and VISUAL.
@@ -331,8 +336,8 @@ return {
         fields = { 'kind', 'menu' },
         formatting = {
           format = lspkind.cmp_format({
-            mode = 'symbol_text', -- show only symbol annotations
-            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            mode = 'symbol_text',  -- show only symbol annotations
+            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
             ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
           }),
         },
@@ -404,17 +409,17 @@ return {
         server = {
           on_attach = function(_, bufnr)
             local keymap = {
-              { '<space>lh', '<cmd>RustHoverActions<CR>' },
-              { '<space>lH', '<cmd>RustHoverRange<CR>' },
-              { '<space>le', '<cmd>RustExpandMacro<CR>' },
-              { '<space>lE', '<cmd>RustOpenExternalDocs<CR>' },
-              { '<space>lR', '<cmd>RustRunnables<CR>' },
-              { '<space>lD', '<cmd>RustDebuggables<CR>' },
+              { '<space>lh',  '<cmd>RustHoverActions<CR>' },
+              { '<space>lH',  '<cmd>RustHoverRange<CR>' },
+              { '<space>le',  '<cmd>RustExpandMacro<CR>' },
+              { '<space>lE',  '<cmd>RustOpenExternalDocs<CR>' },
+              { '<space>lR',  '<cmd>RustRunnables<CR>' },
+              { '<space>lD',  '<cmd>RustDebuggables<CR>' },
               { '<space>lmd', '<cmd>RustMoveItemDown<CR>' },
               { '<space>lmu', '<cmd>RustMoveItemUp<CR>' },
-              { '<space>lc', '<cmd>RustOpenCargo<CR>' },
-              { '<space>lp', '<cmd>RustParentModule<CR>' },
-              { '<space>lj', '<cmd>RustJoinLines<CR>' },
+              { '<space>lc',  '<cmd>RustOpenCargo<CR>' },
+              { '<space>lp',  '<cmd>RustParentModule<CR>' },
+              { '<space>lj',  '<cmd>RustJoinLines<CR>' },
             }
 
             for _, v in pairs(keymap) do
