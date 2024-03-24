@@ -59,6 +59,7 @@ static const Rule rules[] = {
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static int attachbelow = 1;    /* 1 means attach at the end */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -102,6 +103,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,        XK_Delete, spawn,       {.v = shutcmd } },
 	{ MODKEY|ShiftMask,        XK_p,      spawn,       {.v = passmenu2 } },
 	{ MODKEY|ShiftMask,        0xffc1,      spawn,       {.v = displayswitchcmd } },
+  { MODKEY,                       XK_a,      toggleAttachBelow,           {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
