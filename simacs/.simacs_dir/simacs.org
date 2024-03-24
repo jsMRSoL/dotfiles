@@ -1217,6 +1217,7 @@
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)
+     ;; (javascript . t)
      (shell . t)
      (go . t)
      (rust . t)))
@@ -1226,6 +1227,7 @@
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
   (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
+  (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
   (add-to-list 'org-structure-template-alist '("go" . "src go"))
   (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
 
