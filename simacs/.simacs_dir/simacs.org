@@ -42,7 +42,6 @@
     (column-number-mode)
     ;;(global-display-line-numbers-mode t)
     (global-hl-line-mode t)
-    (setq fill-column 78)
     ;; disable line numbers for these modes:
     (dolist (mode '(org-mode-hook
 		    term-mode-hook
@@ -76,11 +75,23 @@
 					   :weight normal :height 150
 					   :width normal)))))
 
-    (when (string= "derek" (system-name)) (set-frame-font "FiraCode Nerd Font Propo-14"))
+    (when (string= "derek" (system-name))
+      (set-frame-font "FiraCode Nerd Font Propo-14"))
+
     (global-prettify-symbols-mode t)
 
   #+end_src
   
+* Visual fill mode
+#+begin_src emacs-lisp
+
+  (use-package visual-fill-column
+    :init
+    (setq visual-fill-column-width 82)
+    (setq visual-fill-column-center-text t)
+    :hook (visual-line-mode . visual-fill-column-mode))
+
+#+end_src
 * Link check
   #+begin_src emacs-lisp
 
