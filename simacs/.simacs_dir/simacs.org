@@ -4,24 +4,22 @@
 
 * Package system setup
   #+begin_src emacs-lisp
-    ;; ;;; init.el -*- lexical-binding: t; -*-
+    (defvar bootstrap-version)
+    (let ((bootstrap-file
+	   (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	  (bootstrap-version 5))
+      (unless (file-exists-p bootstrap-file)
+	(with-current-buffer
+	    (url-retrieve-synchronously
+	     "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	     'silent 'inhibit-cookies)
+	  (goto-char (point-max))
+	  (eval-print-last-sexp)))
+      (load bootstrap-file nil 'nomessage))
 
-    (require 'package)
+    (straight-use-package 'use-package)
 
-    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			     ("org" . "https://orgmode.org/elpa/")
-			     ("elpa" . "https://elpa.gnu.org/packages/")))
-
-    (package-initialize)
-    (unless package-archive-contents
-      (package-refresh-contents))
-
-    (unless (package-installed-p 'use-package)
-      (package-install 'use-package))
-
-    (require 'use-package)
-    (setq use-package-always-ensure t)
-
+    (setq straight-use-package-by-default t)
   #+end_src
 
 * Basic UI Configuration
@@ -324,7 +322,7 @@
 
     ;; Persist history over Emacs restarts. Vertico sorts by history position.
     (use-package savehist
-      :ensure nil
+      :straight nil
       :init
       (savehist-mode 1))
 
@@ -724,7 +722,7 @@
   #+begin_src emacs-lisp
 
       (use-package dired
-	:ensure nil
+	:straight nil
 	:commands (dired dired-jump)
 	:custom ((dired-listing-switches "-agho --group-directories-first"))
 	:config
@@ -846,7 +844,7 @@
   #+begin_src emacs-lisp
 
     (use-package ediff
-      :ensure nil
+      :straight nil
       :config
       (setq ediff-window-setup-function #'ediff-setup-windows-plain)
       (setq ediff-split-window-function #'split-window-horizontally))
@@ -1349,7 +1347,7 @@
 * LSJ2 mode
   #+begin_src emacs-lisp
     ;; (use-package lsj2-mode
-    ;;   :ensure nil
+    ;;   :straight nil
     ;;   :load-path "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
      ;; (load-file "/home/simon/.simacs_dir/private/LSJ2/local/lsj2-mode/lsj2-mode.el")
 
