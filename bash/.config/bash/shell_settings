@@ -27,10 +27,6 @@ export BROWSER="firefox"
 export PAGER="less"
 export RTV_BROWSER="w3m"
 export PLAYER="mpv"
-## set up nvm (node version manager)
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  ## This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  ## This loads nvm bash_completion
 ## database URLs
 export LSJ_PG_DATABASE_URL=postgres://simon:postgres@192.168.1.103/greeklexicon
 export LATIN_PG_DATABASE_URL=postgres://simon:postgres@localhost/latin_dictionary
@@ -42,6 +38,12 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 ################################################################################
 ## End environmental variables
 ################################################################################
+################################################################################
+## Coding-related settings ####
+################################################################################
+## Javascript
+# set up nvm (node version manager)
+[ -f "/usr/share/nvm/init-nvm.sh" ] && source /usr/share/nvm/init-nvm.sh
 ################################################################################
 ## Program settings ####
 ################################################################################

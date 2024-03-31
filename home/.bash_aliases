@@ -10,6 +10,3 @@ BASHFILES="/home/simon/.dotfiles/bash/.config/bash"
 
 # api keys
 [ -f "$HOME/.api_keys" ] && source "$HOME/.api_keys"
-
-# nvm
-[ -f "/usr/share/nvm/init-nvm.sh" ] && source /usr/share/nvm/init-nvm.sh
