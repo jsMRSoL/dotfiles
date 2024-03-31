@@ -1301,6 +1301,10 @@
 	"#+EMAIL: " user-mail-address "\n")
   #+end_src
 
+* Ledger
+#+begin_src emacs-lisp
+  (use-package ledger-mode)
+#+end_src
 * Start screen
 #+begin_src emacs-lisp
 
