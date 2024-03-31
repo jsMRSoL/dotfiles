@@ -40,15 +40,11 @@
     (setq ring-bell-function 'ignore)
 
     (column-number-mode)
-    ;;(global-display-line-numbers-mode t)
+
     (global-hl-line-mode t)
-    ;; disable line numbers for these modes:
-    (dolist (mode '(org-mode-hook
-		    term-mode-hook
-		    treemacs-mode-hook
-		    shell-mode-hook
-		    eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+    ;; display line numbers for programming-derived modes:
+    (add-hook 'prog-mode-hook (lambda() (setq display-line-numbers 'relative)))
 
     (defalias 'yes-or-no-p 'y-or-n-p)
 
