@@ -44,6 +44,10 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 ## Javascript
 # set up nvm (node version manager)
 [ -f "/usr/share/nvm/init-nvm.sh" ] && source /usr/share/nvm/init-nvm.sh
+## Go
+# set GOPATH & GOBIN
+export GOPATH="/home/simon/.go"
+export GOBIN="/home/simon/.go/bin/"
 ################################################################################
 ## Program settings ####
 ################################################################################
