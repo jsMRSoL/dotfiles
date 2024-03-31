@@ -1,0 +1,32 @@
+#!/bin/bash
+
+process_csv() {
+  orig_file="$1"
+  echo "Working on $orig_file..."
+
+  tmpfile=mktemp
+  echo "date,,,,payee,debit,credit," > "$tmpfile"
+  awk '{a[i++]=$0} END {for (j=i-1; j>=1;) print a[j--] }' "$orig_file" >> "$tmpfile"
+  sed -i 's/-\([0-9]\)/\1/' "$tmpfile"
+
+  new_file=${orig_file/.csv/.ledger}
+  ledger -f "$LEDGER_JOURNAL" \
+    convert "$tmpfile" \
+    --input-date-format "%d/%m/%Y" \
+    --invert \
+    --account Assets:Current\ Account \
+    > "$new_file" \
+    && echo "Wrote $new_file" || \
+    echo "Ledger could not convert $new_file"
+
+  rm "$tmpfile"
+}
+
+filename=$(find . -name "*.csv" | fzf)
+
+if [ -z "$filename" ]; then
+  echo "This script needs a file to work on! Exiting..."
+  exit 1
+fi
+
+process_csv "$filename"
