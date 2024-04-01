@@ -1,162 +1,8 @@
 return {
   {
-    'jose-elias-alvarez/null-ls.nvim',
-    event = 'VeryLazy',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      local null_ls = require('null-ls')
-
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.formatting.stylua,
-          null_ls.builtins.formatting.prettierd,
-          null_ls.builtins.diagnostics.luacheck.with({
-            args = { '--no-global' },
-          }),
-          null_ls.builtins.formatting.shfmt.with({
-            args = { '-i', '2', '-bn', '-ci', '-sr' },
-          }),
-          null_ls.builtins.diagnostics.shellcheck,
-          null_ls.builtins.completion.spell,
-        },
-      })
-    end,
-  },
-  {
-    'lewis6991/gitsigns.nvim',
-    event = 'VeryLazy',
-    config = function()
-      require('gitsigns').setup({
-        signs = {
-          add = { text = '┆' },
-          change = { text = '┆' },
-        },
-      })
-
-      local gs = package.loaded.gitsigns
-
-      local function map(mode, l, r, opts)
-        opts = opts or {}
-        -- opts.buffer = bufnr
-        vim.keymap.set(mode, l, r, opts)
-      end
-
-      map('n', ']c', function()
-        if vim.wo.diff then
-          return ']c'
-        end
-        vim.schedule(function()
-          gs.next_hunk()
-        end)
-        return '<Ignore>'
-      end, { expr = true })
-
-      map('n', '[c', function()
-        if vim.wo.diff then
-          return '[c'
-        end
-        vim.schedule(function()
-          gs.prev_hunk()
-        end)
-        return '<Ignore>'
-      end, { expr = true })
-
-      -- text object
-      map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-    end,
-  },
-  {
-    'folke/neodev.nvim',
-    event = 'VeryLazy',
-    config = function()
-      require('neodev').setup({
-        library = { plugins = { 'nvim-dap-ui' }, types = true },
-      })
-    end,
-  },
-  {
-    'folke/trouble.nvim',
-    event = 'VeryLazy',
-    config = function()
-      local trouble = require('trouble.providers.telescope')
-
-      local telescope = require('telescope')
-
-      telescope.setup({
-        defaults = {
-          mappings = {
-            i = { ['<c-x>'] = trouble.open_with_trouble },
-            n = { ['<c-x>'] = trouble.open_with_trouble },
-          },
-        },
-      })
-
-      local cmd = vim.api.nvim_create_user_command
-
-      cmd('TroubleSkipNext', function()
-        require('trouble').next({ skip_groups = true, jump = true })
-      end, {})
-
-      cmd('TroubleSkipPrev', function()
-        require('trouble').previous({ skip_groups = true, jump = true })
-      end, {})
-
-      cmd('TroubleSkipFirst', function()
-        require('trouble').first({ skip_groups = true, jump = true })
-      end, {})
-
-      cmd('TroubleSkipLast', function()
-        require('trouble').last({ skip_groups = true, jump = true })
-      end, {})
-    end,
-  },
-  {
-    'j-hui/fidget.nvim',
-    tag = 'legacy',
-    event = 'LspAttach',
-  },
-  {
-    'onsails/lspkind.nvim',
-    event = 'VeryLazy',
-    config = function()
-      require('lspkind').init({
-        mode = 'symbol_text',
-        symbol_map = {
-          Text = '  ',
-          Method = '  ',
-          Function = '  ',
-          Constructor = '  ',
-          Variable = '[]',
-          Class = '  ',
-          Interface = ' 蘒',
-          Module = '  ',
-          Property = '  ',
-          Unit = ' 塞 ',
-          Value = '  ',
-          Enum = ' 練',
-          Keyword = '  ',
-          Snippet = '  ',
-          Color = '',
-          File = '',
-          Folder = ' ﱮ ',
-          EnumMember = '  ',
-          Constant = '  ',
-          Struct = '  ',
-        },
-      })
-    end,
-  },
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    event = 'VeryLazy',
-    branch = 'v2.x',
+    'neovim/nvim-lspconfig', -- Required
     dependencies = {
-      -- LSP Support
-      { 'neovim/nvim-lspconfig' }, -- Required
-      -- Optional
-      {
-        'simrat39/rust-tools.nvim',
-      },
+      { 'simrat39/rust-tools.nvim' },
       {
         'williamboman/mason.nvim',
         build = function()
@@ -166,286 +12,340 @@ return {
           end
         end,
       },
-      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
-
-      -- Autocompletion
-      { 'hrsh7th/nvim-cmp' },     -- Required
-      { 'hrsh7th/cmp-nvim-lsp' }, -- Required
-      { 'hrsh7th/cmp-buffer' },
-      { 'hrsh7th/cmp-path' },
-      { 'hrsh7th/cmp-cmdline' },
-      { 'saadparwaiz1/cmp_luasnip' },
-      { 'L3MON4D3/LuaSnip' }, -- Required
-      { 'rafamadriz/friendly-snippets' },
+      { 'williamboman/mason-lspconfig.nvim' },
+      { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
+      -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
+      -- used for completion, annotations and signatures of Neovim apis
+      {
+        'folke/neodev.nvim',
+        event = 'VeryLazy',
+        config = function()
+          require('neodev').setup({
+            library = { plugins = { 'nvim-dap-ui' }, types = true },
+          })
+        end,
+      },
+      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        'onsails/lspkind.nvim',
+        event = 'VeryLazy',
+      },
+      {
+        'olexsmir/gopher.nvim',
+        dependencies = { -- dependencies
+          'nvim-lua/plenary.nvim',
+          'nvim-treesitter/nvim-treesitter',
+        },
+      },
     },
     config = function()
-      local lsp = require('lsp-zero').preset({
-        float_border = 'rounded',
-        call_servers = 'local',
-        configure_diagnostics = true,
-        setup_servers_on_start = true,
-        set_lsp_keymaps = {
-          preserve_mappings = false,
-          omit = {},
-        },
-        manage_nvim_cmp = true,
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('my-lsp-attach', { clear = true }),
+        callback = function(event)
+          local bufnr = event.buf
+          local nmap = function(keys, func, desc)
+            vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+          end
+
+          nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
+          nmap('<leader>la', vim.lsp.buf.code_action, 'Code action')
+          -- Jump to the definition of the word under your cursor.
+          --  This is where a variable was first declared, or where a function is defined, etc.
+          --  To jump back, press <C-t>.
+          nmap('gd', vim.lsp.buf.definition, 'Go to definition')
+          -- Find references for the word under your cursor.
+          nmap('gr', require('telescope.builtin').lsp_references, 'Go to references')
+          -- Jump to the implementation of the word under your cursor.
+          --  Useful when your language has ways of declaring types without an actual implementation.
+          nmap('gI', require('telescope.builtin').lsp_implementations, 'Go to implementation')
+          -- Jump to the type of the word under your cursor.
+          --  Useful when you're not sure what type a variable is and you want to see
+          --  the definition of its *type*, not where it was *defined*.
+          nmap('<leader>ld', vim.lsp.buf.type_definition, 'Type definition')
+          -- Fuzzy find all the symbols in your current document.
+          --  Symbols are things like variables, functions, types, etc.
+          nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
+          -- Fuzzy find all the symbols in your current workspace.
+          --  Similar to document symbols, except searches over your entire project.
+          nmap('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
+
+          -- diagnostics
+          nmap('[d', vim.diagnostic.goto_next, 'Next diagnostic')
+          nmap(']d', vim.diagnostic.goto_prev, 'Previous diagnostic')
+
+          -- See `:help K` for why this keymap
+          nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+          nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+          -- Lesser used LSP functionality
+          nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration')
+          nmap('<leader>lwa', vim.lsp.buf.add_workspace_folder, 'Workspace Add Folder')
+          nmap('<leader>lwr', vim.lsp.buf.remove_workspace_folder, 'Workspace Remove Folder')
+          nmap('<leader>lwl', function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+          end, 'Workspace List Folders')
+          --
+          -- -- Set some keybinds conditional on server capabilities
+          nmap('<space>lf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', 'Format buffer')
+
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities.documentHighlightProvider then
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.document_highlight,
+            })
+
+            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.clear_references,
+            })
+          end
+        end,
       })
 
-      lsp.on_attach(function(_, bufnr)
-        -- lsp.default_keymaps({ buffer = bufnr })
+      -- LSP servers and clients are able to communicate to each other what features they support.
+      --  By default, Neovim doesn't support everything that is in the LSP specification.
+      --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
+      --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-        local nmap = function(keys, func, desc)
-          vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-        end
-
-        nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
-        nmap('<leader>la', vim.lsp.buf.code_action, 'Code action')
-
-        nmap('gd', vim.lsp.buf.definition, 'Go to definition')
-        nmap('gr', require('telescope.builtin').lsp_references, 'Go to references')
-        nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
-        nmap('<leader>ld', vim.lsp.buf.type_definition, 'Type Definition')
-        nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document Symbols')
-        nmap('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace Symbols')
-        -- diagnostics
-        nmap('[d', vim.diagnostic.goto_next, 'Next diagnostic')
-        nmap(']d', vim.diagnostic.goto_prev, 'Previous diagnostic')
-
-        -- See `:help K` for why this keymap
-        nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-        nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-        -- Lesser used LSP functionality
-        nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration')
-        nmap('<leader>lwa', vim.lsp.buf.add_workspace_folder, 'Workspace Add Folder')
-        nmap('<leader>lwr', vim.lsp.buf.remove_workspace_folder, 'Workspace Remove Folder')
-        nmap('<leader>lwl', function()
-          print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, 'Workspace List Folders')
-
-        -- Set some keybinds conditional on server capabilities
-        nmap('<space>lf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', 'Format buffer')
-        -- elseif client.resolved_capabilities.document_range_formatting then
-        --   nmap("<space>lf", "<cmd>lua vim.lsp.buf.format()<CR>", "Format")
-        -- end
-      end)
-
-      lsp.set_sign_icons({
-        error = '✘',
-        warn = '▲',
-        hint = '⚑',
-        info = '»',
-      })
-
-      lsp.ensure_installed({
-        -- Replace these with whatever servers you want to install
-        'lua_ls',
-        'rust_analyzer',
-        -- Don't for this for dap: codelldb. It doesn't install automatically.
-        'bashls',
-        -- 'gopls',
-      })
-
-      require('neodev').setup()
-      -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-      local lspconfig = require('lspconfig')
-      lspconfig.lua_ls.setup({
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
-            diagnostics = {
-              -- get the language server to recogniser
-              -- globals used in plenary tests
-              globals = {
-                'describe',
-                'it',
-                'before_each',
-              },
-            },
-          },
-        },
-      })
-
-      lsp.skip_server_setup({ 'rust_analyzer' })
-
-      -- lsp status info
-      require('fidget').setup()
-
-      lsp.setup()
-
-      local lspkind = require('lspkind')
-      local luasnip = require('luasnip')
-      local vscode_loaders = require('luasnip.loaders.from_vscode')
-      vscode_loaders.lazy_load()
-
-      local types = require('luasnip.util.types')
-      luasnip.setup({
-        keep_roots = true,
-        link_roots = true,
-        link_children = true,
-
-        -- Update more often, :h events for more info.
-        update_events = 'TextChanged,TextChangedI',
-        -- Snippets aren't automatically removed if their text is deleted.
-        -- `delete_check_events` determines on which events (:h events) a check for
-        -- deleted snippets is performed.
-        -- This can be especially useful when `history` is enabled.
-        delete_check_events = 'TextChanged',
-        ext_opts = {
-          [types.choiceNode] = {
-            active = {
-              virt_text = { { 'choiceNode', 'Comment' } },
-            },
-          },
-        },
-        -- treesitter-hl has 100, use something higher (default is 200).
-        ext_base_prio = 300,
-        -- minimal increase in priority.
-        ext_prio_increase = 1,
-        -- enable_autosnippets = true,
-        -- mapping for cutting selected text so it's usable as SELECT_DEDENT,
-        -- SELECT_RAW or TM_SELECTED_TEXT (mapped via xmap).
-        -- store_selection_keys = '<Tab>',
-        -- luasnip uses this function to get the currently active filetype. This
-        -- is the (rather uninteresting) default, but it's possible to use
-        -- eg. treesitter for getting the current filetype by setting ft_func to
-        -- require("luasnip.extras.filetype_functions").from_cursor (requires
-        -- `nvim-treesitter/nvim-treesitter`). This allows correctly resolving
-        -- the current filetype in eg. a markdown-code block or `vim.cmd()`.
-        -- ft_func = function()
-        --   return vim.split(vim.bo.filetype, '.', true)
-        -- end,
-      })
-      local ok, _ = pcall(require, 'config.user-snippets')
-      if not ok then
-        vim.notify('Could not load user snippets!', vim.log.levels.WARN)
+      -- define diagnostic signs
+      local function sign_define(args)
+        vim.fn.sign_define(args.name, {
+          texthl = args.name,
+          text = args.text,
+          numhl = '',
+        })
       end
 
-      -- set keybinds for both INSERT and VISUAL.
-      vim.api.nvim_set_keymap('i', '<C-n>', '<Plug>luasnip-next-choice', {})
-      vim.api.nvim_set_keymap('s', '<C-n>', '<Plug>luasnip-next-choice', {})
-      vim.api.nvim_set_keymap('i', '<C-p>', '<Plug>luasnip-prev-choice', {})
-      vim.api.nvim_set_keymap('s', '<C-p>', '<Plug>luasnip-prev-choice', {})
+      sign_define({ name = 'DiagnosticSignError', text = '✘' })
+      sign_define({ name = 'DiagnosticSignWarn', text = '▲' })
+      sign_define({ name = 'DiagnosticSignHint', text = '⚑' })
+      sign_define({ name = 'DiagnosticSignInfo', text = '»' })
 
-      local cmp = require('cmp')
-      local luasnip = require('luasnip')
-      require('luasnip.loaders.from_vscode').lazy_load()
-      cmp.setup({
-        fields = { 'kind', 'menu' },
-        formatting = {
-          format = lspkind.cmp_format({
-            mode = 'symbol_text',  -- show only symbol annotations
-            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-          }),
-        },
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
-          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete({}),
-          ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-          }),
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-        }),
-        sources = {
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'path' },
-        },
-      })
-
-      cmp.setup.cmdline({ '/', '?' }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = 'buffer' },
-        },
-      })
-
-      cmp.setup.cmdline(':', {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = 'path' },
-        }, {
-          { name = 'cmdline' },
-        }),
-      })
-
-      local rust_tools = require('rust-tools')
-
-      local mason_registry = require('mason-registry')
-      local codelldb = mason_registry.get_package('codelldb')
-      local extension_path = codelldb:get_install_path() .. '/extension/'
-      local codelldb_path = extension_path .. 'adapter/codelldb'
-      local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
-
-      rust_tools.setup({
-        tools = {
-          focus = true,
-        },
-        server = {
-          on_attach = function(_, bufnr)
-            local keymap = {
-              { '<space>lh',  '<cmd>RustHoverActions<CR>' },
-              { '<space>lH',  '<cmd>RustHoverRange<CR>' },
-              { '<space>le',  '<cmd>RustExpandMacro<CR>' },
-              { '<space>lE',  '<cmd>RustOpenExternalDocs<CR>' },
-              { '<space>lR',  '<cmd>RustRunnables<CR>' },
-              { '<space>lD',  '<cmd>RustDebuggables<CR>' },
-              { '<space>lmd', '<cmd>RustMoveItemDown<CR>' },
-              { '<space>lmu', '<cmd>RustMoveItemUp<CR>' },
-              { '<space>lc',  '<cmd>RustOpenCargo<CR>' },
-              { '<space>lp',  '<cmd>RustParentModule<CR>' },
-              { '<space>lj',  '<cmd>RustJoinLines<CR>' },
-            }
-
-            for _, v in pairs(keymap) do
-              vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
-            end
-
-            local wk = require('which-key')
-            wk.register({
-              ['<leader>lm'] = { name = '+move' },
-            })
-          end,
-          settings = {
-            ['rust-analyzer'] = {
-              runnables = {
-                -- extraArgs = { '--', '--show-output', '--color always', '--test-threads=1' },
-              },
-              -- checkOnSave = {
-              --   command = { 'clippy', '--', '-W', 'clippy::pedantic', '-W', 'clippy::nursery', '-W', 'clippy::unwrap_used' }
-              -- }
+      --  Add any additional override configuration in the following tables. Available keys are:
+      --  - cmd (table): Override the default command used to start the server
+      --  - filetypes (table): Override the default list of associated filetypes for the server
+      --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
+      --  - settings (table): Override the default settings passed when initializing the server.
+      local servers = {
+        -- rust
+        rust_analyzer = {},
+        -- go
+        gopls = {},
+        -- python
+        -- pyright = {}, -- can't get this to work?!
+        pylsp = {},
+        -- ts/js
+        tsserver = {
+          init_options = {
+            preferences = {
+              disableSuggestions = true,
             },
           },
         },
-        dap = {
-          adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path),
+        -- lua
+        lua_ls = {
+          settings = {
+            Lua = {
+              completion = {
+                callSnippet = 'Replace',
+              },
+              diagnostics = {
+                -- get the language server to recognise
+                -- globals used in plenary tests
+                globals = {
+                  'describe',
+                  'it',
+                  'before_each',
+                  'vim',
+                },
+                disable = {
+                  'missing-fields',
+                },
+              },
+            },
+          },
+        },
+      }
+
+      -- mason config begins
+      require('mason').setup()
+      local ensure_installed = vim.tbl_keys(servers or {})
+      vim.list_extend(ensure_installed, {
+        -- lua
+        'stylua',
+        'selene',
+        -- python
+        -- 'ruff',
+        -- 'mypy',
+        -- 'black',
+        'debugpy',
+        -- go
+        'golines',
+        'delve',
+        'impl',
+        'gotests',
+        'gomodifytags',
+        'iferr',
+        -- js/ts
+        'prettierd',
+        -- shell
+        'shfmt',
+        'shellcheck',
+        'beautysh',
+        -- rust
+        'codelldb',
+      })
+
+      -- we use the ensure_installed variable here...
+      require('mason-tool-installer').setup({ ensure_installed = ensure_installed })
+
+      -- but we use the servers variable here
+      require('mason-lspconfig').setup({
+        handlers = {
+          -- first entry (without a key) is the default handler
+          function(server_name)
+            local server = servers[server_name] or {}
+            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            require('lspconfig')[server_name].setup(server)
+          end,
+          -- dedicated handlers for specific servers
+          ['gopls'] = function()
+            local mason_registry = require('mason-registry')
+            local impl = mason_registry.get_package('impl'):get_install_path() .. '/impl'
+            local gomodifytags = mason_registry.get_package('gomodifytags'):get_install_path() .. '/gomodifytags'
+            local iferr = mason_registry.get_package('iferr'):get_install_path() .. '/iferr'
+            local gotests = mason_registry.get_package('gotests'):get_install_path() .. '/gotests'
+            require('gopher').setup({
+              commands = {
+                go = 'go',
+                gomodifytags = gomodifytags,
+                gotests = gotests,
+                impl = impl,
+                iferr = iferr,
+              },
+            })
+
+            require('lspconfig').gopls.setup({
+              on_attach = function(_, bufnr)
+                local wk = require('which-key')
+                wk.register({
+                  ['<leader>lt'] = { name = '+tags' },
+                  ['<leader>lT'] = { name = '+tests' },
+                  ['<leader>lm'] = { name = '+mod' },
+                })
+
+                local keymap = {
+                  { '<space>lg',  ':GoGet ' },
+                  { '<space>lI',  ':GoImpl ' },
+                  { '<space>ltj', '<cmd>GoTagAdd json<CR>' },
+                  { '<space>lty', '<cmd>GoTagAdd yaml<CR>' },
+                  { '<space>lTa', '<cmd>GoTestsAll<CR>' },
+                  { '<space>lTA', '<cmd>GoTestAdd<CR>' },
+                  { '<space>lTe', '<cmd>GoTestsExp<CR>' },
+                  { '<space>lD',  '<cmd>GoCmt' },
+                  { '<space>li',  '<cmd>GoIfErr<CR>' },
+                  { '<space>lmi', ':GoMod init ' },
+                  { '<space>lmt', '<cmd>GoMod tidy<CR>' },
+                }
+
+                for _, v in pairs(keymap) do
+                  vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
+                end
+              end,
+            })
+          end,
+          ['rust_analyzer'] = function()
+            local rust_tools = require('rust-tools')
+
+            local mason_registry = require('mason-registry')
+            local codelldb = mason_registry.get_package('codelldb')
+            local extension_path = codelldb:get_install_path() .. '/extension/'
+            local codelldb_path = extension_path .. 'adapter/codelldb'
+            local liblldb_path = extension_path .. 'lldb/lib/liblldb.so'
+
+            rust_tools.setup({
+              tools = {
+                focus = true,
+              },
+              server = {
+                on_attach = function(_, bufnr)
+                  local keymap = {
+                    { '<space>lh',  '<cmd>RustHoverActions<CR>' },
+                    { '<space>lH',  '<cmd>RustHoverRange<CR>' },
+                    { '<space>le',  '<cmd>RustExpandMacro<CR>' },
+                    { '<space>lE',  '<cmd>RustOpenExternalDocs<CR>' },
+                    { '<space>lR',  '<cmd>RustRunnables<CR>' },
+                    { '<space>lD',  '<cmd>RustDebuggables<CR>' },
+                    { '<space>lmd', '<cmd>RustMoveItemDown<CR>' },
+                    { '<space>lmu', '<cmd>RustMoveItemUp<CR>' },
+                    { '<space>lc',  '<cmd>RustOpenCargo<CR>' },
+                    { '<space>lp',  '<cmd>RustParentModule<CR>' },
+                    { '<space>lj',  '<cmd>RustJoinLines<CR>' },
+                  }
+
+                  for _, v in pairs(keymap) do
+                    vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
+                  end
+
+                  local wk = require('which-key')
+                  wk.register({
+                    ['<leader>lm'] = { name = '+move' },
+                  })
+                end,
+                settings = {
+                  ['rust-analyzer'] = {
+                    runnables = {
+                      -- extraArgs = { '--', '--show-output', '--color always', '--test-threads=1' },
+                    },
+                    -- checkOnSave = {
+                    --   command = { 'clippy', '--', '-W', 'clippy::pedantic', '-W', 'clippy::nursery', '-W', 'clippy::unwrap_used' }
+                    -- }
+                  },
+                },
+              },
+              dap = {
+                adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path),
+              },
+            })
+          end,
         },
       })
+
+      -- Set up autoformat on save
+      -- local fmt_group = vim.api.nvim_create_augroup('autoformat_cmds', { clear = true })
+      --
+      -- local function setup_autoformat(event)
+      --   local id = vim.tbl_get(event, 'data', 'client_id')
+      --   local client = id and vim.lsp.get_client_by_id(id)
+      --   if client == nil then
+      --     return
+      --   end
+      --
+      --   vim.api.nvim_clear_autocmds({ group = fmt_group, buffer = event.buf })
+      --
+      --   local buf_format = function(e)
+      --     vim.lsp.buf.format({
+      --       bufnr = e.buf,
+      --       async = false,
+      --       timeout_ms = 10000,
+      --     })
+      --   end
+      --
+      --   vim.api.nvim_create_autocmd('BufWritePre', {
+      --     buffer = event.buf,
+      --     group = fmt_group,
+      --     desc = 'Format current buffer',
+      --     callback = buf_format,
+      --   })
+      -- end
+      --
+      -- vim.api.nvim_create_autocmd('LspAttach', {
+      --   desc = 'Setup format on save',
+      --   callback = setup_autoformat,
+      -- })
     end,
   },
 }

@@ -56,6 +56,51 @@ return {
     end,
   },
   {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'rcarriga/nvim-dap-ui',
+    },
+    config = function()
+      local mason_registry = require('mason-registry')
+      local debugpy = mason_registry.get_package('debugpy')
+      local install_path = debugpy:get_install_path() .. '/venv/bin/python'
+      require('dap-python').setup(install_path)
+
+      vim.keymap.set('n', '<leader>dpr', function()
+        require('dap-python').test_method()
+      end, { desc = 'Python: test method' })
+    end,
+  },
+  {
+    'leoluz/nvim-dap-go',
+    ft = 'go',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'rcarriga/nvim-dap-ui',
+    },
+    config = function()
+      local mason_registry = require('mason-registry')
+      local delve = mason_registry.get_package('delve')
+      local install_path = delve:get_install_path() .. '/dlv'
+      local opts = {
+        delve = {
+          path = install_path,
+        },
+      }
+      require('dap-go').setup(opts)
+
+      vim.keymap.set('n', '<leader>dgt', function()
+        require('dap-go').debug_test()
+      end, { desc = 'Go: debug test' })
+
+      vim.keymap.set('n', '<leader>dgl', function()
+        require('dap-go').debug_last()
+      end, { desc = 'Go: debug last test' })
+    end,
+  },
+  {
     'rcarriga/nvim-dap-ui',
     dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
     config = true,
