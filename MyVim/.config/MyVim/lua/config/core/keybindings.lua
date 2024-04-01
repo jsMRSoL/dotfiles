@@ -33,6 +33,7 @@ local mappings = {
   { 'n', '<leader>/', '<cmd>Telescope live_grep<cr>', { desc = 'Grep (root dir)' } },
   { 'n', '<leader>:', '<cmd>Telescope command_history<cr>', { desc = 'Command History' } },
   { 'n', '<leader>e', '<cmd>Neotree focus<cr>', { desc = 'Explorer' } },
+  { 'n', '<leader>h', ':vert h ', { desc = 'help' } },
   -- ranger
   { 'n', '<leader>r', '<cmd>FloatermNew --opener=edit --name=ranger ranger<CR>', { desc = 'Ranger' } },
   -- quickfix
