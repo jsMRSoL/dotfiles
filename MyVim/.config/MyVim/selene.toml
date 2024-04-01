@@ -1,0 +1,4 @@
+# https://kampfkarren.github.io/selene/usage/configuration.html
+std="nvim+lua51"
+[lints]
+mixed_table = "allow"
