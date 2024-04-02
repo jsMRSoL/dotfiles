@@ -6,13 +6,19 @@ return {
       local dap = require('dap')
       local dapui = require('dapui')
       dap.listeners.after.event_initialized['dapui_config'] = function()
+        vim.keymap.set('n', '<right>', '<cmd>DapStepOver<cr>', { desc = 'StepOver' })
+        vim.keymap.set('n', '<up>', '<cmd>DapStepOut<cr>', { desc = 'StepOut' })
+        vim.keymap.set('n', '<down>', '<cmd>DapStepInto<cr>', { desc = 'StepInto' })
         dapui.open()
       end
-      dap.listeners.after.event_terminated['dapui_config'] = function()
-        dapui.close()
-      end
+      -- dap.listeners.after.event_terminated['dapui_config'] = function()
+      --   -- dapui.close()
+      -- end
       dap.listeners.after.event_exited['dapui_config'] = function()
-        dapui.close()
+        vim.keymap.del('n', '<right>')
+        vim.keymap.del('n', '<up>')
+        vim.keymap.del('n', '<down>')
+        -- dapui.close()
       end
 
       local signs = {
