@@ -63,3 +63,4 @@ tmux/.config/tmux/plugins
 .luarc.json
 /ncmpcpp/.config/ncmpcpp/lyrics/
 /simacs/.simacs_dir/eln-cache/
+simacs/.simacs_dir/straight
