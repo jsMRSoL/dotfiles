@@ -187,6 +187,7 @@ return {
         'delve',
         'impl',
         'gotests',
+        'gotestsum',
         'gomodifytags',
         'iferr',
         -- js/ts
