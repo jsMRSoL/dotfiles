@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd('CmdlineLeave', {
   end,
 })
 -- terminal
-vim.api.nvim_create_autocmd('TermEnter', {
+vim.api.nvim_create_autocmd('TermOpen', {
   desc = 'No line numbers in terminals',
   group = vim.api.nvim_create_augroup('terminal-numbers-off', { clear = true }),
   callback = function()
@@ -48,4 +48,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 --   autocmd VimEnter,BufReadPost,BufEnter * if &filetype == 'rust' | echo(expand('<abuf>'))
 --   augroup END
 -- ]])
-
