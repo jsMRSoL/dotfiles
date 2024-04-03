@@ -974,7 +974,10 @@
        (setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'"))))
 
    #+end_src
-   
+** Lua
+#+begin_src emacs-lisp
+  (use-package lua-mode)
+#+end_src
 * DAP
   #+begin_src emacs-lisp
 
@@ -1225,6 +1228,7 @@
      ;; (javascript . t)
      (shell . t)
      (go . t)
+     (lua . t)
      (rust . t)))
 
   (require 'org-tempo)
@@ -1234,6 +1238,7 @@
   (add-to-list 'org-structure-template-alist '("rs" . "src rust"))
   (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
   (add-to-list 'org-structure-template-alist '("go" . "src go"))
+  (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
   (add-to-list 'org-structure-template-alist '("cpp" . "src cpp"))
 
   (require 'org-src)
@@ -1242,6 +1247,8 @@
   ;; disable code execution warnings
   (setq org-confirm-babel-evaluate nil)
 #+end_src
+
+#+RESULTS:
     
 ** My functions
    #+begin_src emacs-lisp
