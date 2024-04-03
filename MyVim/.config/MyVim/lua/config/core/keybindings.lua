@@ -26,39 +26,39 @@ local mappings = {
   { 'v', 'p',             '"_dp' },
   { 'v', 'P',             'p' },
   -- top level on which-key menu
-  { 'n', '<leader><Tab>', ':b#<CR>',                                                 { desc = 'Alt buffer' } },
-  { 'n', '<leader><cr>',  '@@',                                                      { desc = 'Repeat macro' } },
-  { 'n', '<leader>\\',    ':%s/<C-r>=expand("<cword>")<cr>//g<left><left>',          { desc = 'Global replace' } },
-  { 'n', '<leader>,',     '<cmd>Telescope buffers show_all_buffers=true<cr>',        { desc = 'Switch Buffer' } },
-  { 'n', '<leader>/',     '<cmd>Telescope live_grep<cr>',                            { desc = 'Grep (root dir)' } },
-  { 'n', '<leader>:',     '<cmd>Telescope command_history<cr>',                      { desc = 'Command History' } },
-  { 'n', '<leader>e',     '<cmd>Neotree focus<cr>',                                  { desc = 'Explorer' } },
-  { 'n', '<leader>h',     ':vert h ',                                                { desc = 'help' } },
+  { 'n', '<leader><Tab>', ':b#<CR>',                                                                { desc = 'Alt buffer' } },
+  { 'n', '<leader><cr>',  '@@',                                                                     { desc = 'Repeat macro' } },
+  { 'n', '<leader>\\',    ':%s/<C-r>=expand("<cword>")<cr>//g<left><left>',                         { desc = 'Global replace' } },
+  { 'n', '<leader>,',     '<cmd>Telescope buffers show_all_buffers=true<cr>',                       { desc = 'Switch Buffer' } },
+  { 'n', '<leader>/',     '<cmd>Telescope live_grep<cr>',                                           { desc = 'Grep (root dir)' } },
+  { 'n', '<leader>:',     '<cmd>Telescope command_history<cr>',                                     { desc = 'Command History' } },
+  { 'n', '<leader>e',     '<cmd>Neotree focus<cr>',                                                 { desc = 'Explorer' } },
+  { 'n', '<leader>h',     ':vert h ',                                                               { desc = 'help' } },
   -- ranger
-  { 'n', '<leader>r',     '<cmd>FloatermNew --opener=edit --name=ranger ranger<CR>', { desc = 'Ranger' } },
+  { 'n', '<leader>r',     '<cmd>FloatermNew --opener=edit --title=ranger --name=ranger ranger<CR>', { desc = 'Ranger' } },
   -- quickfix
-  { 'n', '<leader>cn',    '<cmd>cnext<CR>',                                          { desc = 'next' } },
-  { 'n', '<leader>cp',    '<cmd>cprevious<CR>',                                      { desc = 'previous' } },
-  { 'n', '<leader>co',    '<cmd>copen<CR>',                                          { desc = 'open' } },
-  { 'n', '<leader>cc',    '<cmd>cclose<CR>',                                         { desc = 'close' } },
-  { 'n', '<leader>cC',    '<cmd>cexpr []<CR>',                                       { desc = 'clear' } },
-  { 'n', '<leader>cr',    '<cmd>colder<CR>',                                         { desc = 'restore' } },
+  { 'n', '<leader>cn',    '<cmd>cnext<CR>',                                                         { desc = 'next' } },
+  { 'n', '<leader>cp',    '<cmd>cprevious<CR>',                                                     { desc = 'previous' } },
+  { 'n', '<leader>co',    '<cmd>copen<CR>',                                                         { desc = 'open' } },
+  { 'n', '<leader>cc',    '<cmd>cclose<CR>',                                                        { desc = 'close' } },
+  { 'n', '<leader>cC',    '<cmd>cexpr []<CR>',                                                      { desc = 'clear' } },
+  { 'n', '<leader>cr',    '<cmd>colder<CR>',                                                        { desc = 'restore' } },
   -- dap
-  { 'n', '<leader>dt',    '<cmd>DapToggleBreakpoint<cr>',                            { desc = 'Toggle Breakpoint' } },
-  { 'n', '<leader>dx',    '<cmd>DapTerminate<cr>',                                   { desc = 'Exit run' } },
-  { 'n', '<leader>dc',    '<cmd>DapContinue<cr>',                                    { desc = 'Start/Continue' } },
-  { 'n', '<leader>do',    '<cmd>DapStepOver<cr>',                                    { desc = 'Step Over' } },
-  { 'n', '<leader>dO',    '<cmd>DapStepOut<cr>',                                     { desc = 'Step Out' } },
-  { 'n', '<leader>di',    '<cmd>DapStepInto<cr>',                                    { desc = 'Step Into' } },
-  { 'n', '<leader>de',    "<cmd>lua require('dapui').eval(<expression>)<cr>",        { desc = 'Eval expression' } },
-  { 'v', '<leader>de',    "<cmd>lua require('dapui').eval()<cr>",                    { desc = 'Eval expression' } },
-  { 'n', '<leader>dl',    "<cmd>lua require('osv').run_this()<cr>",                  { desc = 'Debug this lua file' } },
-  { 'n', '<leader>dL',    "<cmd>lua require('osv').launch({port = 8086})<cr>",       { desc = 'Launch lua debugger' } },
-  { 'n', '<leader>duo',   "<cmd>lua require('dapui').open()<cr>",                    { desc = 'UI open' } },
-  { 'n', '<leader>duc',   "<cmd>lua require('dapui').close()<cr>",                   { desc = 'UI close' } },
-  { 'n', '<leader>dut',   "<cmd>lua require('dapui').toggle()<cr>",                  { desc = 'UI toggle' } },
+  { 'n', '<leader>dt',    '<cmd>DapToggleBreakpoint<cr>',                                           { desc = 'Toggle Breakpoint' } },
+  { 'n', '<leader>dx',    '<cmd>DapTerminate<cr>',                                                  { desc = 'Exit run' } },
+  { 'n', '<leader>dc',    '<cmd>DapContinue<cr>',                                                   { desc = 'Start/Continue' } },
+  { 'n', '<leader>do',    '<cmd>DapStepOver<cr>',                                                   { desc = 'Step Over' } },
+  { 'n', '<leader>dO',    '<cmd>DapStepOut<cr>',                                                    { desc = 'Step Out' } },
+  { 'n', '<leader>di',    '<cmd>DapStepInto<cr>',                                                   { desc = 'Step Into' } },
+  { 'n', '<leader>de',    "<cmd>lua require('dapui').eval(<expression>)<cr>",                       { desc = 'Eval expression' } },
+  { 'v', '<leader>de',    "<cmd>lua require('dapui').eval()<cr>",                                   { desc = 'Eval expression' } },
+  { 'n', '<leader>dl',    "<cmd>lua require('osv').run_this()<cr>",                                 { desc = 'Debug this lua file' } },
+  { 'n', '<leader>dL',    "<cmd>lua require('osv').launch({port = 8086})<cr>",                      { desc = 'Launch lua debugger' } },
+  { 'n', '<leader>duo',   "<cmd>lua require('dapui').open()<cr>",                                   { desc = 'UI open' } },
+  { 'n', '<leader>duc',   "<cmd>lua require('dapui').close()<cr>",                                  { desc = 'UI close' } },
+  { 'n', '<leader>dut',   "<cmd>lua require('dapui').toggle()<cr>",                                 { desc = 'UI toggle' } },
   -- files
-  { 'n', '<leader>fb',    '<cmd>Telescope buffers<cr>',                              { desc = 'Buffers' } },
+  { 'n', '<leader>fb',    '<cmd>Telescope buffers<cr>',                                             { desc = 'Buffers' } },
   { 'n', '<leader>ff', '<cmd>Telescope find_files<cr>', {
     desc = 'Find Files (root dir)',
   } },
@@ -87,7 +87,7 @@ local mappings = {
   { 'n', '<leader>gU', '<Cmd>lua require("gitsigns").undo_stage_hunk()<CR>',                       { desc = 'undo stage hunk', } },
   { 'n', '<leader>gd', '<Cmd>lua require("gitsigns").diffthis(nil, { split = "belowright" })<CR>', { desc = 'diffthis index', }, },
   { 'n', '<leader>gD',
-    function()
+    function ()
       require('gitsigns').diffthis('~', { split = 'belowright' })
     end,
     { desc = 'diffthis ~', },
@@ -96,13 +96,13 @@ local mappings = {
   { 'n', '<leader>go', '<Cmd>windo diffoff<CR>',  { desc = 'diffoff', } },
   { 'n', '<leader>gu', '<Cmd>diffupdate<CR>',     { desc = 'diffupdate', } },
   { 'v', '<leader>gs',
-    function()
+    function ()
       require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
     end,
     { desc = 'stage hunk', },
   },
   { 'v', '<leader>gr',
-    function()
+    function ()
       require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
     end,
     { desc = 'reset hunk', },
@@ -225,7 +225,8 @@ local cli_abbreviations = {
 
 for _, v in pairs(mappings) do
   -- vim.keymap.set(v[1], v[2], v[3], v[4] or default_opts)
-  vim.keymap.set(v[1], v[2], v[3], vim.tbl_extend('force', default_opts, v[4] or {}))
+  vim.keymap.set(v[1], v[2], v[3],
+    vim.tbl_extend('force', default_opts, v[4] or {}))
 end
 
 for _, v in pairs(cli_abbreviations) do
