@@ -1,4 +1,5 @@
 vim.g.mapleader = ' '
+vim.g.localleader = ';'
 
 local default_opts = { noremap = true, silent = true }
 
@@ -87,7 +88,7 @@ local mappings = {
   { 'n', '<leader>gU', '<Cmd>lua require("gitsigns").undo_stage_hunk()<CR>',                       { desc = 'undo stage hunk', } },
   { 'n', '<leader>gd', '<Cmd>lua require("gitsigns").diffthis(nil, { split = "belowright" })<CR>', { desc = 'diffthis index', }, },
   { 'n', '<leader>gD',
-    function ()
+    function()
       require('gitsigns').diffthis('~', { split = 'belowright' })
     end,
     { desc = 'diffthis ~', },
@@ -96,13 +97,13 @@ local mappings = {
   { 'n', '<leader>go', '<Cmd>windo diffoff<CR>',  { desc = 'diffoff', } },
   { 'n', '<leader>gu', '<Cmd>diffupdate<CR>',     { desc = 'diffupdate', } },
   { 'v', '<leader>gs',
-    function ()
+    function()
       require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
     end,
     { desc = 'stage hunk', },
   },
   { 'v', '<leader>gr',
-    function ()
+    function()
       require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
     end,
     { desc = 'reset hunk', },

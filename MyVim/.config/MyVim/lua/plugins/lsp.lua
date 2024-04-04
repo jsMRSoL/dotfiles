@@ -37,6 +37,7 @@ return {
           'nvim-treesitter/nvim-treesitter',
         },
       },
+      { 'jsMRSoL/goalltesty' },
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -133,7 +134,62 @@ return {
         -- rust
         rust_analyzer = {},
         -- go
-        gopls = {},
+        gopls = {
+          on_attach = function(_, bufnr)
+            local mason_registry = require('mason-registry')
+            local impl = mason_registry.get_package('impl'):get_install_path() .. '/impl'
+            local gomodifytags = mason_registry.get_package('gomodifytags'):get_install_path() .. '/gomodifytags'
+            local iferr = mason_registry.get_package('iferr'):get_install_path() .. '/iferr'
+            local gotests = mason_registry.get_package('gotests'):get_install_path() .. '/gotests'
+            local gotestsum = mason_registry.get_package('gotestsum'):get_install_path() .. '/gotestsum'
+
+            require('gopher').setup({
+              commands = {
+                go = 'go',
+                gomodifytags = gomodifytags,
+                gotests = gotests,
+                impl = impl,
+                iferr = iferr,
+              },
+            })
+
+            require('gotestit').setup({
+              commands = {
+                gotestsum = gotestsum,
+              }
+            })
+
+            local wk = require('which-key')
+            wk.register({
+              ['<leader>lt'] = { name = '+tags' },
+              ['<leader>lT'] = { name = '+tests' },
+              ['<leader>lm'] = { name = '+mod' },
+            })
+
+            local keymap = {
+              { '<space>lg',  ':GoGet ' },
+              { '<space>lI',  ':GoImpl ' },
+              { '<space>ltj', '<cmd>GoTagAdd json<CR>' },
+              { '<space>lty', '<cmd>GoTagAdd yaml<CR>' },
+              { '<space>lTa', '<cmd>GoTestsAll<CR>' },
+              { '<space>lTA', '<cmd>GoTestAdd<CR>' },
+              { '<space>lTe', '<cmd>GoTestsExp<CR>' },
+              { '<space>lD',  '<cmd>GoCmt' },
+              { '<space>li',  '<cmd>GoIfErr<CR>' },
+              { '<space>lmi', ':GoMod init ' },
+              { '<space>lmt', '<cmd>GoMod tidy<CR>' },
+              -- { '<leader>lTT', '<cmd>GoRunThisTest<CR>' },
+              -- { '<leader>lTG', '<cmd>GoRunAllTests<CR>' },
+              { ';tt',        '<cmd>GoRunThisTest<CR>' },
+              { ';td',        '<cmd>GoRunAllTests<CR>' },
+            }
+
+            for _, v in pairs(keymap) do
+              vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
+            end
+          end,
+
+        },
         -- python
         -- pyright = {}, -- can't get this to work?!
         pylsp = {},
@@ -147,6 +203,16 @@ return {
         },
         -- lua
         lua_ls = {
+          on_attach = function(_, bufnr)
+            local keymap = {
+              { ';tf', '<cmd>PlenaryBustedFile %<CR>' },
+              { ';td', '<cmd>PlenaryBustedDirectory %:p:h<CR>' },
+            }
+
+            for _, v in pairs(keymap) do
+              vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
+            end
+          end,
           settings = {
             Lua = {
               completion = {
@@ -213,51 +279,6 @@ return {
             require('lspconfig')[server_name].setup(server)
           end,
           -- dedicated handlers for specific servers
-          ['gopls'] = function()
-            local mason_registry = require('mason-registry')
-            local impl = mason_registry.get_package('impl'):get_install_path() .. '/impl'
-            local gomodifytags = mason_registry.get_package('gomodifytags'):get_install_path() .. '/gomodifytags'
-            local iferr = mason_registry.get_package('iferr'):get_install_path() .. '/iferr'
-            local gotests = mason_registry.get_package('gotests'):get_install_path() .. '/gotests'
-            require('gopher').setup({
-              commands = {
-                go = 'go',
-                gomodifytags = gomodifytags,
-                gotests = gotests,
-                impl = impl,
-                iferr = iferr,
-              },
-            })
-
-            require('lspconfig').gopls.setup({
-              on_attach = function(_, bufnr)
-                local wk = require('which-key')
-                wk.register({
-                  ['<leader>lt'] = { name = '+tags' },
-                  ['<leader>lT'] = { name = '+tests' },
-                  ['<leader>lm'] = { name = '+mod' },
-                })
-
-                local keymap = {
-                  { '<space>lg',  ':GoGet ' },
-                  { '<space>lI',  ':GoImpl ' },
-                  { '<space>ltj', '<cmd>GoTagAdd json<CR>' },
-                  { '<space>lty', '<cmd>GoTagAdd yaml<CR>' },
-                  { '<space>lTa', '<cmd>GoTestsAll<CR>' },
-                  { '<space>lTA', '<cmd>GoTestAdd<CR>' },
-                  { '<space>lTe', '<cmd>GoTestsExp<CR>' },
-                  { '<space>lD',  '<cmd>GoCmt' },
-                  { '<space>li',  '<cmd>GoIfErr<CR>' },
-                  { '<space>lmi', ':GoMod init ' },
-                  { '<space>lmt', '<cmd>GoMod tidy<CR>' },
-                }
-
-                for _, v in pairs(keymap) do
-                  vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
-                end
-              end,
-            })
-          end,
           ['rust_analyzer'] = function()
             local rust_tools = require('rust-tools')
 
