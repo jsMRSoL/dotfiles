@@ -10,13 +10,39 @@ function tagger() {
 # fuzzy cd and fancy ls -lh
 function c() {
   local dir
-  dir="$( fd --type d -H . -d 5 ~/ | fzf )"
+  dir="$( fd --type d -H -d 5 | fzf )"
   [[ -z $dir ]] && return
-  cd "$dir"
-  exa -l --icons
+  # cd "$dir"
+  # exa -l --icons
+  ranger $dir
 }
 
-# fuzzy search for a file and open it in myvim.
+# fuzzy search for a file in the current directory and open it in myvim.
+function f() {
+  local file
+  file="$(fd --type f -HL -d 1 | fzf --preview='bat --color always {}')"
+  [[ -z $file ]] && return
+
+  cd "$(dirname $file)"
+  # base="$(basename $file)"
+  # echo $base
+  # myvim "$file"
+  myvim "$(basename $file)"
+}
+
+# fuzzy search for a file in the Projects directory and open it in myvim.
+function j() {
+  local file
+  file="$(fd --type f -HL . '/home/simon/Projects' | fzf --preview='bat --color always {}')"
+  [[ -z $file ]] && return
+
+  cd "$(dirname $file)"
+  myvim "$file"
+  cd ~/
+}
+
+# fuzzy search for a file in a directory under $HOME
+# narrowing by directory, and open it in myvim.
 function ff() {
   local dir
   dir="$( fd --type d -H . -d 1 ~/ | fzf )"
@@ -84,7 +110,7 @@ function bak() {
     done
 }
 
-function m() {
+function tmusic() {
     if [[ -n $TMUX ]]; then
       echo "Already in tmux. Start this in a separate terminal."
       return 0
