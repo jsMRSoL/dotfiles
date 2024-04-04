@@ -64,3 +64,5 @@ tmux/.config/tmux/plugins
 /ncmpcpp/.config/ncmpcpp/lyrics/
 /simacs/.simacs_dir/eln-cache/
 simacs/.simacs_dir/straight
+MyVim/.config/MyVim/ignore/ftplugin
+MyVim/.config/MyVim/lua/plugins/gotestit.lua.retired
