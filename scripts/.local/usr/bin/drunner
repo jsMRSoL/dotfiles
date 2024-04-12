@@ -2,7 +2,7 @@
 #
 j4-dmenu-desktop --dmenu="dmenu \
   -g 5 \
-  -l 10 \
+  -l 14 \
   -p 'Select application: ' \
   -fn 'Firacode Nerd Font-15' \
   -nf '#cdd6f4' \

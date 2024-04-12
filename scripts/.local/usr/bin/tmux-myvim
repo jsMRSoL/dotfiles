@@ -7,7 +7,7 @@ launch() {
     tmux select-window -t MyVim
   else
   tmux new-window -n MyVim \
-    && tmux send-keys -t :MyVim 'myvim && exit' Enter
+    && tmux send-keys -t :MyVim 'myvim' Enter
   fi
 }
 
