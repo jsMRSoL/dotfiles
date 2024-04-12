@@ -218,6 +218,7 @@ return {
               completion = {
                 callSnippet = 'Replace',
               },
+              hint = { enable = true },
               diagnostics = {
                 -- get the language server to recognise
                 -- globals used in plenary tests

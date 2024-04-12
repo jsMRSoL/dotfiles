@@ -1,5 +1,5 @@
 local opts = {
-  autochdir = true,
+  -- autochdir = true,
   autoindent = true,
   backspace = 'indent,eol,start',
   breakindent = true,
@@ -21,7 +21,7 @@ local opts = {
   foldmethod = 'expr',
   foldexpr = 'nvim_treesitter#foldexpr()',
   foldenable = false,
-  formatoptions = 'jcroqlnt', -- tcqj
+  formatoptions = 'jcrqlnt', -- tcqj
   grepformat = '%f:%l:%c:%m',
   grepprg = 'rg --vimgrep',
   -- The following did not work well with catppuccin.

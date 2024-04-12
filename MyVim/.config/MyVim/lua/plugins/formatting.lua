@@ -19,7 +19,9 @@ return {
           null_ls.builtins.code_actions.impl,
           null_ls.builtins.code_actions.gomodifytags,
           -- lua
-          null_ls.builtins.diagnostics.selene,
+          --- Do I need this? Lua_ls provides diagnostics
+          --- and has code actions linked to them.
+          -- null_ls.builtins.diagnostics.selene,
           -- typescript/javascript
           null_ls.builtins.formatting.prettierd,
           -- shell
