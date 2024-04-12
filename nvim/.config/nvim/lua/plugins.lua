@@ -18,32 +18,32 @@ require("packer").startup(function()
   use("nvim-lua/popup.nvim")
   use("nvim-lua/plenary.nvim")
   -- lsp config
-  use { -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    requires = {
-      -- Automatically install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-
-      -- Useful status updates for LSP
-      'j-hui/fidget.nvim',
-    },
-  }
-  use("onsails/lspkind-nvim")
+  -- use { -- LSP Configuration & Plugins
+  --   'neovim/nvim-lspconfig',
+  --   requires = {
+  --     -- Automatically install LSPs to stdpath for neovim
+  --     'williamboman/mason.nvim',
+  --     'williamboman/mason-lspconfig.nvim',
+  --
+  --     -- Useful status updates for LSP
+  --     'j-hui/fidget.nvim',
+  --   },
+  -- }
+  -- use("onsails/lspkind-nvim")
   -- Lua
-  use({
-    "folke/trouble.nvim",
-    requires = "kyazdani42/nvim-web-devicons",
-    config = function()
-      require("trouble").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
-    end,
-  })
+  -- use({
+  --   "folke/trouble.nvim",
+  --   requires = "kyazdani42/nvim-web-devicons",
+  --   config = function()
+  --     require("trouble").setup({
+  --       -- your configuration comes here
+  --       -- or leave it empty to use the default settings
+  --       -- refer to the configuration section below
+  --     })
+  --   end,
+  -- })
   -- autocomplete
-  use("hrsh7th/cmp-nvim-lsp")
+  -- use("hrsh7th/cmp-nvim-lsp")
   use("hrsh7th/cmp-buffer")
   use("hrsh7th/cmp-path")
   use("hrsh7th/cmp-cmdline")
@@ -51,24 +51,24 @@ require("packer").startup(function()
   use("hrsh7th/nvim-cmp")
   -- For vsnip users.
   use("hrsh7th/cmp-vsnip")
-  use("hrsh7th/vim-vsnip")
-  use("hrsh7th/vim-vsnip-integ")
+  -- use("hrsh7th/vim-vsnip")
+  -- use("hrsh7th/vim-vsnip-integ")
   use({
     "ray-x/lsp_signature.nvim",
   })
   -- treesitter
-  use({"nvim-treesitter/nvim-treesitter",
-    run = function()
-      pcall(require("nvim-treesitter.install").update { with_sync = true })
-    end,
-  })
-  use("nvim-treesitter/playground")
+  -- use({"nvim-treesitter/nvim-treesitter",
+  --   run = function()
+  --     pcall(require("nvim-treesitter.install").update { with_sync = true })
+  --   end,
+  -- })
+  -- use("nvim-treesitter/playground")
   -- dap
-  use("mfussenegger/nvim-dap")
-  use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
+  -- use("mfussenegger/nvim-dap")
+  -- use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
   -- snippets
   -- use 'rust-lang/vscode-rust'
-  use("rafamadriz/friendly-snippets")
+  -- use("rafamadriz/friendly-snippets")
   -- telescope
   use("nvim-telescope/telescope.nvim")
   use("nvim-telescope/telescope-fzy-native.nvim")
@@ -87,7 +87,7 @@ require("packer").startup(function()
   -- use("kyazdani42/nvim-tree.lua")
   -- use("kyazdani42/nvim-web-devicons")
   use("ryanoasis/vim-devicons")
-  use("airblade/vim-rooter")
+  -- use("airblade/vim-rooter")
   -- terminal
   use("voldikss/vim-floaterm")
   -- editing
@@ -146,24 +146,24 @@ require("packer").startup(function()
   --   },
   -- })
   -- undo
-  use("mbbill/undotree")
+  -- use("mbbill/undotree")
   -- org
-  use({
-    "nvim-orgmode/orgmode",
-    config = function()
-      require("orgmode").setup({})
-    end,
-  })
-  use("simrat39/rust-tools.nvim")
+  -- use({
+  --   "nvim-orgmode/orgmode",
+  --   config = function()
+  --     require("orgmode").setup({})
+  --   end,
+  -- })
+  -- use("simrat39/rust-tools.nvim")
   -- linting/formatting
-  use({
-    "jose-elias-alvarez/null-ls.nvim",
-    requires = {
-      "nvim-lua/plenary.nvim",
-    },
-  })
-  use("AndrewRadev/splitjoin.vim")
-  use_rocks("lunajson")
+  -- use({
+  --   "jose-elias-alvarez/null-ls.nvim",
+  --   requires = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  -- })
+  -- use("AndrewRadev/splitjoin.vim")
+  -- use_rocks("lunajson")
 end)
 
 if is_bootstrap then

@@ -80,7 +80,7 @@ cmp.setup({
     { name = "vsnip" }, -- For vsnip users.
     { name = "buffer" },
     { name = "path" },
-    { name = "orgmode" },
+    -- { name = "orgmode" },
     -- { name = "nvim_lsp_signature_help" },
     -- { name = 'luasnip' }, -- For luasnip users.
     -- { name = 'ultisnips' }, -- For ultisnips users.
