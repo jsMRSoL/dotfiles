@@ -169,11 +169,11 @@
 * Multiple cursors
   #+begin_src emacs-lisp
 
-    (use-package evil-multiedit
-      :config
-      (evil-multiedit-default-keybinds))
+    ;; (use-package evil-multiedit
+    ;;   :config
+    ;;   (evil-multiedit-default-keybinds))
 
-    ;; (use-package evil-mc
+    ;; ;; (use-package evil-mc
     ;;   :init
     ;;   (global-evil-mc-mode))
 
@@ -237,11 +237,11 @@
   
 * Workspaces
   #+begin_src emacs-lisp
-    (use-package perspective
-      :init
-      (setq persp-mode-prefix-key "l")
-      (persp-mode)
-      (setq persp-state-default-file "~/.simacs_dir/layouts/layouts"))
+    ;; (use-package perspective
+    ;;   :init
+    ;;   (setq persp-mode-prefix-key "l")
+    ;;   (persp-mode)
+    ;;   (setq persp-state-default-file "~/.simacs_dir/layouts/layouts"))
   #+end_src
   
 * Text macros
