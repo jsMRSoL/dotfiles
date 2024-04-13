@@ -1,22 +1,22 @@
-#!/bin/sh
+#!/bin/bash
 ######################################################
 # useful functions
 ######################################################
 touch /root/installation.log
 LOG=/root/installation.log
 report() {
-    # $1 is success message
-    # $2 is failure message
-    [ $? -eq 0 ] && echo "$1" || echo "$2" >>$LOG
+  # $1 is success message
+  # $2 is failure message
+  [ $? -eq 0 ] && echo "$1" || echo "$2" >> $LOG
 }
 ######################################################
 # Test if chrooted
 ######################################################
-if [ "$(awk '$5=="/" {print $1}' </proc/1/mountinfo)" != "$(awk '$5=="/" {print $1}' </proc/$$/mountinfo)" ]; then
-    echo "Already in chroot. Continuing with installation..."
+if [ "$(awk '$5=="/" {print $1}' < /proc/1/mountinfo)" != "$(awk '$5=="/" {print $1}' < /proc/$$/mountinfo)" ]; then
+  echo "Already in chroot. Continuing with installation..."
 else
-    arch-chroot /mnt
-    echo "Now running in chroot on /mnt."
+  arch-chroot /mnt
+  echo "Now running in chroot on /mnt."
 fi
 ######################################################
 # set time and locale
@@ -27,18 +27,18 @@ sed -i 's/#en_GB.UTF-8/en_GB.UTF-8/' /etc/locale.gen
 sed -i 's/#el_GR.UTF-8/el_GR.UTF-8/' /etc/locale.gen
 locale-gen
 report "Generated locale" "Couldn't generate locale"
-echo LANG=en_GB.UTF-8 >/etc/locale.conf
+echo LANG=en_GB.UTF-8 > /etc/locale.conf
 export LANG=en_GB.UTF-8
 ######################################################
 # configure networking
 ######################################################
 read -p "Input a hostname: " hostname
-touch /etc/hostname &&
-    echo "$hostname" >/etc/hostname
+touch /etc/hostname \
+  && echo "$hostname" > /etc/hostname
 report "Wrote hostname $hostname to /etc/hostname" "Couldn't write hostname to /etc/hostname"
 
 touch /etc/hosts
-cat <<EOT >>/etc/hosts
+cat << EOT >> /etc/hosts
 127.0.0.1       localhost
 192.168.1.1     router
 192.168.1.112   ace
@@ -53,7 +53,7 @@ pacman -Sy
 pacman -S --noconfirm sudo
 report "Installed sudo" "Couldn't install sudo"
 # add special permission for simon
-cat <<EOT >>/etc/sudoers
+cat << EOT >> /etc/sudoers
 simon   ALL=(ALL:ALL) ALL
 simon ALL=(ALL) NOPASSWD:/sbin/poweroff,/sbin/reboot,/sbin/shutdown
 EOT
@@ -61,7 +61,7 @@ report "Updated sudoers" "Couldn't update sudoers"
 ######################################################
 # Binds for /etc/fstab
 ######################################################
-cat <<EOT >>/etc/fstab
+cat << EOT >> /etc/fstab
 
 # Binds for data partition
 /mnt/data/Documents	/home/simon/Documents	none	defaults,bind 0	0
@@ -84,24 +84,24 @@ docx2txt cups sxiv mpv sxhkd python-pip ttf-ubuntu-font-family ttf-dejavu
 ttf-liberation ttf-fira-code nfs-utils acpi base-devel dmenu slock pass git stow
 rsync gtk2 trash-cli lazygit"
 for package in $packages; do
-    pacman -Ss $package
-    [ $? -eq 0 ] && pacman -S --noconfirm $package && echo "Installed package $package" >>$LOG || echo "Couldn't find package $package" >>$LOG
+  pacman -Ss $package
+  [ $? -eq 0 ] && pacman -S --noconfirm $package && echo "Installed package $package" >> $LOG || echo "Couldn't find package $package" >> $LOG
 done
 ######################################################
 # Enable packages
 ######################################################
 services="lightdm org.cups.cupsd iwd dhcpcd sshd"
 for service in $services; do
-    systemctl enable $service
-    report "Installed service $service" "Couldn't install service $service"
+  systemctl enable $service
+  report "Installed service $service" "Couldn't install service $service"
 done
 ######################################################
 # pip install python
 ######################################################
 pippackages="youtube-dl mps-youtube xlsx2csv"
 for pippkg in $pippackages; do
-    pip install $pippkg
-    report "Installed pip package $pippkg" "Couldn't install pip package $pippkg"
+  pip install $pippkg
+  report "Installed pip package $pippkg" "Couldn't install pip package $pippkg"
 done
 ## lightdm should now be able to start dwm.
 ## If it doesn't, check .xsession-errors. Errors raised by .profile (including
@@ -116,7 +116,7 @@ done
 # Set up home directory with git and stow
 ######################################################
 useradd -m simon
-sudo -i -u simon bash <<EOT
+sudo -i -u simon bash << EOT
 mkdir .local .config .vim .vim/bundle .emacs.d .emacs.d/private
 git clone http://192.168.1.210/git/private-ace.git ~/.private
 mv ~/.ssh ~/ssh.bak
@@ -172,8 +172,8 @@ makepkg -si
 ######################################################
 paru_packages="lightdm-slick-greeter urlview task-spooler python-xlsx2csv ttf-ms-fonts ttf-vista-fonts"
 for paru_package in $paru_packages; do
-    # paru -S --answerclean=None --answerdiff=None --answeredit=None --answerupgrade=None $paru_package
-    paru -S --noconfirm $paru_package
+  # paru -S --answerclean=None --answerdiff=None --answeredit=None --answerupgrade=None $paru_package
+  paru -S --noconfirm $paru_package
 done
 
 ######################################################
