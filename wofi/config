@@ -1,0 +1,13 @@
+color=./colors
+mode=drun
+#prompt=
+width=100%
+height=100%
+allow_images=true
+term=alacritty
+insensitive=true
+no_actions=false
+lines=24
+columns=4
+image_size=24
+sort_order=alphabetical

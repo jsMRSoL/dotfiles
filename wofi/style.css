@@ -1,0 +1,29 @@
+/* @import "./catppuccin.module.css"; */
+
+@define-color background rgba(30,30,46,0.95);
+
+window {
+  font-size: 28px;
+  font-family: "Roboto Mono Nerd Font Medium";
+  background-color: @background;
+  color: rgba(186, 194, 222, 1);
+  width: 500px;
+}
+
+/* Selector for the text box for filtering items  */
+#input {
+  background-color: @background;
+  color: rgba(186, 194, 222, 1);
+  border: 2px solid #313244;
+}
+
+#entry {
+  padding-left: 20px;
+}
+/* The currently focused text in the list */
+#entry:selected {
+  background-color: rgba(186, 194, 222, 1);
+}
+#text:selected {
+  color: rgba(30, 30, 46, 0.98);
+}
