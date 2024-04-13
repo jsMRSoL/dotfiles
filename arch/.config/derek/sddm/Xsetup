@@ -1,3 +1,0 @@
-#!/bin/sh
-# Xsetup - run as root before the login dialog appears
-xrandr --output VGA1 --auto --primary --output eDP1 --auto --left-of VGA1
