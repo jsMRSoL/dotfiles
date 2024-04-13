@@ -66,3 +66,5 @@ tmux/.config/tmux/plugins
 simacs/.simacs_dir/straight
 MyVim/.config/MyVim/ignore/ftplugin
 MyVim/.config/MyVim/lua/plugins/gotestit.lua.retired
+emacs/.emacs.d/auto-save-list
+emacs/.emacs.d/eln-cache/29.3-561b282f
