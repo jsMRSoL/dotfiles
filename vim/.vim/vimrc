@@ -112,8 +112,8 @@ filetype plugin indent on    " required
     nnoremap <leader>cc :call ToggleColorCol()<CR>
 " }}}
 " Autocommands {{{
-    autocmd FileType vim setlocal foldmethod=marker 
-    autocmd vimenter * colorscheme archman
+    autocmd FileType vim setlocal foldmethod=marker
+    autocmd vimenter * colorscheme catppuccin_mocha
 " }}}
 " Manage vim's internal files  {{{
 " check directories exist first
