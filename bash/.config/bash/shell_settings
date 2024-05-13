@@ -132,11 +132,11 @@ alias ytva='youtube-dl --config-location ~/.config/youtube-dl/ytva'
 ## shortcut files
 alias min='vim ~/.dotfiles/help/minimal-debian-install'
 ## config files
-alias cfg-ncmpcpp='vim ~/.config/ncmpcpp/config'
-alias cfg-mpd='vim ~/.config/mpd/mpd.conf'
-alias cfg-ranger='vim ~/.config/ranger/rc.conf'
-alias cfg-ba='vim ~/.bash_aliases'
-alias cfg-brc='vim ~/.bashrc'
+alias cfg-ncmpcpp='myvim ~/.config/ncmpcpp/config'
+alias cfg-mpd='myvim ~/.config/mpd/mpd.conf'
+alias cfg-ranger='myvim ~/.config/ranger/rc.conf'
+alias cfg-ba='myvim ~/.bash_aliases'
+alias cfg-brc='myvim ~/.bashrc'
 ################################################################################
 ## End aliases
 ################################################################################

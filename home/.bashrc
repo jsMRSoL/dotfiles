@@ -117,5 +117,5 @@ fi
 eval "$(zoxide init bash)"
 # start starship prompt
 eval "$(starship init bash)"
-# atuin
+# add atuin
 eval "$(atuin init bash --disable-up-arrow)"
