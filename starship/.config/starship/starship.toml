@@ -16,9 +16,6 @@ add_newline = false
 success_symbol = "[ ✓](bold green) "
 error_symbol = "[ ✗](bold red) "
 
-[rust]
-format = "via [ $version](red bold) "
-
 [cmd_duration]
 min_time = 10_000
 format = "took [$duration](bold yellow)"
