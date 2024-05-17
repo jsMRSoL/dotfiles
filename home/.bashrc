@@ -116,9 +116,14 @@ if ! shopt -oq posix; then
     . /usr/share/bash-completion/completions/zellij
   fi
 fi
-# add zoxide
-eval "$(zoxide init bash)"
 # start starship prompt
 eval "$(starship init bash)"
+<<<<<<< Updated upstream
 # add atuin
+=======
+# add zoxide
+eval "$(zoxide init bash)"
+# atuin
+[[ -f /usr/share/bash-preexec/bash-preexec.sh ]] && source /usr/share/bash-preexec/bash-preexec.sh
+>>>>>>> Stashed changes
 eval "$(atuin init bash --disable-up-arrow)"
