@@ -17,32 +17,32 @@ function c() {
   ranger $dir
 }
 
-# fuzzy search for a file in the current directory and open it in myvim.
+# fuzzy search for a file in the current directory and open it in $EDITOR.
 function f() {
   local file
-  file="$(fd --type f -HL -d 1 | fzf --preview='bat --color always {}')"
+  file="$(fd --type f -HL | fzf --preview='bat --color always {}')"
   [[ -z $file ]] && return
 
   cd "$(dirname $file)"
   # base="$(basename $file)"
   # echo $base
-  # myvim "$file"
-  myvim "$(basename $file)"
+  # $EDITOR "$file"
+  $EDITOR "$(basename $file)"
 }
 
-# fuzzy search for a file in the Projects directory and open it in myvim.
+# fuzzy search for a file in the Projects directory and open it in $EDITOR.
 function j() {
   local file
   file="$(fd --type f -HL . '/home/simon/Projects' | fzf --preview='bat --color always {}')"
   [[ -z $file ]] && return
 
   cd "$(dirname $file)"
-  myvim "$file"
+  $EDITOR "$file"
   cd ~/
 }
 
 # fuzzy search for a file in a directory under $HOME
-# narrowing by directory, and open it in myvim.
+# narrowing by directory, and open it in $EDITOR.
 function ff() {
   local dir
   dir="$( fd --type d -H . -d 1 ~/ | fzf )"
@@ -53,12 +53,12 @@ function ff() {
   [[ -z $file ]] && return
 
   cd "$(dirname $file)"
-  myvim "$file"
+  $EDITOR "$file"
 }
 
-# open directory in myvim
+# open directory in $EDITOR
 function dir_in_vim() {
-  myvim "$( fd --type d . ~/ | fzf )"
+  $EDITOR "$( fd --type d . ~/ | fzf )"
 }
 
 # Install packages using paru
@@ -71,11 +71,11 @@ function remove() {
 }
 
 function cheat() {
-  fd --type f -H . /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1 | xargs -ro myvim
+  fd --type f -H . /home/simon/.dotfiles/help | fzf -e --query="$1" --select-1 | xargs -ro $EDITOR
 }
 
 function cfg() {
-  fd --type f -H . /home/simon/.config | fzf -e --query="$1" --select-1 | xargs -ro myvim
+  fd --type f -HL . /home/simon/.config | fzf -e --query="$1" --select-1 | xargs -ro $EDITOR
 }
 
 # fdr - cd to selected parent directory
@@ -170,9 +170,9 @@ function vu() {
 function escr() {
     FILE=$( whereis "$1" | cut -d' ' -f2 )
     if [ "$(stat -c %U "$FILE")" == "$USER" ]; then
-        myvim "$FILE"
+        $EDITOR "$FILE"
     else
-        sudo myvim "$FILE"
+        sudo $EDITOR "$FILE"
     fi
 }
 
