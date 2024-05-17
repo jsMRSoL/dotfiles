@@ -13,7 +13,7 @@ launch() {
   fi
 
   tmux new-window -n MyVim -t "$session" \
-    && tmux send-keys -t "$session":MyVim "myvim $file && exit" Enter \
+    && tmux send-keys -t "$session":MyVim "cd $path && myvim $file && exit" Enter \
     && tmux switch-client -t "$session"
 }
 
