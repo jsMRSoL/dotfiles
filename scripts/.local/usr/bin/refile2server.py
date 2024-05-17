@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/home/simon/.virtualenvs/serverrefiler/bin/python
 # -*- coding: utf-8 -*-
 from paramiko import SSHClient
 import os
@@ -17,40 +17,52 @@ def get_file_count(id):
     client.connect('ant', username='simon')
 
     # Check if folder exists
-    new_folder = False
     stdin, stdout, stderr = client.exec_command(f'ls ~/vcol/{id}')
+    if stdout.channel.recv_exit_status() != 0:
+        print("Could not get info from server. Exiting...")
+        client.close()
+        sys.exit(0)
+
     if 'No such file or directory' in stderr.read().decode("utf8"):
-        new_folder = True
         stdin, stdout, stderr = client.exec_command(
             f'mkdir ~/vcol/{id}/thumbs -p')
 
         if stdout.channel.recv_exit_status() != 0:
             print(f'Folder {id} does not exist in ~/vcol & cannot be created')
+            client.close()
             sys.exit(0)
 
+        client.close()
+        return 0
+
+    # Check for  any filenames with underscore
+    cmd = f'find ~/vcol/{id} -maxdepth 1 -type f -name *_* | wc -l'
+    stdin, stdout, stderr = client.exec_command(cmd)
+    with stdin, stdout, stderr as stdin, stdout, stderr:
+        no_files = stdout.read().decode("utf8")
+        if int(no_files) == 0:
+            client.close()
+            return 0
+
     # Get last filename
-    cmd = f'find ~/vcol/{id} -maxdepth 1 -type f | sort | tail -n 1'
+    cmd = f'find ~/vcol/{id} -maxdepth 1 -type f -name *_* | sort | tail -n 1'
     stdin, stdout, stderr = client.exec_command(cmd)
     with stdin, stdout, stderr as stdin, stdout, stderr:
         output = stdout.read().decode("utf8")
-        # Get return code from command (0 is default for success)
-        if stdout.channel.recv_exit_status() != 0:
-            print("Could not get info from server. Exiting...")
-            sys.exit(0)
+
     # Close the client itself
     client.close()
 
     logging.debug(output)
+
     if output == '':
         output = 'dummy_000.jpg'
 
     try:
-        if new_folder:
-            return 0
-        else:
-            num = output.split("_")[1]
-            num = num.split(".")[0]
-            return int(num)
+        num = output.split("_")[1]
+        num = num.split(".")[0]
+        return int(num)
+
     except IndexError as e:
         print("Filename was not in expected format.")
         print(f"Error: {e}")
