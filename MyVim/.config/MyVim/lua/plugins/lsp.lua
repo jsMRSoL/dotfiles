@@ -5,7 +5,7 @@ return {
       { 'simrat39/rust-tools.nvim' },
       {
         'williamboman/mason.nvim',
-        build = function()
+        build = function ()
           local ok, _ = pcall(vim.cmd, 'MasonUpdate')
           if not ok then
             vim.notify('Could not run MasonUpdate')
@@ -19,13 +19,16 @@ return {
       {
         'folke/neodev.nvim',
         event = 'VeryLazy',
-        config = function()
+        config = function ()
           require('neodev').setup({
             library = { plugins = { 'nvim-dap-ui' }, types = true },
           })
         end,
       },
-      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        'j-hui/fidget.nvim',
+        opts = {}
+      },
       {
         'onsails/lspkind.nvim',
         event = 'VeryLazy',
@@ -37,14 +40,15 @@ return {
           'nvim-treesitter/nvim-treesitter',
         },
       },
-      { 'jsMRSoL/goalltesty' },
+      -- { 'jsMRSoL/goalltesty' },
+      { dir = '~/Projects/lua/goalltesty.nvim/' }
     },
-    config = function()
+    config = function ()
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('my-lsp-attach', { clear = true }),
-        callback = function(event)
+        callback = function (event)
           local bufnr = event.buf
-          local nmap = function(keys, func, desc)
+          local nmap = function (keys, func, desc)
             vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
           end
 
@@ -55,20 +59,25 @@ return {
           --  To jump back, press <C-t>.
           nmap('gd', vim.lsp.buf.definition, 'Go to definition')
           -- Find references for the word under your cursor.
-          nmap('gr', require('telescope.builtin').lsp_references, 'Go to references')
+          nmap('gr', require('telescope.builtin').lsp_references,
+            'Go to references')
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
-          nmap('gI', require('telescope.builtin').lsp_implementations, 'Go to implementation')
+          nmap('gI', require('telescope.builtin').lsp_implementations,
+            'Go to implementation')
           -- Jump to the type of the word under your cursor.
           --  Useful when you're not sure what type a variable is and you want to see
           --  the definition of its *type*, not where it was *defined*.
           nmap('<leader>ld', vim.lsp.buf.type_definition, 'Type definition')
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
-          nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
+          nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols,
+            'Document symbols')
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
-          nmap('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
+          nmap('<leader>lws',
+            require('telescope.builtin').lsp_dynamic_workspace_symbols,
+            'Workspace symbols')
 
           -- diagnostics
           nmap('[d', vim.diagnostic.goto_next, 'Next diagnostic')
@@ -80,14 +89,17 @@ return {
 
           -- Lesser used LSP functionality
           nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration')
-          nmap('<leader>lwa', vim.lsp.buf.add_workspace_folder, 'Workspace Add Folder')
-          nmap('<leader>lwr', vim.lsp.buf.remove_workspace_folder, 'Workspace Remove Folder')
-          nmap('<leader>lwl', function()
+          nmap('<leader>lwa', vim.lsp.buf.add_workspace_folder,
+            'Workspace Add Folder')
+          nmap('<leader>lwr', vim.lsp.buf.remove_workspace_folder,
+            'Workspace Remove Folder')
+          nmap('<leader>lwl', function ()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
           end, 'Workspace List Folders')
           --
           -- -- Set some keybinds conditional on server capabilities
-          nmap('<space>lf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', 'Format buffer')
+          nmap('<space>lf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>',
+            'Format buffer')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.server_capabilities.documentHighlightProvider then
@@ -109,7 +121,8 @@ return {
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      capabilities = vim.tbl_deep_extend('force', capabilities,
+        require('cmp_nvim_lsp').default_capabilities())
 
       -- define diagnostic signs
       local function sign_define(args)
@@ -135,13 +148,18 @@ return {
         rust_analyzer = {},
         -- go
         gopls = {
-          on_attach = function(_, bufnr)
+          on_attach = function (_, bufnr)
             local mason_registry = require('mason-registry')
-            local impl = mason_registry.get_package('impl'):get_install_path() .. '/impl'
-            local gomodifytags = mason_registry.get_package('gomodifytags'):get_install_path() .. '/gomodifytags'
-            local iferr = mason_registry.get_package('iferr'):get_install_path() .. '/iferr'
-            local gotests = mason_registry.get_package('gotests'):get_install_path() .. '/gotests'
-            local gotestsum = mason_registry.get_package('gotestsum'):get_install_path() .. '/gotestsum'
+            local impl = mason_registry.get_package('impl'):get_install_path() ..
+              '/impl'
+            local gomodifytags = mason_registry.get_package('gomodifytags')
+              :get_install_path() .. '/gomodifytags'
+            local iferr = mason_registry.get_package('iferr'):get_install_path() ..
+              '/iferr'
+            local gotests = mason_registry.get_package('gotests'):get_install_path() ..
+              '/gotests'
+            local gotestsum = mason_registry.get_package('gotestsum')
+              :get_install_path() .. '/gotestsum'
 
             require('gopher').setup({
               commands = {
@@ -203,7 +221,7 @@ return {
         },
         -- lua
         lua_ls = {
-          on_attach = function(_, bufnr)
+          on_attach = function (_, bufnr)
             local keymap = {
               { ';tf', '<cmd>PlenaryBustedFile %<CR>' },
               { ';td', '<cmd>PlenaryBustedDirectory %:p:h<CR>' },
@@ -274,13 +292,14 @@ return {
       require('mason-lspconfig').setup({
         handlers = {
           -- first entry (without a key) is the default handler
-          function(server_name)
+          function (server_name)
             local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities,
+              server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
           -- dedicated handlers for specific servers
-          ['rust_analyzer'] = function()
+          ['rust_analyzer'] = function ()
             local rust_tools = require('rust-tools')
 
             local mason_registry = require('mason-registry')
@@ -294,7 +313,7 @@ return {
                 focus = true,
               },
               server = {
-                on_attach = function(_, bufnr)
+                on_attach = function (_, bufnr)
                   local keymap = {
                     { '<space>lh',  '<cmd>RustHoverActions<CR>' },
                     { '<space>lH',  '<cmd>RustHoverRange<CR>' },
@@ -310,7 +329,8 @@ return {
                   }
 
                   for _, v in pairs(keymap) do
-                    vim.keymap.set('n', v[1], v[2], { noremap = true, buffer = bufnr })
+                    vim.keymap.set('n', v[1], v[2],
+                      { noremap = true, buffer = bufnr })
                   end
 
                   local wk = require('which-key')
@@ -330,7 +350,8 @@ return {
                 },
               },
               dap = {
-                adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path),
+                adapter = require('rust-tools.dap').get_codelldb_adapter(
+                  codelldb_path, liblldb_path),
               },
             })
           end,
@@ -338,7 +359,8 @@ return {
       })
 
       -- Set up autoformat on save
-      local fmt_group = vim.api.nvim_create_augroup('autoformat_cmds', { clear = true })
+      local fmt_group = vim.api.nvim_create_augroup('autoformat_cmds',
+        { clear = true })
 
       local function setup_autoformat(event)
         local id = vim.tbl_get(event, 'data', 'client_id')
@@ -349,7 +371,7 @@ return {
 
         vim.api.nvim_clear_autocmds({ group = fmt_group, buffer = event.buf })
 
-        local buf_format = function(e)
+        local buf_format = function (e)
           vim.lsp.buf.format({
             bufnr = e.buf,
             async = false,
