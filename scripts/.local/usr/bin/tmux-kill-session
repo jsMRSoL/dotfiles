@@ -7,6 +7,8 @@ main() {
 
   [[ -z $mode ]] && exit
 
+  this_session=$(tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1 | cut -d' ' -f2)
+
   if [[ $mode == "1. "* ]]; then
     switch_and_kill_this
   else
@@ -15,7 +17,6 @@ main() {
 }
 
 switch_and_kill_this() {
-  this_session=$(tmux list-sessions -F '#{session_attached} #{session_name}' | grep ^1 | cut -d' ' -f2)
   destination=$(pick_session "Pick session to switch to: ")
   tmux switch-client -t $destination && tmux kill-session -t $this_session
 }
@@ -26,7 +27,7 @@ kill_another() {
 }
 
 pick_session() {
-  session=$(tmux list-sessions | cut -d: -f1 | fzf --prompt="$1")
+  session=$(tmux list-sessions | cut -d: -f1 | sed "/^$this_session/d" | fzf --prompt="$1")
   echo $session
 }
 
