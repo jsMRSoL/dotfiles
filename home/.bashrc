@@ -112,6 +112,9 @@ if ! shopt -oq posix; then
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
   fi
+  if [ -f /usr/share/bash-completion/completions/zellij ]; then
+    . /usr/share/bash-completion/completions/zellij
+  fi
 fi
 # add zoxide
 eval "$(zoxide init bash)"
