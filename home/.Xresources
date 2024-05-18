@@ -3,3 +3,9 @@ Sxiv.background: #1e1e2e
 Sxiv.foreground: #626880
 
 Sxiv.font: FiraCode Nerd Font 12
+
+Nsxiv.window.background: #1e1e2e
+
+Nsxiv.window.foreground: #626880
+
+Nsxiv.bar.font: FiraCode Nerd Font 12

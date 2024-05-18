@@ -1,6 +1,7 @@
 return {
-  { dir = '~/Projects/lua/pg.nvim',
+  {
+    dir = '~/Projects/lua/pg.nvim',
     event = 'VeryLazy',
-    config = true,
+    -- config = true,
   }
 }
