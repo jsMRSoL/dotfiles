@@ -77,7 +77,7 @@ M.test_floating_win = function()
 
   -- set up buffer for floating window
   local new_buf = vim.api.nvim_create_buf(false, true) -- create new empty buffer
-  vim.api.nvim_buf_set_option(new_buf, "bufhidden", "wipe")
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = new_buf })
 
   -- get cursor position
   local pos = vim.api.nvim_win_get_cursor(0)
@@ -104,7 +104,7 @@ M.test_floating_win = function()
   win = vim.api.nvim_open_win(new_buf, true, opts)
   vim.api.nvim_buf_set_lines(new_buf, 0, -1, false, tokens)
   -- customize highlighting
-  vim.api.nvim_win_set_option(win, "winhl", "NormalFloat:MyNormalFloat")
+  vim.api.nvim_set_option_value("winhl", "NormalFloat:MyNormalFloat", { win = win })
 end
 
 M.close_window = function()
