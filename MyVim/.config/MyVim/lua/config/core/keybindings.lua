@@ -116,12 +116,12 @@ local mappings = {
   { 'n', '<leader>bh',  '<cmd>Alpha<cr>',                                                { desc = 'home', } },
   { 'n', '<leader>bR',  '<cmd>e!<cr>',                                                   { desc = 'revert', } },
   -- lsp
-  { 'n', '<leader>lxx', '<cmd>TroubleToggle<cr>' },
-  { 'n', '<leader>lxw', '<cmd>TroubleToggle workspace_diagnostics<cr>' },
-  { 'n', '<leader>lxd', '<cmd>TroubleToggle document_diagnostics<cr>' },
-  { 'n', '<leader>lxL', '<cmd>TroubleToggle loclist<cr>' },
-  { 'n', '<leader>lxq', '<cmd>TroubleToggle quickfix<cr>' },
-  { 'n', '<leader>lxr', '<cmd>TroubleToggle lsp_references<cr>' },
+  { 'n', '<leader>lxx', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',              { desc = 'Buffer diagnostics' } },
+  { 'n', '<leader>lxw', '<cmd>Trouble diagnostics toggle<cr>',                           { desc = 'Workspace diagnostics' } },
+  { 'n', '<leader>lxs', '<cmd>Trouble symbols toggle focus=false<cr>',                   { desc = 'Symbols (Trouble)' } },
+  { 'n', '<leader>lxL', '<cmd>Trouble loclist toggle<cr>',                               { desc = 'Location list (Trouble)' } },
+  { 'n', '<leader>lxq', '<cmd>Trouble qflist toggle<cr>',                                { desc = 'Quickfix list (Trouble)' } },
+  { 'n', '<leader>lxr', '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',    { desc = 'LSP defs/refs/... (Trouble)' } },
   -- Trouble -- jump to the next item, skipping the groups
   { 'n', '<leader>lxn', '<cmd>TroubleSkipNext<cr>',                                      { desc = 'jump next', } },
   -- Trouble -- jump to the previous item, skipping the groups

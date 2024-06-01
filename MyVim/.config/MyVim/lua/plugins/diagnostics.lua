@@ -1,17 +1,18 @@
 return {
- {
+  {
     'folke/trouble.nvim',
-    event = 'VeryLazy',
+    cmd = 'Trouble',
     config = function()
-      local trouble = require('trouble.providers.telescope')
+      require('trouble').setup()
+      local trouble = require('trouble.sources.telescope')
 
       local telescope = require('telescope')
 
       telescope.setup({
         defaults = {
           mappings = {
-            i = { ['<c-x>'] = trouble.open_with_trouble },
-            n = { ['<c-x>'] = trouble.open_with_trouble },
+            i = { ['<c-x>'] = trouble.open },
+            n = { ['<c-x>'] = trouble.open },
           },
         },
       })
