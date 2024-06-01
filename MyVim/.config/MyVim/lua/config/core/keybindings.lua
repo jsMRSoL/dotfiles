@@ -150,6 +150,7 @@ local mappings = {
   { 'n', '<leader>sL',  '<cmd>Telescope reloader<cr>',                                   { desc = 'Lua module (reloader)', } },
   { 'n', '<leader>sM',  '<cmd>Telescope man_pages<cr>',                                  { desc = 'Man Pages', } },
   { 'n', '<leader>sm',  '<cmd>Telescope marks<cr>',                                      { desc = 'Jump to Mark', } },
+  { 'n', '<leader>sN',  '<cmd>Telescope notify<cr>',                                     { desc = 'Notifications', } },
   { 'n', '<leader>so',  '<cmd>Telescope vim_options<cr>',                                { desc = 'Options', } },
   { 'n', '<leader>sq',  '<cmd>Telescope quickfix<cr>',                                   { desc = 'Quickfix list', } },
   { 'n', '<leader>sQ',  '<cmd>Telescope quickfixhistory<cr>',                            { desc = 'Quickfix history', } },
