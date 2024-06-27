@@ -68,3 +68,4 @@ MyVim/.config/MyVim/ignore/ftplugin
 MyVim/.config/MyVim/lua/plugins/gotestit.lua.retired
 emacs/.emacs.d/auto-save-list
 emacs/.emacs.d/eln-cache/29.3-561b282f
+emacs/.emacs.d/eln-cache/29.4-576e0a91
