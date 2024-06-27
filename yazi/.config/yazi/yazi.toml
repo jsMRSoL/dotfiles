@@ -79,6 +79,7 @@ suppress_preload = false
 
 [plugin]
 prepend_previewers = [
+    { name = "*.doc", run = "doc" },
     { name = "*.docx", run = "docx" },
     { name = "*.docm", run = "docx" },
     { name = "*.xlsx", run = "xlsx" },
