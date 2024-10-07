@@ -23,7 +23,7 @@ tmux_ready() {
   if tmux_running && tmux_attached; then
     return 0
   else
-    exec alacritty -e tmux-sessionizer.sh home &
+    exec kitty -e tmux-sessionizer.sh home &
     for _i in {1..50}; do
       if tmux has-session -t home 2> /dev/null; then
         # good to go

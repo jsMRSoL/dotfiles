@@ -11,10 +11,11 @@ return {
       local dap = require('dap')
       local dapui = require('dapui')
       dap.listeners.after.event_initialized['dapui_config'] = function ()
-        vim.keymap.set('n', '<right>', '<cmd>DapStepOver<cr>',
-          { desc = 'StepOver' })
+        vim.keymap.set('n', '<right>', '<cmd>DapStepInto<cr>',
+          { desc = 'StepInto' })
         vim.keymap.set('n', '<up>', '<cmd>DapStepOut<cr>', { desc = 'StepOut' })
-        vim.keymap.set('n', '<down>', '<cmd>DapStepInto<cr>', { desc = 'StepInto' })
+        vim.keymap.set('n', '<down>', '<cmd>DapStepOver<cr>', { desc = 'StepOver' })
+        vim.keymap.set('n', '<left>', '<cmd>DapContinue<cr>', { desc = 'Continue' })
         dapui.open()
       end
       -- dap.listeners.after.event_terminated['dapui_config'] = function()
@@ -24,6 +25,7 @@ return {
         vim.keymap.del('n', '<right>')
         vim.keymap.del('n', '<up>')
         vim.keymap.del('n', '<down>')
+        vim.keymap.del('n', '<left>')
         -- dapui.close()
       end
 

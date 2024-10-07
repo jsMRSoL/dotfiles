@@ -9,4 +9,4 @@ j4-dmenu-desktop --dmenu="dmenu \
   -nb '#1e1e2e' \
   -sf '#D8DEE9' \
   -sb '#626880' \
-  " --no-generic --term="alacritty"
+  " --no-generic --term="kitty"

@@ -52,6 +52,7 @@ button:hover {
   background-color: #eb4d4b;
 }
 
+#language,
 #clock,
 #cpu,
 #memory,
@@ -139,12 +140,18 @@ label:focus {
 }
 
 #idle_inhibitor {
-  background-color: @Surfce0;
+  /* background-color: @Surface0; */
+  background-color: @Rosewater;
+  color: @Surface0;
 }
 
 #idle_inhibitor.activated {
   background-color: @Text;
   color: @Base;
+}
+
+#language {
+  background-color: @Mauve;
 }
 
 #keyboard-state {
